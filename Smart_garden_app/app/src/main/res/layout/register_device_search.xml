@@ -16,7 +16,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintHorizontal_bias="0.107"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +29,7 @@
         android:textColor="#C1D045"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintHorizontal_bias="0.067"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerDeviceTextView" />
 
@@ -37,9 +37,9 @@
         android:id="@+id/registerDeviceIDEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Enter device ID"
         android:inputType="textPersonName"
@@ -57,7 +57,7 @@
         android:textColor="#C1D045"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintHorizontal_bias="0.077"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerDeviceIDEditText" />
 
@@ -65,9 +65,9 @@
         android:id="@+id/registerDeviceNameEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Enter device name"
         android:inputType="textPersonName"
