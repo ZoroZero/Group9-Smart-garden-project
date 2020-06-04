@@ -1,5 +1,6 @@
 package Database;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import Helper.Helper;
+import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
 public class Garden_Database_Control {
@@ -44,6 +46,47 @@ public class Garden_Database_Control {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+
+    // Register function
+    public static void RegisterUser(final String username, final String password,
+                                    final Context context, final VolleyCallBack callback){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Processing request");
+        progressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.REGISTER_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            //JSONObject jsonObject = new JSONObject(response);
+                            callback.onSuccessResponse(response);
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.hide();
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.smartgarden.R;
 
@@ -17,7 +18,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText usernameText, passwordText;
     private Button loginButton;
-
+    private TextView goToRegister;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +27,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 ////            //finish();
 ////            //startActivity(new Intent(this, ProfileActivity.class));
 ////        }
-        usernameText = (EditText) findViewById(R.id.loginUsernameEditText);
-        passwordText = (EditText) findViewById(R.id.loginPasswordEditText);
-        loginButton = (Button) findViewById(R.id.loginButton);
+        usernameText = findViewById(R.id.loginUsernameEditText);
+        passwordText = findViewById(R.id.loginPasswordEditText);
+        loginButton = findViewById(R.id.loginButton);
+        goToRegister = findViewById(R.id.goToRegisterTextView);
         ProgressDialog progressDialog = new ProgressDialog(this);
+
 
         progressDialog.setMessage("Please wait ...");
 
         loginButton.setOnClickListener(this);
+        goToRegister.setOnClickListener(this);
+
     }
 
 
@@ -51,6 +56,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if(v == loginButton){
             login();
+        }
+        else if(v == goToRegister){
+            startActivity(new Intent(getApplicationContext(), RegisterUserActivity.class));
         }
     }
 }
