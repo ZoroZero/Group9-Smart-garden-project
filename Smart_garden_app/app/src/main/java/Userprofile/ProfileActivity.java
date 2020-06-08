@@ -18,12 +18,17 @@ import android.widget.TextView;
 
 import com.example.smartgarden.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import Database.Garden_Database_Control;
+import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements VolleyCallBack {
     private ListView deviceListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +44,8 @@ public class ProfileActivity extends AppCompatActivity {
         deviceListView = findViewById(R.id.deviceListView);
         usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername());
 
-        Button goToRegDevice = findViewById(R.id.goToRegisterDevice);
-        goToRegDevice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegisterDeviceSearchActivity.class));
-            }
-        });
-        //DatabaseHelper.FetchDevicesInfo(this, this);
+        //Display devices info
+        Garden_Database_Control.FetchDevicesInfo(this, this);
     }
 
     @Override
@@ -91,5 +90,27 @@ public class ProfileActivity extends AppCompatActivity {
         ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
+    }
+
+    @Override
+    public void onSuccessResponse(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                if (!jsonObject.getBoolean("error")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("list");
+                    String[] get_device_id = new String[jsonArray.length()];
+                    String[] get_device_name = new String[jsonArray.length()];
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        get_device_id[i] = obj.getString("device_id") ;
+                        get_device_name[i] = obj.getString("device_name");
+                    }
+                    DeviceDetailAdapter deviceDetailAdapter = new DeviceDetailAdapter(getApplicationContext(), get_device_id, get_device_name);
+                    deviceListView.setAdapter(deviceDetailAdapter);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }
