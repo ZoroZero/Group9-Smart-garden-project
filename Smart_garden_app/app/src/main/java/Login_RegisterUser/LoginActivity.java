@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.smartgarden.R;
 
 import Database.Garden_Database_Control;
+import Userprofile.ProfileActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -23,10 +24,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        if (UserLoginManagement.getInstance(this).isLoggedIn()) {
-////            //finish();
-////            //startActivity(new Intent(this, ProfileActivity.class));
-////        }
+        if (UserLoginManagement.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
         usernameText = findViewById(R.id.loginUsernameEditText);
         passwordText = findViewById(R.id.loginPasswordEditText);
         loginButton = findViewById(R.id.loginButton);
