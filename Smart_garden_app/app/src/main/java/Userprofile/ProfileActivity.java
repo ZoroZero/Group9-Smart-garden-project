@@ -27,6 +27,7 @@ import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
+import Registeration.RegisterPlant;
 
 public class ProfileActivity extends AppCompatActivity implements VolleyCallBack {
     private ListView deviceListView;
@@ -79,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 finish();
                 return true;
             case 3:
+                startActivity(new Intent(getApplicationContext(), RegisterPlant.class));
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
