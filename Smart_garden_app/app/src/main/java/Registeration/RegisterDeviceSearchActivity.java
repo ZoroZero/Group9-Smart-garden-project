@@ -90,7 +90,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 JSONObject jsonObject = new JSONObject(new String(message.getPayload()));
-                Intent deviceSetting = new Intent(getApplicationContext(), MainActivity.class);
+                Intent deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
                 deviceSetting.putExtra("device_id", jsonObject.getString("device_id"));
                 deviceSetting.putExtra("device_type", jsonObject.getString("device_type"));
                 deviceSetting.putExtra("device_name", jsonObject.getString("device_name"));
