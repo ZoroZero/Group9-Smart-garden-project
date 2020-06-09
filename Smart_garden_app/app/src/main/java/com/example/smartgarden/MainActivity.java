@@ -1,27 +1,32 @@
 package com.example.smartgarden;
 
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//import android.os.Bundle;
-//
-//public class MainActivity extends AppCompatActivity {
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//    }
-//}
 
 
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.codec.Base64;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -36,12 +41,39 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.os.Environment;
+
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import javax.security.auth.login.LoginException;
 
 
 public class MainActivity extends AppCompatActivity {
+
     GraphView graphTemperature,graphLightLevel;
     MQTTHelper mqttHelper;
     boolean flag = true;
@@ -51,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
     int numOfLight = 0;
     double []temp = {0,0,0,0,0};
     double []light = {0,0,0,0,0};
+
+
+
+    @SuppressLint("WrongThread")
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +106,129 @@ public class MainActivity extends AppCompatActivity {
         graphTemperature.getViewport().setMaxY(60);
         graphTemperature.getViewport().setYAxisBoundsManual(true);
 
-       setupBlinkyTimer();
+        setupBlinkyTimer();
+
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageAvailable =   false;
+            mExternalStorageWriteable = false;
+        }
+        if(!mExternalStorageWriteable)
+        {
+
+        }
 
 
+
+
+        View v1 = graphTemperature.getRootView();
+        v1.setDrawingCacheEnabled(true);
+        v1.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        v1.layout(0, 0, v1.getMeasuredWidth(), v1.getMeasuredHeight());
+
+        v1.buildDrawingCache(true);
+        Bitmap screen = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+
+
+
+        /*File pdfDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "MyApp");
+        if (!pdfDir.exists()){
+            pdfDir.mkdirs();
+        }
+        File pdfFile = new File(pdfDir, "myPdfFile.pdf");*/
+
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File dir = new File (root.getAbsolutePath() + "/Gym");
+        if(!dir.exists()) {
+            if (dir.mkdir()) {
+                Log.e("gym", "Dir made");
+            } else {
+                Log.e("gym", "Error: Dir not made");
+            }
+        }
+
+        File file = new File(dir, "myPdfFile.pdf");
+
+        try {
+                Document  document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(file));
+                document.open();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                screen.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                addImage(document,byteArray);
+                document.close();
+
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        Uri uri = FileProvider.getUriForFile(MainActivity.this, BuildConfig.APPLICATION_ID + ".provider",file);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
 
 
     }
+
+
+
+    private static void addImage(Document document,byte[] byteArray)
+    {
+        Image image = null;
+        try
+        {
+            image = Image.getInstance(byteArray);
+        }
+        catch (BadElementException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // image.scaleAbsolute(150f, 150f);
+        try
+        {
+            document.add(image);
+        } catch (DocumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     private void startMQTT(){
         mqttHelper = new MQTTHelper(getApplicationContext());
@@ -138,7 +292,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response response) throws IOException {
                 String jsonString = response.body().string();
-                Log.e("new test", "DUY");
                 try{
                     JSONObject jsonData = new JSONObject(jsonString);
                     JSONArray jsonArray = jsonData.getJSONArray("feeds");
