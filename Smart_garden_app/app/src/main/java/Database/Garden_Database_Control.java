@@ -62,7 +62,7 @@ public class Garden_Database_Control {
 
 
     // Register function
-    public static void RegisterUser(final String username, final String password,
+    public static void RegisterUser(final String username, final String password, final String email,
                                     final Context context, final VolleyCallBack callback){
         String database_ip = Helper.getConfigValue(context, "database_server");
         final ProgressDialog progressDialog = new ProgressDialog(context);
@@ -95,6 +95,7 @@ public class Garden_Database_Control {
                 Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
+                params.put("email", email);
                 return params;
             }
         };
