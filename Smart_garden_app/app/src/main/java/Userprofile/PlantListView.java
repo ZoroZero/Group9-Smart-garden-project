@@ -17,6 +17,11 @@ import Login_RegisterUser.UserLoginManagement;
 
 public class PlantListView extends AppCompatActivity implements VolleyCallBack {
     private ListView plantListView;
+    private String[] plant_name;
+    private String[] plant_buy_date ;
+    private String[] plant_buy_location ;
+    private String[] plant_amount ;
+    private String[] linked_sensor_id ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +38,12 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
             if (!jsonObject.getBoolean("error")) {
                 JSONArray jsonArray = jsonObject.getJSONArray("plant_list");
                 Log.i("JSON Array", String.valueOf(jsonArray));
-                String[] plant_name = new String[jsonArray.length()];
-                String[] plant_buy_date = new String[jsonArray.length()];
-                String[] plant_buy_location = new String[jsonArray.length()];
-                String[] plant_amount = new String[jsonArray.length()];
-                String[] linked_sensor_id = new String[jsonArray.length()];
+                //String[] plant_name = new String[jsonArray.length()];
+                plant_name = new String[jsonArray.length()];
+                plant_buy_date = new String[jsonArray.length()];
+                plant_buy_location = new String[jsonArray.length()];
+                plant_amount = new String[jsonArray.length()];
+                linked_sensor_id = new String[jsonArray.length()];
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     Log.i("JSON Object", String.valueOf(obj));

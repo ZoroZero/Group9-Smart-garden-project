@@ -97,6 +97,9 @@ public class RecordMeasurementService extends Service {
                         stoptimertask();
                     }
                     device_list = UserLoginManagement.getInstance(getApplicationContext()).getDevice_list();
+                    if(device_list == null){
+                        return;
+                    }
                     for (DeviceInformation device : device_list) {
                         if (device.getDevice_type().equals("sensor"))
                             Garden_Database_Control.recordMeasurement(device.getDevice_name() + "/" + device.getDevice_id(),
