@@ -13,6 +13,7 @@ public class UserLoginManagement {
     private static final String SHARED_PREF_NAME = "mysharedpref12";
     private static final String KEY_USER_ID = "user_ID";
     private static final String KEY_USERNAME = "username";
+    private static final String KEY_USER_EMAIL = "user_email";
     private UserLoginManagement(Context context) {
         ctx = context;
     }
@@ -24,25 +25,21 @@ public class UserLoginManagement {
         return instance;
     }
 
-    public boolean userLogin(int user_id, String username){
+    public void userLogin(int user_id, String username, String email){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt(KEY_USER_ID, user_id);
         editor.putString(KEY_USERNAME, username);
-
+        editor.putString(KEY_USER_EMAIL, email);
         editor.apply();
 
-        return true;
     }
 
     // Check if user is logged in
     public boolean isLoggedIn(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if(sharedPreferences.getString(KEY_USERNAME, null) != null){
-            return true;
-        }
-        return false;
+        return sharedPreferences.getString(KEY_USERNAME, null) != null;
     }
 
     // Logout
@@ -76,6 +73,11 @@ public class UserLoginManagement {
     public int getUserId(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_USER_ID, 0);
+    }
+
+    public String getUserEmail(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_USER_EMAIL, null);
     }
 
     public DeviceInformation[] getDevice_list(){

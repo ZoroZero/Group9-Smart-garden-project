@@ -33,7 +33,7 @@ public class Garden_Database_Control {
                                 Toast.makeText(context, "Login successful",
                                         Toast.LENGTH_LONG).show();
                                 UserLoginManagement.getInstance(context).userLogin(jsonObject.getInt("user_ID"),
-                                        jsonObject.getString("username"));
+                                        jsonObject.getString("username"), jsonObject.getString("email"));
                             } else {
                                 Toast.makeText(context, jsonObject.getString("message"),
                                         Toast.LENGTH_LONG).show();

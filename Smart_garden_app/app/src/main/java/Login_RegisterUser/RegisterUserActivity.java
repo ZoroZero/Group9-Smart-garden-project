@@ -22,7 +22,7 @@ import Helper.VolleyCallBack;
 public class RegisterUserActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
     public EditText usernameText;
     public TextView passwordText;
-    private EditText gmailText;
+    private EditText emailText;
     public Button registerButton;
     public TextView goToLoginButton;
     public ProgressDialog progressDialog;
@@ -33,7 +33,7 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
 
         usernameText = findViewById(R.id.registerUser_username_ET);
         passwordText = findViewById(R.id.registerUser_password_ET);
-        gmailText = findViewById(R.id.registerUser_email_ET);
+        emailText = findViewById(R.id.registerUser_email_ET);
         registerButton = findViewById(R.id.regButton);
         goToLoginButton = findViewById(R.id.goToLoginTextView);
 
@@ -46,7 +46,7 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
     public void registerUser(){
         final String username = usernameText.getText().toString().trim();
         final String password = passwordText.getText().toString().trim();
-        final String email = gmailText.getText().toString().trim();
+        final String email = emailText.getText().toString().trim();
         Garden_Database_Control.RegisterUser(username, password, email,this, this);
     }
 
