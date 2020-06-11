@@ -104,7 +104,8 @@ public class Garden_Database_Control {
 
     // Register device
     public static void registerDevice(final String device_id, final String device_name,
-                                      final String linked_device_id, final String linked_device_name, final Context context, final VolleyCallBack callBack){
+                                      final String linked_device_id, final String linked_device_name,
+                                      final String threshold, final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         // final ProgressDialog progressDialog = new ProgressDialog(context);
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
@@ -136,6 +137,7 @@ public class Garden_Database_Control {
                 params.put("device_name", device_name);
                 params.put("linked_device_id", linked_device_id);
                 params.put("linked_device_name", linked_device_name);
+                params.put("threshold", threshold);
                 return params;
             }
         };
@@ -144,7 +146,9 @@ public class Garden_Database_Control {
 
 
     // Add new plant
-    public static void addNewPlant(final String plant_name, final String buy_date, final String buy_location, final String amount, final Context context, final VolleyCallBack callBack){
+    public static void addNewPlant(final String plant_name, final String buy_date, final String buy_location,
+                                   final String amount, final String linked_sensor_id,
+                                   final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -173,6 +177,7 @@ public class Garden_Database_Control {
                 params.put("buy_date", buy_date);
                 params.put("buy_location", buy_location);
                 params.put("amount", amount);
+                params.put("linked_sensor_id", linked_sensor_id);
                 return params;
             }
         };

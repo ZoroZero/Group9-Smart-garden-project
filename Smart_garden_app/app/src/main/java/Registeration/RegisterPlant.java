@@ -1,5 +1,6 @@
 package Registeration;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
     private EditText plant_nameET;
     private EditText buy_locationET;
     private EditText amountET;
-
+    private EditText linked_sensor_idET;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         plant_nameET = findViewById(R.id.registerPlantNameEditText);
         buy_locationET = findViewById(R.id.registerPlantBuyLocationEditText);
         amountET = findViewById(R.id.registerPlantAmountEditText);
+        linked_sensor_idET = findViewById(R.id.registerPlantSensorIDEditText);
         Button submitBtn = findViewById(R.id.registerPlant_SubmitBtn);
 
         buy_date_input.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +53,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
                 // date picker dialog
                 picker = new DatePickerDialog(RegisterPlant.this,
                         new DatePickerDialog.OnDateSetListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 buy_date_input.setText(year + "-" +  (monthOfYear + 1) + "-" + dayOfMonth);
@@ -67,12 +70,12 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
                 final String buy_date = buy_date_input.getText().toString();
                 final String buy_location = buy_locationET.getText().toString();
                 final String amount = amountET.getText().toString();
-
+                final String linked_sensor_id = linked_sensor_idET.getText().toString();
                 if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("")){
                     Toast.makeText(getApplicationContext(), "Empty field detected", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount,
+                Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount, linked_sensor_id,
                         getApplicationContext(), RegisterPlant.this);
             }
         });

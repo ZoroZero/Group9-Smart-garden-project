@@ -69,7 +69,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String measurement = thresholdET.getText().toString();
+                final String threshold = thresholdET.getText().toString();
                 final String device_id = getIntent().getStringExtra("device_id");
                 final String device_name = getIntent().getStringExtra("device_name");
                 final String linked_device_id = linkedDeviceId.getText().toString();
@@ -80,10 +80,10 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 }
                 if(getIntent().getStringExtra("device_type").equals("sensor")){
                     Garden_Database_Control.registerDevice(device_id, device_name,
-                            linked_device_id, linked_device_name, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                            linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
                 }
                 else {
-                    checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name);
+                    checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name, threshold);
                 }
 
             }
@@ -109,7 +109,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
     }
 
     protected void checkLinkedDevice(final String device_id, final String device_name,
-                                     final String linked_device_id, final String linked_device_name) {
+                                     final String linked_device_id, final String linked_device_name, final String threshold) {
         final String topic = linked_device_name + "/" + linked_device_id;
         IOT_Server_Access.Subscribe(topic, getApplicationContext());
         startLoading();
@@ -118,7 +118,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 if (linked) {
                     stopLoading();
                     Garden_Database_Control.registerDevice(device_id, device_name,
-                            linked_device_id, linked_device_name, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                            linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
                     this.cancel();
                 }
             }
