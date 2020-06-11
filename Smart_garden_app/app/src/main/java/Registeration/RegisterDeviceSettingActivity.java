@@ -1,5 +1,6 @@
 package Registeration;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -18,11 +19,14 @@ import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import Database.Garden_Database_Control;
+import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 
-public class RegisterDeviceSettingActivity extends AppCompatActivity {
+public class RegisterDeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
 
     // MQTT client
     MqttAndroidClient client = null;
@@ -58,7 +62,8 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity {
         progressBarHolder = findViewById(R.id.register_setting_progressBarHolder);
         // Set device_type
         String device_type = getIntent().getStringExtra("device_type");
-        deviceTypeTV.setText(device_type);
+        assert device_type != null;
+        deviceTypeTV.setText(device_type.toUpperCase());
 
         // Set submit button
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +78,14 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name);
+                if(getIntent().getStringExtra("device_type").equals("sensor")){
+                    Garden_Database_Control.registerDevice(device_id, device_name,
+                            linked_device_id, linked_device_name, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                }
+                else {
+                    checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name);
+                }
+
             }
         });
 
@@ -106,7 +118,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity {
                 if (linked) {
                     stopLoading();
                     Garden_Database_Control.registerDevice(device_id, device_name,
-                            linked_device_id, linked_device_name, getApplicationContext());
+                            linked_device_id, linked_device_name, getApplicationContext(), RegisterDeviceSettingActivity.this);
                     this.cancel();
                 }
             }
@@ -133,5 +145,24 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity {
         progressBarHolder.setAnimation(outAnimation);
         progressBarHolder.setVisibility(View.GONE);
         submitBtn.setEnabled(true);
+    }
+
+    @Override
+    public void onSuccessResponse(String result) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
+        assert jsonObject != null;
+        try {
+            showResult.putExtra("register_type", "Register new device");
+            showResult.putExtra("register_message", jsonObject.getString("message"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        startActivity(showResult);
     }
 }

@@ -39,6 +39,7 @@
         <activity android:name="Registeration.RegisterDeviceSearchActivity" />
         <activity android:name="Registeration.RegisterDeviceSettingActivity" />
         <activity android:name="Registeration.RegisterPlant"/>
+        <activity android:name="Registeration.RegisterMessageActivity"/>
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 

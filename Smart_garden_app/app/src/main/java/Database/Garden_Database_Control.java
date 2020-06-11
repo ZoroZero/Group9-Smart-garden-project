@@ -103,7 +103,7 @@ public class Garden_Database_Control {
 
     // Register device
     public static void registerDevice(final String device_id, final String device_name,
-                                      final String linked_device_id, final String linked_device_name, final Context context){
+                                      final String linked_device_id, final String linked_device_name, final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         // final ProgressDialog progressDialog = new ProgressDialog(context);
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
@@ -113,8 +113,9 @@ public class Garden_Database_Control {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                            callBack.onSuccessResponse(response);
                         }catch(Exception e){
                             e.printStackTrace();
                         }

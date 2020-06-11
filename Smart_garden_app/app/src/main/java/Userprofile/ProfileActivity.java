@@ -97,23 +97,43 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
 
     @Override
     public void onSuccessResponse(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                if (!jsonObject.getBoolean("error")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("list");
-                    String[] get_device_id = new String[jsonArray.length()];
-                    String[] get_device_name = new String[jsonArray.length()];
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        get_device_id[i] = obj.getString("device_id") ;
-                        get_device_name[i] = obj.getString("device_name");
-                    }
-                    DeviceDetailAdapter deviceDetailAdapter = new DeviceDetailAdapter(getApplicationContext(), get_device_id, get_device_name);
-                    deviceListView.setAdapter(deviceDetailAdapter);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (!jsonObject.getBoolean("error")) {
+                JSONArray jsonArray = jsonObject.getJSONArray("list");
+                String[] get_device_id = new String[jsonArray.length()];
+                String[] get_device_name = new String[jsonArray.length()];
+                String[] device_topic = new String[jsonArray.length()];
+                String[] linked_device_id = new String[jsonArray.length()];
+                String[] linked_device_name = new String[jsonArray.length()];
+                String[] linked_device_topic = new String[jsonArray.length()];
+                String[] device_type = new String[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    get_device_id[i] = obj.getString("device_id");
+                    get_device_name[i] = obj.getString("device_name");
+                    device_topic[i] = get_device_name[i] +"/" + get_device_name[i];
+                    linked_device_id[i] = obj.getString("linked_device_id");
+                    linked_device_name[i] = obj.getString("linked_device_name");
+                    linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
+                    if(get_device_id[i].contains("ld"))
+                        device_type[i] = "output";
+                    else
+                        device_type[i] = "sensor";
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name,linked_device_id, linked_device_name, device_type);
+                deviceListView.setAdapter(itemAdapter);
+
+//                // Start background service to record device measure
+//                MQTTPullRequest mYourService = new MQTTPullRequest();
+//                mServiceIntent = new Intent(this, mYourService.getClass());
+//                if (!isMyServiceRunning(mYourService.getClass())) {
+//                    startService(mServiceIntent);
+//                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

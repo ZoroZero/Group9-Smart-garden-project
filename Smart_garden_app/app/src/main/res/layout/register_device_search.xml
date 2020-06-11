@@ -49,6 +49,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerDeviceTextView" />
 
+        <TextView
+            android:id="@+id/registerDeviceIDTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="32dp"
+            android:text="Device ID"
+            android:textColor="#C1D045"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerDeviceTextView" />
+
         <EditText
             android:id="@+id/registerDeviceIDEditText"
             android:layout_width="0dp"
@@ -78,28 +90,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerDeviceIDEditText" />
 
-        <Button
-            android:id="@+id/searchDeviceBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:background="#C1D045"
-            android:text="Submit"
-            android:textColor="#C238EB"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameEditText" />
-
         <EditText
             android:id="@+id/registerDeviceNameEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
             android:ems="10"
             android:hint="Enter device name"
             android:inputType="textPersonName"
@@ -108,17 +105,59 @@
             app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameTextView" />
 
         <TextView
-            android:id="@+id/registerDeviceIDTextView"
+            android:id="@+id/Registerdevice_TV3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="32dp"
-            android:text="Device ID"
+            android:text="Device Type"
             android:textColor="#C1D045"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerDeviceTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameEditText" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Registerdevice_TV3">
+
+            <RadioButton
+                android:id="@+id/radio_sensor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Sensor" />
+
+            <RadioButton
+                android:id="@+id/radio_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Output" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/searchDeviceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="#C1D045"
+            android:text="Submit"
+            android:textColor="#C238EB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
