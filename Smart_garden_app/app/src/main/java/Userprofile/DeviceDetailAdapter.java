@@ -1,5 +1,6 @@
 package Userprofile;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,8 @@ import com.example.smartgarden.R;
 
 public class DeviceDetailAdapter extends BaseAdapter {
     private LayoutInflater mInfoInflater;
-    public String[] device_ids;
-    public String[] device_names;
+    private String[] device_ids;
+    private String[] device_names;
 
     public DeviceDetailAdapter(Context context, String[] device_ids, String[] device_names){
         this.device_ids = device_ids;
@@ -35,9 +36,10 @@ public class DeviceDetailAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = mInfoInflater.inflate(R.layout.device_detail_view, null);
+        @SuppressLint({"ViewHolder", "InflateParams"}) View v = mInfoInflater.inflate(R.layout.device_detail_view, null);
         // Get view component
         TextView nameText = v.findViewById(R.id.detail_device_id);
         TextView desText = v.findViewById(R.id.device_detail_name);

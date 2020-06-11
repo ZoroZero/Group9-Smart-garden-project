@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.smartgarden">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -20,12 +21,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
-        <!-- Activity        -->
+        <activity android:name="Userprofile.PlantListView"></activity>
+        <!-- Activity -->
         <activity
             android:name="Userprofile.ProfileActivity"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name="Login_RegisterUser.RegisterUserActivity"
+        <activity
+            android:name="Login_RegisterUser.RegisterUserActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.LoginActivity"
@@ -38,19 +40,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name="Registeration.RegisterDeviceSearchActivity"
+        <activity
+            android:name="Registeration.RegisterDeviceSearchActivity"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name="Registeration.RegisterDeviceSettingActivity"
+        <activity
+            android:name="Registeration.RegisterDeviceSettingActivity"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name="Registeration.RegisterPlant"
+        <activity
+            android:name="Registeration.RegisterPlant"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name="Registeration.RegisterMessageActivity"
-            tools:ignore="InnerclassSeparator" />
-
-        <!-- Service        -->
+        <activity
+            android:name="Registeration.RegisterMessageActivity"
+            tools:ignore="InnerclassSeparator" /> <!-- Service -->
         <service android:name="org.eclipse.paho.android.service.MqttService" />
-        <service android:name="org.eclipse.paho.android.service.MqttService"/>
-        <service android:name="Background_service.RecordMeasurementService"
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+        <service
+            android:name="Background_service.RecordMeasurementService"
             tools:ignore="InnerclassSeparator" />
 
         <provider
@@ -60,11 +65,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@layout/file_paths"/>
+                android:resource="@layout/file_paths" />
         </provider>
     </application>
 
-
-
 </manifest>
-

@@ -19,6 +19,9 @@ public class Constants {
     // Add new plant
     public static String ADD_PLANT_URL = ROOT_URL + "/addPlant.php";
 
+    // Get plant list
+    public static String FETCH_PLANT_URL = ROOT_URL + "/fetchPlantInfo.php";
+
     // Automatically record measurement
     public static String RECORD_URL = MQTT_URL + "/subscribeMQTT.php";
 }

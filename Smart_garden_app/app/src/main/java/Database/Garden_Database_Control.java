@@ -223,6 +223,44 @@ public class Garden_Database_Control {
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
+
+    // Fetch plants info
+    public static void FetchPlantsInfo(final Context context, final VolleyCallBack callBack){
+        final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.FETCH_PLANT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(!jsonObject.getBoolean("error")) {
+                                callBack.onSuccessResponse(response);
+                            }else{
+                                Toast.makeText(context, jsonObject.getString("message"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", user_id);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
     //Record measurement
     public static void recordMeasurement(final String topic, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");

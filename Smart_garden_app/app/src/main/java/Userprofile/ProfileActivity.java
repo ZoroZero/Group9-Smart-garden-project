@@ -15,8 +15,6 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,8 +47,8 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
             return;
         }
         IOT_Server_Access.connect(getApplicationContext());
-        TextView usernameTextView = findViewById(R.id.UsernameTextView);
-        deviceListView = findViewById(R.id.deviceListView);
+        TextView usernameTextView = findViewById(R.id.PlantListViewTextView);
+        deviceListView = findViewById(R.id.PlantList_PLantListView);
         usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername());
 
         //Display devices info
@@ -97,6 +95,8 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 finish();
                 return true;
             case 2:
+                startActivity(new Intent(this, PlantListView.class));
+                finish();
                 return true;
             case 3:
                 startActivity(new Intent(getApplicationContext(), RegisterDeviceSearchActivity.class));
