@@ -3,6 +3,7 @@ package com.example.smartgarden;
 public class Constants {
     public static final String ROOT_URL = "//Android/v1";
 
+    private static final String MQTT_URL = "//Android/MQTT";
     // Register url
     public static final String REGISTER_URL = ROOT_URL + "/registerUser.php";
 
@@ -17,4 +18,7 @@ public class Constants {
 
     // Add new plant
     public static String ADD_PLANT_URL = ROOT_URL + "/addPlant.php";
+
+    // Automatically record measurement
+    public static String RECORD_URL = MQTT_URL + "/subscribeMQTT.php";
 }

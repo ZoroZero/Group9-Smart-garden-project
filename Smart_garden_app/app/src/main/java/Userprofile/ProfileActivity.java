@@ -3,12 +3,16 @@ package Userprofile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +26,7 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
@@ -32,6 +37,8 @@ import Registeration.RegisterPlant;
 
 public class ProfileActivity extends AppCompatActivity implements VolleyCallBack {
     private ListView deviceListView;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 finish();
                 return true;
             case 6:
-                return true;
+                return false;
             case 7:
                 UserLoginManagement.getInstance(this).logOut();
                 finish();
@@ -139,7 +146,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
                     get_device_name[i] = obj.getString("device_name");
-                    device_topic[i] = get_device_name[i] +"/" + get_device_name[i];
+                    device_topic[i] = get_device_name[i] +"/" + get_device_id[i];
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
@@ -149,18 +156,31 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                         device_type[i] = "sensor";
                 }
                 DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
-                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name,linked_device_id, linked_device_name, device_type);
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
                 deviceListView.setAdapter(itemAdapter);
 
-//                // Start background service to record device measure
-//                MQTTPullRequest mYourService = new MQTTPullRequest();
-//                mServiceIntent = new Intent(this, mYourService.getClass());
-//                if (!isMyServiceRunning(mYourService.getClass())) {
-//                    startService(mServiceIntent);
-//                }
+                // Start background service to record device measure
+                RecordMeasurementService mYourService = new RecordMeasurementService();
+                Intent mServiceIntent = new Intent(this, mYourService.getClass());
+                if (!isMyServiceRunning(mYourService.getClass())) {
+                    startService(mServiceIntent);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isMyServiceRunning(Class serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        assert manager != null;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
     }
 }
