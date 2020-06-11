@@ -1,6 +1,7 @@
 package Registeration;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgarden.R;
@@ -21,6 +23,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
@@ -67,6 +71,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
 
         // Set submit button
         submitBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 final String threshold = thresholdET.getText().toString();
@@ -78,7 +83,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(getIntent().getStringExtra("device_type").equals("sensor")){
+                if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
                     Garden_Database_Control.registerDevice(device_id, device_name,
                             linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
                 }
@@ -96,7 +101,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
             }
 
             @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
+            public void messageArrived(String topic, MqttMessage message) {
                 linked = true;
                 //startActivity(deviceSetting);
             }
@@ -117,8 +122,8 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
             public void onTick(long millisUntilFinished) {
                 if (linked) {
                     stopLoading();
-                    Garden_Database_Control.registerDevice(device_id, device_name,
-                            linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                    Garden_Database_Control.registerDevice(linked_device_id, linked_device_name,
+                            device_id, device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
                     this.cancel();
                 }
             }
