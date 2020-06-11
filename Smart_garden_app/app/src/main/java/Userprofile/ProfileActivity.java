@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -53,17 +54,31 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.normal_menu, menu);
         menu.add(0, 1, 1,
-                menuIconWithText(getResources().getDrawable(R.drawable.ic_exit_to_app_black_24dp),
-                        getResources().getString(R.string.log_out)));
+                menuIconWithText(getResources().getDrawable(R.drawable.ic_home_black_24dp),
+                        getResources().getString(R.string.home)));
 
         menu.add(0, 2, 2,
+                menuIconWithText(getResources().getDrawable(R.drawable.ic_list_black_24dp),
+                        getResources().getString(R.string.view_plant_list)));
+
+        menu.add(0, 3, 3,
                 menuIconWithText(getResources().getDrawable(R.drawable.ic_add_black_24dp),
                         getResources().getString(R.string.register_device)));
 
-        menu.add(0, 3, 3,
+        menu.add(0, 4, 4,
                 menuIconWithText(getResources().getDrawable(R.drawable.ic_local_florist_black_24dp),
                         getResources().getString(R.string.register_plant)));
 
+        menu.add(0, 5, 5,
+                menuIconWithText(getResources().getDrawable(R.drawable.ic_view_report_black_24dp),
+                        getResources().getString(R.string.view_report)));
+
+        menu.add(0, 6, 6,
+                menuIconWithText(getResources().getDrawable(R.drawable.ic_settings_black_24dp),
+                        getResources().getString(R.string.setting)));
+
+        menu.add(0, 7, 7, menuIconWithText(getResources().getDrawable(R.drawable.ic_exit_to_app_black_24dp),
+                getResources().getString(R.string.log_out)));
         return true;
     }
 
@@ -71,17 +86,29 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                UserLoginManagement.getInstance(this).logOut();
+                startActivity(new Intent(this, ProfileActivity.class));
                 finish();
-                startActivity(new Intent(this, LoginActivity.class));
                 return true;
             case 2:
+                return true;
+            case 3:
                 startActivity(new Intent(getApplicationContext(), RegisterDeviceSearchActivity.class));
                 finish();
                 return true;
-            case 3:
+            case 4:
                 startActivity(new Intent(getApplicationContext(), RegisterPlant.class));
                 finish();
+                return true;
+            case 5:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+                return true;
+            case 6:
+                return true;
+            case 7:
+                UserLoginManagement.getInstance(this).logOut();
+                finish();
+                startActivity(new Intent(this, LoginActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

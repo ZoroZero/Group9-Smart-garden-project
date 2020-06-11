@@ -72,7 +72,7 @@ public class IOT_Server_Access {
     // Publish to a topic
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void Publish(String topic, String payload, Context context){
-        byte[] encodedPayload = new byte[0];
+        byte[] encodedPayload;
         try {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
             MqttMessage message = new MqttMessage(encodedPayload);

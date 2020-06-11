@@ -47,10 +47,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final String username = usernameText.getText().toString().trim();
         final String password = passwordText.getText().toString().trim();
         Garden_Database_Control.Login(username, password, this);
-//        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-//            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-//            finish();
-//        }
+        if (UserLoginManagement.getInstance(this).isLoggedIn()) {
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            finish();
+        }
     }
 
     @Override

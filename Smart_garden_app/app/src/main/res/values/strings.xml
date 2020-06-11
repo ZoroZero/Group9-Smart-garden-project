@@ -6,4 +6,8 @@
     <string name="log_out">Logout</string>
     <string name="register_device">Register new device</string>
     <string name="register_plant">Add new plant</string>
+    <string name="home">Home</string>
+    <string name="view_report">View report</string>
+    <string name="view_plant_list">View plant list</string>
+    <string name="setting">Setting</string>
 </resources>
