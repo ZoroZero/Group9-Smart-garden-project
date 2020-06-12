@@ -223,7 +223,6 @@ public class Garden_Database_Control {
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-
     // Fetch plants info
     public static void FetchPlantsInfo(final Context context, final VolleyCallBack callBack){
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
@@ -261,6 +260,7 @@ public class Garden_Database_Control {
         };
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
+
     //Record measurement
     public static void recordMeasurement(final String topic, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
@@ -282,6 +282,34 @@ public class Garden_Database_Control {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("topic", topic);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    //Record measurement_v2
+    public static void recordMeasurement_v2(final String topic,final String type, final Context context){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.RECORD_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("topic", topic);
+                params.put("type", type);
                 return params;
             }
         };

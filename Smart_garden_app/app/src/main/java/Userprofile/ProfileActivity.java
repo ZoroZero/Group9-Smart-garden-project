@@ -150,10 +150,12 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
-                    if(get_device_id[i].contains("ld"))
+                    if(get_device_id[i].contains("LightD"))
                         device_type[i] = "output";
-                    else
-                        device_type[i] = "sensor";
+                    else if(get_device_id[i].contains("Light"))
+                        device_type[i] = "Light";
+                    else if(get_device_id[i].contains("TempHumi"))
+                        device_type[i] = "TempHumi";
                 }
                 DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
