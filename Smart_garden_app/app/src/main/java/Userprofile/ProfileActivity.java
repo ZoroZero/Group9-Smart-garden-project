@@ -151,38 +151,38 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
                     if(get_device_id[i].contains("LightD"))
-                        device_type[i] = "output";
+                        device_type[i] = "Output";
                     else if(get_device_id[i].contains("Light"))
-                        device_type[i] = "Light";
+                        device_type[i] = "Light Sensor";
                     else if(get_device_id[i].contains("TempHumi"))
-                        device_type[i] = "TempHumi";
+                        device_type[i] = "TempHumi Sensor";
                 }
                 DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
                 deviceListView.setAdapter(itemAdapter);
 
-                // Start background service to record device measure
-//                RecordMeasurementService mYourService = new RecordMeasurementService();
-//                Intent mServiceIntent = new Intent(this, mYourService.getClass());
-//                if (!isMyServiceRunning(mYourService.getClass())) {
-//                    startService(mServiceIntent);
-//                }
+                //Start background service to record device measure
+                RecordMeasurementService mYourService = new RecordMeasurementService();
+                Intent mServiceIntent = new Intent(this, mYourService.getClass());
+                if (!isMyServiceRunning(mYourService.getClass())) {
+                    startService(mServiceIntent);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-//    private boolean isMyServiceRunning(Class serviceClass) {
-//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//        assert manager != null;
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if (serviceClass.getName().equals(service.service.getClassName())) {
-//                Log.i ("Service status", "Running");
-//                return true;
-//            }
-//        }
-//        Log.i ("Service status", "Not running");
-//        return false;
-//    }
+    private boolean isMyServiceRunning(Class serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        assert manager != null;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
+    }
 }

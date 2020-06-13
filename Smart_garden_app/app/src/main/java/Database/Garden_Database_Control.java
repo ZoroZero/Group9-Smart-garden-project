@@ -262,34 +262,7 @@ public class Garden_Database_Control {
     }
 
     //Record measurement
-    public static void recordMeasurement(final String topic, final Context context){
-        String database_ip = Helper.getConfigValue(context, "database_server");
-        //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "http://" + database_ip + Constants.RECORD_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("topic", topic);
-                return params;
-            }
-        };
-        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-    //Record measurement_v2
-    public static void recordMeasurement_v2(final String topic,final String type, final Context context){
+    public static void recordMeasurement(final String topic,final String type, final String device_id, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
         //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -310,6 +283,7 @@ public class Garden_Database_Control {
                 Map<String, String> params = new HashMap<>();
                 params.put("topic", topic);
                 params.put("type", type);
+                params.put("device_id", device_id);
                 return params;
             }
         };

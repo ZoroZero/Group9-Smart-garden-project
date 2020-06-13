@@ -84,8 +84,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
-                    assert device_id != null;
-                    if(!device_id.contains("LightD")){
+                    if(!linked_device_id.contains("LightD")){
                         Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -95,7 +94,6 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 else {
                     checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name, threshold);
                 }
-
             }
         });
 

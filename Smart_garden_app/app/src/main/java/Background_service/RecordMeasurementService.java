@@ -101,9 +101,9 @@ public class RecordMeasurementService extends Service {
                         return;
                     }
                     for (DeviceInformation device : device_list) {
-                        if (device.getDevice_type().equals("sensor"))
+                        if (device.getDevice_type().contains("Sensor"))
                             Garden_Database_Control.recordMeasurement(device.getDevice_name() + "/" + device.getDevice_id(),
-                                    getApplicationContext());
+                                    device.getDevice_type().replace(" Sensor", ""), device.getDevice_id(), getApplicationContext());
                         //Log.i("Topic", jsonObject.getString("device_id") + "/" + jsonObject.getString("device_name"));
                     }
                 }

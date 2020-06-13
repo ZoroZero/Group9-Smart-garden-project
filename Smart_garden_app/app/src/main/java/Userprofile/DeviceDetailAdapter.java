@@ -47,8 +47,8 @@ public class DeviceDetailAdapter extends BaseAdapter {
         String id = device_ids[position];
         String name = device_names[position];
         // Set texts
-        nameText.setText("Device id: " + id);
-        desText.setText("Device name: " + name);
+        nameText.setText("Device topic: " + id);
+        desText.setText("Device type: " + name);
         return v;
     }
 }
