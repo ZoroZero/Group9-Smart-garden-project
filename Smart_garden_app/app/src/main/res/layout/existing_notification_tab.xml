@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginBottom="1dp"
+        android:background="#8BC34A"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="Smart Gardening App"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="145dp"
+            android:layout_marginEnd="0dp"
+            android:background="match_parent"
+
+            android:src="@drawable/button_menu" />
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="136dp"
+            android:layout_height="144dp"
+            app:srcCompat="@drawable/temperature"
+            tools:layout_editor_absoluteX="36dp"
+            tools:layout_editor_absoluteY="141dp" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="142dp"
+            android:layout_height="144dp"
+            app:srcCompat="@drawable/air_humidity"
+            tools:layout_editor_absoluteX="36dp"
+            tools:layout_editor_absoluteY="396dp" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="81dp"
+            android:layout_height="41dp"
+
+            android:layout_marginStart="248dp"
+            android:layout_marginTop="190dp"
+            android:layout_marginEnd="82dp"
+            android:layout_marginBottom="429dp"
+            android:ems="10"
+            android:gravity="end"
+            android:inputType="textPersonName"
+            android:text="oC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="81dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="248dp"
+            android:layout_marginTop="452dp"
+            android:layout_marginEnd="82dp"
+            android:layout_marginBottom="167dp"
+            android:ems="10"
+            android:gravity="end"
+            android:inputType="textPersonName"
+            android:text="%"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

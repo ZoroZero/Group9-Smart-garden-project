@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nothing_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:id="@+id/smartGarden"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="#C1D045"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Smart garden2"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textAlignment="center"/>-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/btn_menuNothing"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/button_menu"-->
+            <!--android:background="#C1D045"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"/>-->
+
+    <!--</android.support.constraint.ConstraintLayout>-->
+
+</android.support.constraint.ConstraintLayout>

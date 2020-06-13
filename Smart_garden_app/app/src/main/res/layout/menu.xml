@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/menu_fragment1"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/smartGarden"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_menu_view_device"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:text=" View devices            "
+        android:textColor="#39ac39"
+        android:textSize="18sp"
+        android:background="#ffffff"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/smartGarden" />
+
+    <ImageButton
+        android:id="@+id/btn_menu_view_device"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_view_device"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/smartGarden"/>
+
+    <TextView
+        android:id="@+id/space0"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_view_device" />
+
+    <TextView
+        android:id="@+id/txt_menu_search_device"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" Search devices      "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space0"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_search_device"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_search_device"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space0"/>
+
+    <TextView
+        android:id="@+id/space1"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_search_device" />
+
+    <TextView
+        android:id="@+id/txt_menu_add_new_device"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:paddingLeft="5dp"
+        android:text=" Add new device   "
+        android:paddingTop="10dp"
+        android:textColor="#39ac39"
+        android:textSize="18sp"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/space1"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_add_device"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_add_device"
+        android:background="#ffffff"
+        android:paddingTop="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space1"/>
+
+    <TextView
+        android:id="@+id/space2"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_add_new_device" />
+
+    <TextView
+        android:id="@+id/txt_menu_add_new_plant"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" Add new plant              "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space2"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_add_new_plant"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_add_plant"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space2"/>
+
+    <TextView
+        android:id="@+id/space3"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_add_new_plant" />
+
+    <TextView
+        android:id="@+id/txt_menu_view_report"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" View report            "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space3"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_view_report"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_view_report"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space3"/>
+
+    <TextView
+        android:id="@+id/space4"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_view_report" />
+
+    <TextView
+        android:id="@+id/txt_menu_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" Setting                    "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space4"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_setting"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_setting"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space4"/>
+
+    <TextView
+        android:id="@+id/space5"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_setting" />
+
+    <TextView
+        android:id="@+id/txt_menu_log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" Log out                    "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space5"/>
+
+    <ImageButton
+        android:id="@+id/btn_menu_log_out"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_log_out"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space5"/>
+
+</android.support.constraint.ConstraintLayout>
