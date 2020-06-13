@@ -35,7 +35,10 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
     private String topic;
     private String device_type = "";
+    private String device_id;
+    private String device_name;
 
+    // Loading animation
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
     FrameLayout progressBarHolder;
@@ -58,8 +61,8 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         searchDeviceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String device_id = device_IdET.getText().toString();
-                final String device_name = device_nameET.getText().toString();
+                device_id = device_IdET.getText().toString();
+                device_name = device_nameET.getText().toString();
                 if(device_id.equals("") || device_name.equals("") || device_type.equals("")){
                     Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
                 }
@@ -78,7 +81,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     startActivity(goToSetting);
                 }
                 else{
-                    if(device_id.contains("ld")) {
+                    if(device_id.contains("Light_D")) {
                         Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -96,11 +99,15 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                JSONObject jsonObject = new JSONObject(new String(message.getPayload()));
+                //JSONObject jsonObject = new JSONObject(new String(message.getPayload()));
+
+                //deviceSetting.putExtra("device_id", jsonObject.getString("device_id"));
+                // deviceSetting.putExtra("device_name", jsonObject.getString("device_name"));
                 Intent deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
-                deviceSetting.putExtra("device_id", jsonObject.getString("device_id"));
+                deviceSetting.putExtra("device_id", device_id);
                 deviceSetting.putExtra("device_type", device_type);
-                deviceSetting.putExtra("device_name", jsonObject.getString("device_name"));
+                deviceSetting.putExtra("device_name", device_name);
+
 
                 goToSetting = deviceSetting;
                 //startActivity(deviceSetting);
@@ -111,34 +118,6 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void searchDevice(){
-        final String device_id = device_IdET.getText().toString();
-        final String device_name = device_nameET.getText().toString();
-        if (device_id.equals("") || device_name.equals("")) {
-            Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-        topic = device_name + "/" + device_id;
-        IOT_Server_Access.Subscribe(topic, getApplicationContext());
-        startLoading();
-        new CountDownTimer(20000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                if (goToSetting != null) {
-                    stopLoading();
-                    startActivity(goToSetting);
-                    finish();
-                    this.cancel();
-                }
-            }
-
-            public void onFinish() {
-                stopLoading();
-                Toast.makeText(getApplicationContext(), "No device found", Toast.LENGTH_LONG).show();
-                IOT_Server_Access.Unsubscribe(topic, getApplicationContext());
-            }
-        }.start();
     }
 
     private void startLoading(){
@@ -173,7 +152,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 stopLoading();
-                Toast.makeText(getApplicationContext(), "No device found", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No device " + topic + " found", Toast.LENGTH_LONG).show();
                 IOT_Server_Access.Unsubscribe(topic, getApplicationContext());
             }
         }.start();

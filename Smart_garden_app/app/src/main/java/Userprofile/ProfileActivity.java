@@ -162,27 +162,27 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 deviceListView.setAdapter(itemAdapter);
 
                 // Start background service to record device measure
-                RecordMeasurementService mYourService = new RecordMeasurementService();
-                Intent mServiceIntent = new Intent(this, mYourService.getClass());
-                if (!isMyServiceRunning(mYourService.getClass())) {
-                    startService(mServiceIntent);
-                }
+//                RecordMeasurementService mYourService = new RecordMeasurementService();
+//                Intent mServiceIntent = new Intent(this, mYourService.getClass());
+//                if (!isMyServiceRunning(mYourService.getClass())) {
+//                    startService(mServiceIntent);
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private boolean isMyServiceRunning(Class serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        assert manager != null;
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
-                return true;
-            }
-        }
-        Log.i ("Service status", "Not running");
-        return false;
-    }
+//    private boolean isMyServiceRunning(Class serviceClass) {
+//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//        assert manager != null;
+//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+//            if (serviceClass.getName().equals(service.service.getClassName())) {
+//                Log.i ("Service status", "Running");
+//                return true;
+//            }
+//        }
+//        Log.i ("Service status", "Not running");
+//        return false;
+//    }
 }

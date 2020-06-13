@@ -11,6 +11,7 @@ import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -20,9 +21,15 @@ import Helper.Helper;
 public class IOT_Server_Access {
     @SuppressLint("StaticFieldLeak")
     public static MqttAndroidClient client = null;
-
+    static String username = "BKvm2";
+    static String password = "Hcmut_CSE_2020";
     // Connect to MQTT server
     public static void connect(final Context context){
+//        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+//        mqttConnectOptions.setAutomaticReconnect(true);
+//        mqttConnectOptions.setCleanSession(false);
+//        mqttConnectOptions.setUserName(username);
+//        mqttConnectOptions.setPassword(password.toCharArray());
         String server_ip = Helper.getConfigValue(context, "IOT_server");
         final String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(context, "tcp://" + server_ip, clientId);
