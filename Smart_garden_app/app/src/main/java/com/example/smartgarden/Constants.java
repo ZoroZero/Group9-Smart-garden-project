@@ -28,6 +28,10 @@ public class Constants {
     // Update output status record
     public static String UPDATE_OUTPUT_STATUS_URL = ROOT_URL + "/updateOutputStatus.php";
 
+    // Get device last measurement
+    public static final String GET_MEASUREMENT = ROOT_URL + "/getDeviceMeasurement.php";
+
+
 
     // Device id identifier
     public static String OUTPUT_ID = "Light_D";

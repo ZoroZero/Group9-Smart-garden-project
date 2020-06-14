@@ -292,7 +292,6 @@ public class Garden_Database_Control {
     }
 
     // Update output status
-//Record measurement
     public static void updateOutputStatus(final String device_id, final String status, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
         //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
@@ -315,6 +314,43 @@ public class Garden_Database_Control {
                 Map<String, String> params = new HashMap<>();
                 params.put("device_id", device_id);
                 params.put("status", status);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    // Get device last reading
+    public static void getDeviceLastReading(final String device_id, final Context context, final VolleyCallBack callBack){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.GET_MEASUREMENT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(!jsonObject.getBoolean("error")) {
+                                callBack.onSuccessResponse(response);
+                            }else{
+                                Toast.makeText(context, jsonObject.getString("message"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("device_id", device_id);
                 return params;
             }
         };

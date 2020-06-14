@@ -1,9 +1,14 @@
 package Userprofile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.smartgarden.R;
@@ -29,6 +34,28 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
 
         plantListView = findViewById(R.id.PlantList_PLantListView);
         Garden_Database_Control.FetchPlantsInfo(this, this);
+
+//        plantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent showDeviceDetail = new Intent(getApplicationContext(), PlantDetailActivity.class);
+//
+////                SharedPrefManager.getInstance(getApplicationContext()).getDevice_list();
+//                showDeviceDetail.putExtra("plant_detail.plant_name",
+//                        plant_name[position]);
+//                showDeviceDetail.putExtra("plant_detail.buy_date",
+//                        plant_buy_date[position]);
+//                showDeviceDetail.putExtra("plant_detail.buy_location",
+//                        plant_buy_location[position]);
+//                showDeviceDetail.putExtra("plant_detail.amount",
+//                        plant_amount[position]);
+//                showDeviceDetail.putExtra("plant_detail.linked_sensor_id",
+//                        linked_sensor_id[position]);
+//
+//                startActivity(showDeviceDetail);
+//            }
+//        });
     }
 
     @Override
@@ -38,7 +65,6 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
             if (!jsonObject.getBoolean("error")) {
                 JSONArray jsonArray = jsonObject.getJSONArray("plant_list");
                 Log.i("JSON Array", String.valueOf(jsonArray));
-                //String[] plant_name = new String[jsonArray.length()];
                 plant_name = new String[jsonArray.length()];
                 plant_buy_date = new String[jsonArray.length()];
                 plant_buy_location = new String[jsonArray.length()];
@@ -54,8 +80,28 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                     linked_sensor_id[i] = obj.getString("linked_sensor_id");
                 }
                 PlantDetailAdapter itemAdapter = new PlantDetailAdapter(getApplicationContext(), plant_name, plant_buy_date, plant_amount);
-                //UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
                 plantListView.setAdapter(itemAdapter);
+
+                plantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent showDeviceDetail = new Intent(getApplicationContext(), PlantDetailActivity.class);
+
+                        showDeviceDetail.putExtra("plant_detail.plant_name",
+                                plant_name[position]);
+                        showDeviceDetail.putExtra("plant_detail.buy_date",
+                                plant_buy_date[position]);
+                        showDeviceDetail.putExtra("plant_detail.buy_location",
+                                plant_buy_location[position]);
+                        showDeviceDetail.putExtra("plant_detail.amount",
+                                plant_amount[position]);
+                        showDeviceDetail.putExtra("plant_detail.linked_sensor_id",
+                                linked_sensor_id[position]);
+
+                        startActivity(showDeviceDetail);
+                    }
+                });
             }
         }
         catch (Exception e) {

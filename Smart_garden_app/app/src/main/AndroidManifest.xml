@@ -21,8 +21,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="Userprofile.PlantListView"></activity>
-        <!-- Activity -->
+        <activity
+            android:name="Userprofile.PlantDetailActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity android:name="Userprofile.PlantListView"
+            tools:ignore="InnerclassSeparator" /> <!-- Activity -->
         <activity
             android:name="Userprofile.ProfileActivity"
             tools:ignore="InnerclassSeparator" />
@@ -52,8 +55,7 @@
         <activity
             android:name="Registeration.RegisterMessageActivity"
             tools:ignore="InnerclassSeparator" /> <!-- Service -->
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
-<!--        <service android:name="org.eclipse.paho.android.service.MqttService" />-->
+        <service android:name="org.eclipse.paho.android.service.MqttService" /> <!-- <service android:name="org.eclipse.paho.android.service.MqttService" /> -->
         <service
             android:name="Background_service.RecordMeasurementService"
             tools:ignore="InnerclassSeparator" />
