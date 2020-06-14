@@ -10,23 +10,35 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.smartgarden.Constants;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Database.Database_RequestHandler;
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
+import Helper.Helper;
+import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
-public class RecordMeasurementService extends Service {
+public class RecordMeasurementService extends Service{
     public int counter=0;
     private DeviceInformation[] device_list;
     //private MqttAndroidClient client = MQTTHelper.client;
@@ -100,16 +112,18 @@ public class RecordMeasurementService extends Service {
                     if(device_list == null){
                         return;
                     }
-                    for (DeviceInformation device : device_list) {
-                        if (device.getDevice_type().contains("Sensor"))
+                    for (final DeviceInformation device : device_list) {
+                        if (device.getDevice_type().contains("Sensor")) {
                             Garden_Database_Control.recordMeasurement(device.getDevice_name() + "/" + device.getDevice_id(),
-                                    device.getDevice_type().replace(" Sensor", ""), device.getDevice_id(), getApplicationContext());
-                        //Log.i("Topic", jsonObject.getString("device_id") + "/" + jsonObject.getString("device_name"));
+                                    device.getDevice_type().replace(" Sensor", ""), device.getDevice_id(),
+                                    getApplicationContext());
+                            //Log.i("Topic", jsonObject.getString("device_id") + "/" + jsonObject.getString("device_name"));
+                        }
                     }
                 }
             }
         };
-        timer.schedule(timerTask, 1000, 300000);
+        timer.schedule(timerTask, 1000, 200000);
     }
 
     public void stoptimertask() {

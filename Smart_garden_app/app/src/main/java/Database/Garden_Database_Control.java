@@ -5,12 +5,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.smartgarden.Constants;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -263,7 +265,7 @@ public class Garden_Database_Control {
     }
 
     //Record measurement
-    public static void recordMeasurement(final String topic,final String type, final String device_id, final Context context){
+    public static void recordMeasurement(final String topic, final String type, final String device_id, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
         //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -271,6 +273,16 @@ public class Garden_Database_Control {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if(response.contains("{")) {
+                            int start = response.indexOf('{');
+                            int end = response.indexOf('}');
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.substring(start, end+1));
+                                Log.d("JSON", String.valueOf(jsonObject));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -285,9 +297,14 @@ public class Garden_Database_Control {
                 params.put("topic", topic);
                 params.put("type", type);
                 params.put("device_id", device_id);
+                params.put("user_id", UserLoginManagement.getInstance(context).getUserId()+"");
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                61000,
+                1,
+                2));
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
