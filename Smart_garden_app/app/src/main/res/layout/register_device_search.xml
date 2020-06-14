@@ -36,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/PlantDetail_line"
+            android:id="@+id/Page_line"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="15dp"
