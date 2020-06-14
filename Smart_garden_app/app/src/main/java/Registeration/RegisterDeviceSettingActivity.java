@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smartgarden.Constants;
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -84,12 +85,16 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
-                    if(!linked_device_id.contains("LightD")){
+                    if(!linked_device_id.contains(Constants.OUTPUT_ID)){
                         Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
                         return;
                     }
                     Garden_Database_Control.registerDevice(device_id, device_name,
                             linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                    String message = "[{ \"device_id\": \"" + linked_device_id +"\", " +
+                            "\", \"values\" : [\"0\", \"0\"] } ]";
+                    IOT_Server_Access.Publish(linked_device_name + "/" + linked_device_id, message, getApplicationContext());
+                    Garden_Database_Control.updateOutputStatus(linked_device_id, "Off", getApplicationContext());
                 }
                 else {
                     checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name, threshold);
@@ -122,11 +127,16 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         IOT_Server_Access.Subscribe(topic, getApplicationContext());
         startLoading();
         new CountDownTimer(20000, 1000) {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onTick(long millisUntilFinished) {
                 if (linked) {
                     stopLoading();
                     Garden_Database_Control.registerDevice(linked_device_id, linked_device_name,
                             device_id, device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                    String message = "[{ \"device_id\": \"" + device_id +"\", " +
+                            "\", \"values\" : [\"0\", \"0\"] } ]";
+                    IOT_Server_Access.Publish(device_name + "/" + device_id, message, getApplicationContext());
+                    Garden_Database_Control.updateOutputStatus(device_id, "Off", getApplicationContext());
                     this.cancel();
                 }
             }

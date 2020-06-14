@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
@@ -150,11 +151,11 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
-                    if(get_device_id[i].contains("LightD"))
+                    if(get_device_id[i].contains(Constants.OUTPUT_ID))
                         device_type[i] = "Output";
-                    else if(get_device_id[i].contains("Light"))
+                    else if(get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         device_type[i] = "Light Sensor";
-                    else if(get_device_id[i].contains("TempHumi"))
+                    else if(get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
                         device_type[i] = "TempHumi Sensor";
                 }
                 DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);

@@ -24,4 +24,15 @@ public class Constants {
 
     // Automatically record measurement
     public static String RECORD_URL = MQTT_URL + "/subscribeMQTT.php";
+
+    // Update output status record
+    public static String UPDATE_OUTPUT_STATUS_URL = ROOT_URL + "/updateOutputStatus.php";
+
+
+    // Device id identifier
+    public static String OUTPUT_ID = "Light_D";
+
+    public static String LIGHT_SENSOR_ID = "Light";
+
+    public static String TEMPHUMI_SENSOR_ID = "TempHumi";
 }

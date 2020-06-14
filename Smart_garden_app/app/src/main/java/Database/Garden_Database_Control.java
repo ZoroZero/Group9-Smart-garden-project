@@ -2,6 +2,7 @@ package Database;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -284,6 +285,36 @@ public class Garden_Database_Control {
                 params.put("topic", topic);
                 params.put("type", type);
                 params.put("device_id", device_id);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    // Update output status
+//Record measurement
+    public static void updateOutputStatus(final String device_id, final String status, final Context context){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.UPDATE_OUTPUT_STATUS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("Update response", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("device_id", device_id);
+                params.put("status", status);
                 return params;
             }
         };

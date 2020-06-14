@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
@@ -70,7 +71,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                 }
                 else if(device_type.equals("output")){
-                    if(!device_id.contains("LightD")){
+                    if(!device_id.contains(Constants.OUTPUT_ID)){
                         Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
                         return;
                     }
