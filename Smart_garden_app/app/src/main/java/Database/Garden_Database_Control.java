@@ -2,8 +2,11 @@ package Database;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -17,8 +20,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+
 import Helper.Helper;
 import Helper.VolleyCallBack;
+import Helper.DeviceInformation;
+import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
 
 public class Garden_Database_Control {
@@ -265,7 +272,7 @@ public class Garden_Database_Control {
     }
 
     //Record measurement
-    public static void recordMeasurement(final String topic, final String type, final String device_id, final Context context){
+    public static void recordMeasurement(final DeviceInformation device, final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
         //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -294,15 +301,58 @@ public class Garden_Database_Control {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("topic", topic);
-                params.put("type", type);
-                params.put("device_id", device_id);
+                params.put("topic", device.getDevice_name() + "/" + device.getDevice_id());
+                params.put("type", device.getDevice_type().replace(" Sensor", ""));
+                params.put("device_id", device.getDevice_id());
                 params.put("user_id", UserLoginManagement.getInstance(context).getUserId()+"");
                 return params;
             }
         };
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                61000,
+                5000,
+                1,
+                2));
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+
+    //Record measurement
+    public static void recordMeasurement_v2(final Vector<DeviceInformation> devices, final Vector<Integer> positions,
+                                            final Context context, final VolleyCallBack callBack){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.RECORD_URL,
+                new Response.Listener<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onResponse(String response) {
+                        //Log.i("response", response);
+                        callBack.onSuccessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                for(int i = 0; i < devices.size(); i++) {
+                    params.put("topic["+i+"]", devices.get(i).getDevice_name() + "/" + devices.get(i).getDevice_id());
+                    params.put("type["+i+"]", devices.get(i).getDevice_type().replace(" Sensor", ""));
+                    params.put("device_id[" + i+"]", devices.get(i).getDevice_id());
+                    params.put("linked_device_id[" + i+"]", devices.get(i).getLinked_device_id());
+                    params.put("position[" + i+"]", positions.get(i) + "");
+                }
+                params.put("user_id", UserLoginManagement.getInstance(context).getUserId() + "");
+                return params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
                 1,
                 2));
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);

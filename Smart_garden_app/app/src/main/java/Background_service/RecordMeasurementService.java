@@ -22,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.smartgarden.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -30,17 +33,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import Database.Database_RequestHandler;
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
+import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
 
-public class RecordMeasurementService extends Service{
+public class RecordMeasurementService extends Service implements VolleyCallBack{
     public int counter=0;
     private DeviceInformation[] device_list;
+    private Vector<DeviceInformation> sensors;
+    private Vector<Integer> sensors_position;
     //private MqttAndroidClient client = MQTTHelper.client;
 
     @Override
@@ -112,18 +119,19 @@ public class RecordMeasurementService extends Service{
                     if(device_list == null){
                         return;
                     }
-                    for (final DeviceInformation device : device_list) {
-                        if (device.getDevice_type().contains("Sensor")) {
-                            Garden_Database_Control.recordMeasurement(device.getDevice_name() + "/" + device.getDevice_id(),
-                                    device.getDevice_type().replace(" Sensor", ""), device.getDevice_id(),
-                                    getApplicationContext());
-                            //Log.i("Topic", jsonObject.getString("device_id") + "/" + jsonObject.getString("device_name"));
+                    sensors = new Vector<DeviceInformation>();
+                    sensors_position = new Vector<Integer>();
+                    for(int i = 0; i< device_list.length; i++){
+                        if(device_list[i].getDevice_type().contains("Sensor")){
+                            sensors.addElement(device_list[i]);
+                            sensors_position.addElement(i);
                         }
                     }
+                    Garden_Database_Control.recordMeasurement_v2(sensors, sensors_position, getApplicationContext(), RecordMeasurementService.this);
                 }
             }
         };
-        timer.schedule(timerTask, 1000, 200000);
+        timer.schedule(timerTask, 1000, 6000);
     }
 
     public void stoptimertask() {
@@ -152,4 +160,37 @@ public class RecordMeasurementService extends Service{
         } catch (IOException e) { return false; }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onSuccessResponse(String response) {
+        int index = response.indexOf("<br");
+        String change_response = response.substring(0, index);
+        if (change_response.equals(""))
+            return;
+        String[] responses = change_response.split("\n");
+        for (String res : responses) {
+            Log.i("Message", res);
+            try {
+                JSONObject jsonObject = new JSONObject(res);
+                String message = jsonObject.getString("message");
+                if (message.equals("Turn on")) {
+                    int position = jsonObject.getInt("position");
+                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
+                            "\", \"values\" : [\"1\", \"255\"] } ]";
+                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
+                            control_message, getApplicationContext());
+                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-255", getApplicationContext());
+                } else if (message.equals("Turn off")) {
+                    int position = jsonObject.getInt("position");
+                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
+                            "\", \"values\" : [\"1\", \"0\"] } ]";
+                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
+                            control_message, getApplicationContext());
+                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-0", getApplicationContext());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
