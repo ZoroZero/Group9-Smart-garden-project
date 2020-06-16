@@ -55,7 +55,14 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                     JSONArray jsonArray = jsonObject.getJSONArray("reading");
                     JSONObject reading  = jsonArray.getJSONObject(0);
                     //Log.i("JSON object", String.valueOf(reading));
-                    readingTV.setText("" + reading.getInt("measurement"));
+                    String type = reading.getString("type");
+                    String readingText = "";
+                    readingText = reading.getString("type") + ": " + reading.getInt("measurement");
+                    if(type.equals("Humid")){
+                        JSONObject tempReading  = jsonArray.getJSONObject(1);
+                        readingText += " " + tempReading.getString("type") + ": " + tempReading.getInt("measurement");
+                    }
+                    readingTV.setText(readingText);
                     readingTimeTV.setText(reading.getString("date"));
                 }
                 else{

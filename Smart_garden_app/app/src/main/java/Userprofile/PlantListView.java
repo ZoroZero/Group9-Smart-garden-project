@@ -35,27 +35,7 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
         plantListView = findViewById(R.id.PlantList_PLantListView);
         Garden_Database_Control.FetchPlantsInfo(this, this);
 
-//        plantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent showDeviceDetail = new Intent(getApplicationContext(), PlantDetailActivity.class);
-//
-////                SharedPrefManager.getInstance(getApplicationContext()).getDevice_list();
-//                showDeviceDetail.putExtra("plant_detail.plant_name",
-//                        plant_name[position]);
-//                showDeviceDetail.putExtra("plant_detail.buy_date",
-//                        plant_buy_date[position]);
-//                showDeviceDetail.putExtra("plant_detail.buy_location",
-//                        plant_buy_location[position]);
-//                showDeviceDetail.putExtra("plant_detail.amount",
-//                        plant_amount[position]);
-//                showDeviceDetail.putExtra("plant_detail.linked_sensor_id",
-//                        linked_sensor_id[position]);
-//
-//                startActivity(showDeviceDetail);
-//            }
-//        });
+
     }
 
     @Override

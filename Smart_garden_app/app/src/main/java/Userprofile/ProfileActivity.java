@@ -50,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
         IOT_Server_Access.connect(getApplicationContext());
         TextView usernameTextView = findViewById(R.id.PlantListViewTextView);
         deviceListView = findViewById(R.id.PlantList_PLantListView);
-        usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername());
+        usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername().toUpperCase());
 
         //Display devices info
         Garden_Database_Control.FetchDevicesInfo(this, this);

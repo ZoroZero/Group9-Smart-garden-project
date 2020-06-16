@@ -11,11 +11,11 @@ import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.nio.charset.StandardCharsets;
+
 import Helper.Helper;
 
 public class IOT_Server_Access {
@@ -93,7 +93,7 @@ public class IOT_Server_Access {
 
 
     // Unsubscribe from a topic
-    public static void Unsubscribe(String topic, Context context){
+    public static void Unsubscribe(String topic){
         try {
             IMqttToken unsubToken = client.unsubscribe(topic);
             unsubToken.setActionCallback(new IMqttActionListener() {

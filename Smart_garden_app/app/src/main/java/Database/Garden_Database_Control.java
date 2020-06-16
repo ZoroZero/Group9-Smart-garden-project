@@ -22,10 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
-import Helper.DeviceInformation;
-import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
 
 public class Garden_Database_Control {
