@@ -21,10 +21,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name="Userprofile.DeviceDetailActivity"></activity>
         <activity
             android:name="Userprofile.PlantDetailActivity"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name="Userprofile.PlantListView"
+        <activity
+            android:name="Userprofile.PlantListView"
             tools:ignore="InnerclassSeparator" /> <!-- Activity -->
         <activity
             android:name="Userprofile.ProfileActivity"

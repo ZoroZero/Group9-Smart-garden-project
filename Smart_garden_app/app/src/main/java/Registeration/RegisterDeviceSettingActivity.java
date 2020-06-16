@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 import Database.Garden_Database_Control;
+import DeviceController.Device_Control;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 
@@ -91,10 +92,11 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     }
                     Garden_Database_Control.registerDevice(device_id, device_name,
                             linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
-                    String message = "[{ \"device_id\": \"" + linked_device_id +"\", " +
-                            "\", \"values\" : [\"0\", \"0\"] } ]";
-                    IOT_Server_Access.Publish(linked_device_name + "/" + linked_device_id, message, getApplicationContext());
-                    Garden_Database_Control.updateOutputStatus(linked_device_id, "Off", getApplicationContext());
+//                    String message = "[{ \"device_id\": \"" + linked_device_id +"\", " +
+//                            "\", \"values\" : [\"0\", \"0\"] } ]";
+//                    IOT_Server_Access.Publish(linked_device_name + "/" + linked_device_id, message, getApplicationContext());
+//                    Garden_Database_Control.updateOutputStatus(linked_device_id, "Off", getApplicationContext());
+                    Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
                 }
                 else {
                     checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name, threshold);
@@ -133,10 +135,11 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     stopLoading();
                     Garden_Database_Control.registerDevice(linked_device_id, linked_device_name,
                             device_id, device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
-                    String message = "[{ \"device_id\": \"" + device_id +"\", " +
-                            "\", \"values\" : [\"0\", \"0\"] } ]";
-                    IOT_Server_Access.Publish(device_name + "/" + device_id, message, getApplicationContext());
-                    Garden_Database_Control.updateOutputStatus(device_id, "Off", getApplicationContext());
+//                    String message = "[{ \"device_id\": \"" + device_id +"\", " +
+//                            "\", \"values\" : [\"0\", \"0\"] } ]";
+//                    IOT_Server_Access.Publish(device_name + "/" + device_id, message, getApplicationContext());
+//                    Garden_Database_Control.updateOutputStatus(device_id, "Off", getApplicationContext());
+                    Device_Control.turnDeviceOff(device_id, device_name, getApplicationContext());
                     this.cancel();
                 }
             }

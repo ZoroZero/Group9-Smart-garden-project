@@ -15,6 +15,8 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,8 +54,9 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
         deviceListView = findViewById(R.id.PlantList_PLantListView);
         usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername().toUpperCase());
 
-        //Display devices info
+        // Display devices info
         Garden_Database_Control.FetchDevicesInfo(this, this);
+
     }
 
     @Override
@@ -136,13 +139,13 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
             JSONObject jsonObject = new JSONObject(result);
             if (!jsonObject.getBoolean("error")) {
                 JSONArray jsonArray = jsonObject.getJSONArray("list");
-                String[] get_device_id = new String[jsonArray.length()];
-                String[] get_device_name = new String[jsonArray.length()];
+                final String[] get_device_id = new String[jsonArray.length()];
+                final String[] get_device_name = new String[jsonArray.length()];
                 String[] device_topic = new String[jsonArray.length()];
-                String[] linked_device_id = new String[jsonArray.length()];
-                String[] linked_device_name = new String[jsonArray.length()];
+                final String[] linked_device_id = new String[jsonArray.length()];
+                final String[] linked_device_name = new String[jsonArray.length()];
                 String[] linked_device_topic = new String[jsonArray.length()];
-                String[] device_type = new String[jsonArray.length()];
+                final String[] device_type = new String[jsonArray.length()];
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
@@ -161,6 +164,27 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
                 deviceListView.setAdapter(itemAdapter);
+
+                // Set device change tab when click
+                deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent showDeviceDetail = new Intent(getApplicationContext(), DeviceDetailActivity.class);
+
+                        showDeviceDetail.putExtra("device_detail.device_id",
+                                get_device_id[position]);
+                        showDeviceDetail.putExtra("device_detail.device_name",
+                                get_device_name[position]);
+                        showDeviceDetail.putExtra("device_detail.device_type",
+                                device_type[position]);
+                        showDeviceDetail.putExtra("device_detail.linked_device_id",
+                                linked_device_id[position]);
+                        showDeviceDetail.putExtra("device_detail.linked_device_name",
+                                linked_device_name[position]);
+
+                        startActivity(showDeviceDetail);
+                    }
+                });
 
                 //Start background service to record device measure
                 RecordMeasurementService mYourService = new RecordMeasurementService();

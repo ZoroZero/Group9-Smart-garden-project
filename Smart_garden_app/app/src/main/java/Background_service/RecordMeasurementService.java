@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import Database.Garden_Database_Control;
+import DeviceController.Device_Control;
 import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
@@ -110,10 +111,8 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                     }
                     sensors = UserLoginManagement.getInstance(getApplicationContext()).getSensor();
                     sensors_position = new Vector<>();
-                    for(int i = 0; i< device_list.length; i++){
-                        if(device_list[i].getDevice_type().contains("Sensor")){
+                    for(int i = 0; i< sensors.size(); i++){
                             sensors_position.addElement(i);
-                        }
                     }
                     Garden_Database_Control.recordMeasurement_v2(sensors, sensors_position, getApplicationContext(), RecordMeasurementService.this);
                 }
@@ -163,18 +162,20 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                 String message = jsonObject.getString("message");
                 if (message.equals("Turn on")) {
                     int position = jsonObject.getInt("position");
-                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
-                            "\", \"values\" : [\"1\", \"255\"] } ]";
-                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
-                            control_message, getApplicationContext());
-                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-255", getApplicationContext());
+//                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
+//                            "\", \"values\" : [\"1\", \"255\"] } ]";
+//                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
+//                            control_message, getApplicationContext());
+//                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-255", getApplicationContext());
+                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
                 } else if (message.equals("Turn off")) {
                     int position = jsonObject.getInt("position");
-                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
-                            "\", \"values\" : [\"1\", \"0\"] } ]";
-                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
-                            control_message, getApplicationContext());
-                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-0", getApplicationContext());
+//                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
+//                            "\", \"values\" : [\"1\", \"0\"] } ]";
+//                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
+//                            control_message, getApplicationContext());
+//                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-0", getApplicationContext());
+                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
