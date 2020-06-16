@@ -39,4 +39,7 @@ public class Constants {
     public static String LIGHT_SENSOR_ID = "Light";
 
     public static String TEMPHUMI_SENSOR_ID = "TempHumi";
+
+
+    //
 }

@@ -10,17 +10,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.example.smartgarden.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,16 +22,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import Database.Database_RequestHandler;
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
-import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
@@ -119,8 +108,8 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                     if(device_list == null){
                         return;
                     }
-                    sensors = new Vector<DeviceInformation>();
-                    sensors_position = new Vector<Integer>();
+                    sensors = new Vector<>();
+                    sensors_position = new Vector<>();
                     for(int i = 0; i< device_list.length; i++){
                         if(device_list[i].getDevice_type().contains("Sensor")){
                             sensors.addElement(device_list[i]);
