@@ -5,9 +5,12 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +22,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Vector;
 
 import Database.Garden_Database_Control;
+import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
+import Login_RegisterUser.UserLoginManagement;
 
 public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
     private EditText buy_date_input;
@@ -29,7 +35,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
     private EditText plant_nameET;
     private EditText buy_locationET;
     private EditText amountET;
-    private EditText linked_sensor_idET;
+    private String linked_sensor_id = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +45,29 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         plant_nameET = findViewById(R.id.registerPlantNameEditText);
         buy_locationET = findViewById(R.id.registerPlantBuyLocationEditText);
         amountET = findViewById(R.id.registerPlantAmountEditText);
-        linked_sensor_idET = findViewById(R.id.registerPlantSensorIDEditText);
+        Spinner linked_sensor_idSpinner = findViewById(R.id.registerPlantSensorID);
         Button submitBtn = findViewById(R.id.registerPlant_SubmitBtn);
+
+        // Set up spinner
+        Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
+        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size()];
+        for(int i = 0; i < sensor_id.length; i++){
+            sensor_id[i] = sensor.get(i).getDevice_id();
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
+        linked_sensor_idSpinner.setAdapter(arrayAdapter);
+
+        linked_sensor_idSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                linked_sensor_id = sensor_id[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         buy_date_input.setOnClickListener(new View.OnClickListener() {
 
@@ -70,8 +97,8 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
                 final String buy_date = buy_date_input.getText().toString();
                 final String buy_location = buy_locationET.getText().toString();
                 final String amount = amountET.getText().toString();
-                final String linked_sensor_id = linked_sensor_idET.getText().toString();
-                if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("")){
+//                final String linked_sensor_id = linked_sensor_idSpinner.getText().toString();
+                if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("") || linked_sensor_id.equals("")){
                     Toast.makeText(getApplicationContext(), "Empty field detected", Toast.LENGTH_LONG).show();
                     return;
                 }

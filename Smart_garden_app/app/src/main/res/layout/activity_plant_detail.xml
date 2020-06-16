@@ -24,7 +24,7 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="Plant detail"
             android:textColor="#c1d045"
             android:textSize="24sp"

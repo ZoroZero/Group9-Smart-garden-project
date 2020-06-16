@@ -108,11 +108,10 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                     if(device_list == null){
                         return;
                     }
-                    sensors = new Vector<>();
+                    sensors = UserLoginManagement.getInstance(getApplicationContext()).getSensor();
                     sensors_position = new Vector<>();
                     for(int i = 0; i< device_list.length; i++){
                         if(device_list[i].getDevice_type().contains("Sensor")){
-                            sensors.addElement(device_list[i]);
                             sensors_position.addElement(i);
                         }
                     }

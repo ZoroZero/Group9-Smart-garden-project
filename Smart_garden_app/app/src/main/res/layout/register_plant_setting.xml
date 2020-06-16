@@ -22,10 +22,10 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="30dp"
                 android:background="#ffffff">
 
                 <TextView
@@ -33,10 +33,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
                     android:gravity="center"
                     android:text="Add new plant"
                     android:textColor="#C1D045"
@@ -193,22 +190,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/registerPlantAmountEditText" />
 
-                <EditText
-                    android:id="@+id/registerPlantSensorIDEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:ems="10"
-                    android:hint="Enter sensor id linked with"
-                    android:inputType="textPersonName"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Linked_sensor_idTextView" />
-
                 <Button
                     android:id="@+id/registerPlant_SubmitBtn"
                     android:layout_width="wrap_content"
@@ -220,7 +201,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPlantSensorIDEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/registerPlantSensorID" />
+
+                <Spinner
+                    android:id="@+id/registerPlantSensorID"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/Linked_sensor_idTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
