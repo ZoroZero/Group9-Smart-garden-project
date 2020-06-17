@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         if (UserLoginManagement.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
         }
         usernameText = findViewById(R.id.loginUsernameEditText);
         passwordText = findViewById(R.id.loginPasswordEditText);
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final String password = passwordText.getText().toString().trim();
         Garden_Database_Control.Login(username, password, this);
         if (UserLoginManagement.getInstance(this).isLoggedIn()) {
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             finish();
         }
     }

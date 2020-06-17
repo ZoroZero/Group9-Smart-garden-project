@@ -31,6 +31,7 @@ import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
+import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
@@ -44,11 +45,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        if(!UserLoginManagement.getInstance(this).isLoggedIn()){
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }
+
         IOT_Server_Access.connect(getApplicationContext());
         TextView usernameTextView = findViewById(R.id.PlantListViewTextView);
         deviceListView = findViewById(R.id.PlantList_PLantListView);
@@ -95,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                startActivity(new Intent(this, ProfileActivity.class));
+                startActivity(new Intent(this, HomeActivity.class));
                 finish();
                 return true;
             case 2:
@@ -186,28 +183,11 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     }
                 });
 
-                //Start background service to record device measure
-                RecordMeasurementService mYourService = new RecordMeasurementService();
-                Intent mServiceIntent = new Intent(this, mYourService.getClass());
-                if (!isMyServiceRunning(mYourService.getClass())) {
-                    startService(mServiceIntent);
-                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private boolean isMyServiceRunning(Class serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        assert manager != null;
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
-                return true;
-            }
-        }
-        Log.i ("Service status", "Not running");
-        return false;
-    }
 }
