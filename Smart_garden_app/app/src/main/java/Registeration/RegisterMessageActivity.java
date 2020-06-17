@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
+import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Userprofile.DeviceDetailAdapter;
 import Userprofile.ProfileActivity;
@@ -41,7 +42,7 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             }
         });
 

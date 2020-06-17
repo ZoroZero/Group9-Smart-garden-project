@@ -31,7 +31,8 @@ public class Constants {
     // Get device last measurement
     public static final String GET_MEASUREMENT = ROOT_URL + "/getDeviceMeasurement.php";
 
-
+    // Get output status
+    public static final String GET_STATUS = ROOT_URL + "/getOutputInfo.php";
 
     // Device id identifier
     public static String OUTPUT_ID = "Light_D";

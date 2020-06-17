@@ -166,8 +166,13 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent showDeviceDetail = new Intent(getApplicationContext(), DeviceDetailActivity.class);
-
+                        Intent showDeviceDetail = null;
+                        if(device_type[position].contains("Sensor")) {
+                            showDeviceDetail = new Intent(getApplicationContext(), DeviceDetailActivity.class);
+                        }
+                        else {
+                            showDeviceDetail = new Intent(getApplicationContext(), OutputDetailActivity.class);
+                        }
                         showDeviceDetail.putExtra("device_detail.device_id",
                                 get_device_id[position]);
                         showDeviceDetail.putExtra("device_detail.device_name",

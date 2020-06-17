@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Userprofile.DeviceDetailActivity">
+    tools:context="Userprofile.OutputDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <TextView
-            android:id="@+id/deviceId"
+            android:id="@+id/output_deviceId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -73,23 +73,23 @@
             android:layout_marginTop="24dp"
             android:text="Device ID:"
             android:textColor="#708238"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
         <TextView
-            android:id="@+id/DeviceDetail_DeviceID_TV"
+            android:id="@+id/OutputDeviceDetail_DeviceID_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/username" />
 
         <TextView
-            android:id="@+id/deviceName"
+            android:id="@+id/output_deviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -97,23 +97,23 @@
             android:layout_marginTop="24dp"
             android:text="Device Name:"
             android:textColor="#708238"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceId" />
+            app:layout_constraintTop_toBottomOf="@+id/output_deviceId" />
 
         <TextView
-            android:id="@+id/deviceDetail_DeviceName_TV"
+            android:id="@+id/outputDeviceDetail_DeviceName_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="30dp"
-            android:text="TextView"
+            android:layout_marginEnd="20dp"
+            android:text="device name"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/DeviceDetail_DeviceID_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/OutputDeviceDetail_DeviceID_TV" />
 
         <TextView
-            android:id="@+id/deviceType"
+            android:id="@+id/output_deviceType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -121,71 +121,105 @@
             android:layout_marginTop="24dp"
             android:text="Device type:"
             android:textColor="#708238"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceName" />
+            app:layout_constraintTop_toBottomOf="@+id/output_deviceName" />
 
         <TextView
-            android:id="@+id/deviceDetail_DeviceType_TV"
+            android:id="@+id/outputDeviceDetail_DeviceType_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceDetail_DeviceName_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/outputDeviceDetail_DeviceName_TV" />
 
         <TextView
-            android:id="@+id/lastReading"
+            android:id="@+id/output_deviceStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginTop="24dp"
-            android:background="#ffffff"
-            android:text="Last reading"
+            android:text="Device status:"
             android:textColor="#708238"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceType" />
+            app:layout_constraintTop_toBottomOf="@+id/output_deviceType" />
 
         <TextView
-            android:id="@+id/deviceDetail_DeviceLastReading_TV"
+            android:id="@+id/outputDeviceDetail_DeviceStatus_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceDetail_DeviceType_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/outputDeviceDetail_DeviceType_TV" />
 
-        <TextView
-            android:id="@+id/lastReadingTime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="369dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="24dp"
-            android:background="#ffffff"
-            android:text="Last reading time:"
-            android:textColor="#708238"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lastReading" />
-
-        <TextView
-            android:id="@+id/deviceDetail_DeviceLastReadingTime_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="30dp"
-            android:text="TextView"
-            android:textSize="18sp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deviceDetail_DeviceLastReading_TV" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/output_deviceStatus">
+
+            <Button
+                android:id="@+id/outputDeviceDetail_TurnOn_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="#c1d045"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
+                android:text="Set light 255"
+                android:textColor="#C238EB" />
+
+            <Button
+                android:id="@+id/outputDeviceDetail_TurnOff_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="#c1d045"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
+                android:text="Set light 0"
+                android:textColor="#C238EB" />
+
+            <Button
+                android:id="@+id/outputDeviceDetail_Sleep_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="#c1d045"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
+                android:text="Sleep"
+                android:textColor="#C238EB" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/device_changeSettingBtn"
+            android:id="@+id/outputDevice_changeSettingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -196,21 +230,23 @@
             android:text="Change setting"
             android:textColor="#C238EB"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lastReadingTime" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
         <Button
             android:id="@+id/item_returnButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:background="#C1D045"
             android:text="Return"
             android:textColor="#C238EB"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/device_changeSettingBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/outputDevice_changeSettingBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
