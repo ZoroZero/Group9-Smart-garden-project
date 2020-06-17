@@ -30,7 +30,6 @@ import Database.Garden_Database_Control;
 import DeviceController.Device_Control;
 import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
-import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
 
 public class RecordMeasurementService extends Service implements VolleyCallBack{
