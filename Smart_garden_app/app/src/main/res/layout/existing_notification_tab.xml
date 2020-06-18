@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="145dp"
             android:layout_marginEnd="0dp"
-            android:background="match_parent"
+            android:background="#8BC34A"
 
             android:src="@drawable/button_menu" />
 
