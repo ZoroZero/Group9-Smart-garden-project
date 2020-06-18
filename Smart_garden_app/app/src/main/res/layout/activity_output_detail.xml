@@ -165,16 +165,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/output_deviceStatus">
+            app:layout_constraintTop_toBottomOf="@+id/outputDevice_DeviceLight_Switch">
 
             <Button
-                android:id="@+id/outputDeviceDetail_TurnOn_Btn"
+                android:id="@+id/outputDeviceDetail_Wake_Btn"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="20dp"
@@ -185,22 +185,7 @@
                 android:paddingTop="8dp"
                 android:paddingRight="8dp"
                 android:paddingBottom="8dp"
-                android:text="Set light 255"
-                android:textColor="#C238EB" />
-
-            <Button
-                android:id="@+id/outputDeviceDetail_TurnOff_Btn"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/roundedbutton"
-                android:paddingLeft="8dp"
-                android:paddingTop="8dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="8dp"
-                android:text="Set light 0"
+                android:text="Wake up"
                 android:textColor="#C238EB" />
 
             <Button
@@ -248,6 +233,18 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/outputDevice_changeSettingBtn" />
+
+        <Switch
+            android:id="@+id/outputDevice_DeviceLight_Switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Device light "
+            android:textOff="0"
+            android:textOn="255"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/output_deviceStatus" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

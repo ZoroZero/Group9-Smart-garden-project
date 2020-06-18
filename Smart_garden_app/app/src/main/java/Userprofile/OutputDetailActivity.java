@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
     private TextView device_statusTV;
     private String deviceStatus;
+    private Switch lightControl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +38,10 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         TextView device_nameTV = findViewById(R.id.outputDeviceDetail_DeviceName_TV);
         TextView device_typeTV = findViewById(R.id.outputDeviceDetail_DeviceType_TV);
         device_statusTV = findViewById(R.id.outputDeviceDetail_DeviceStatus_TV);
-        Button turnOn_Btn = findViewById(R.id.outputDeviceDetail_TurnOn_Btn);
-        Button turnOff_Btn = findViewById(R.id.outputDeviceDetail_TurnOff_Btn);
+//        Button turnOn_Btn = findViewById(R.id.outputDeviceDetail_TurnOn_Btn);
+
+        lightControl = findViewById(R.id.outputDevice_DeviceLight_Switch);
+        Button wake_Btn = findViewById(R.id.outputDeviceDetail_Wake_Btn);
         Button sleep_Btn = findViewById(R.id.outputDeviceDetail_Sleep_Btn);
         Button return_Btn = findViewById(R.id.item_returnButton);
         //Set text
@@ -47,8 +52,42 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         getDeviceInfo();
 
         // Set onclick event
-        turnOn_Btn.setOnClickListener(this);
-        turnOff_Btn.setOnClickListener(this);
+        lightControl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    switch (deviceStatus) {
+                        case "Off":
+                            Toast.makeText(getApplicationContext(), "Can not turn on right now", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "On-0":
+                            Device_Control.turnDeviceOn(getIntent().getStringExtra("device_detail.device_id"),
+                                    getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
+                            deviceStatus = "On-255";
+                            device_statusTV.setText(deviceStatus);
+                            break;
+                        case "On-255":
+                            Toast.makeText(getApplicationContext(), "Device is already on now", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                } else {
+                    // The toggle is disabled
+                    switch (deviceStatus) {
+                        case "Off":
+                        case "On-255":
+                            Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
+                                    getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
+                            deviceStatus = "On-0";
+                            device_statusTV.setText(deviceStatus);
+                            break;
+                        case "On-0":
+                            Toast.makeText(getApplicationContext(), "Device is already off now", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            }
+        });
+        wake_Btn.setOnClickListener(this);
         sleep_Btn.setOnClickListener(this);
         return_Btn.setOnClickListener(this);
 
@@ -71,6 +110,9 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     //Log.i("JSON object", String.valueOf(reading));
                     deviceStatus = status.getString("status");
                     device_statusTV.setText(deviceStatus);
+                    if(deviceStatus.equals("Off")){
+                        lightControl.setClickable(false);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -83,36 +125,6 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.outputDeviceDetail_TurnOn_Btn:
-                switch (deviceStatus) {
-                    case "Off":
-                        Toast.makeText(getApplicationContext(), "Can not turn on right now", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "On-0":
-                        Device_Control.turnDeviceOn(getIntent().getStringExtra("device_detail.device_id"),
-                                getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                        deviceStatus = "On-255";
-                        device_statusTV.setText(deviceStatus);
-                        break;
-                    case "On-255":
-                        Toast.makeText(getApplicationContext(), "Device is already on now", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                break;
-            case R.id.outputDeviceDetail_TurnOff_Btn:
-                switch (deviceStatus) {
-                    case "Off":
-                    case "On-255":
-                        Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
-                                getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                        deviceStatus = "On-0";
-                        device_statusTV.setText(deviceStatus);
-                        break;
-                    case "On-0":
-                        Toast.makeText(getApplicationContext(), "Device is already off now", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                break;
             case R.id.outputDeviceDetail_Sleep_Btn:
                 switch (deviceStatus) {
                     case "On-0":
@@ -121,9 +133,25 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                                 getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
                         deviceStatus = "Off";
                         device_statusTV.setText(deviceStatus);
+                        lightControl.setClickable(false);
                         break;
                     case "Off":
                         Toast.makeText(getApplicationContext(), "Device is already at sleep now", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                break;
+            case R.id.outputDeviceDetail_Wake_Btn:
+                switch (deviceStatus) {
+                    case "On-0":
+                    case "On-255":
+                        Toast.makeText(getApplicationContext(), "Device is already activate now", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Off":
+                        Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
+                                getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
+                        deviceStatus = "On-0";
+                        device_statusTV.setText(deviceStatus);
+                        lightControl.setClickable(true);
                         break;
                 }
                 break;
