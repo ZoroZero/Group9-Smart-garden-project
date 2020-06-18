@@ -47,9 +47,9 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
         });
 
         //Update information if success
-        if(Objects.requireNonNull(getIntent().getStringExtra("register_message")).contains("Sucessfully")){
-            Garden_Database_Control.FetchDevicesInfo(this, this);
-        }
+        //if(Objects.requireNonNull(getIntent().getStringExtra("register_message")).contains("Sucessfully")){
+        Garden_Database_Control.FetchDevicesInfo(this, this);
+        //}
     }
 
     @Override

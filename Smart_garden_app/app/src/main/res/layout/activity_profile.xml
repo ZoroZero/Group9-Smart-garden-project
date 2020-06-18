@@ -10,11 +10,12 @@
         android:id="@+id/PlantListViewTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Username"
-        android:textColor="#708238"
+        android:layout_marginTop="16dp"
+        android:text="Device list"
+        android:textColor="#c1d045"
         android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
