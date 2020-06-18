@@ -2,6 +2,7 @@ package Userprofile;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
 import android.os.Build;
@@ -27,7 +28,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
     private TextView device_statusTV;
     private String deviceStatus;
-    private Switch lightControl;
+    private SwitchCompat lightControl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,8 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 //        Button turnOn_Btn = findViewById(R.id.outputDeviceDetail_TurnOn_Btn);
 
         lightControl = findViewById(R.id.outputDevice_DeviceLight_Switch);
+        lightControl.setTextOn("255"); // displayed text of the Switch whenever it is in checked or on state
+        lightControl.setTextOff("0");
         Button wake_Btn = findViewById(R.id.outputDeviceDetail_Wake_Btn);
         Button sleep_Btn = findViewById(R.id.outputDeviceDetail_Sleep_Btn);
         Button return_Btn = findViewById(R.id.item_returnButton);
@@ -112,6 +115,12 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     device_statusTV.setText(deviceStatus);
                     if(deviceStatus.equals("Off")){
                         lightControl.setClickable(false);
+                    }
+                    else if(deviceStatus.equals("On-0")){
+                        lightControl.setChecked(false);
+                    }
+                    else if(deviceStatus.equals("On-255")){
+                        lightControl.setChecked(true);
                     }
                 }
             }
