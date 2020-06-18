@@ -113,14 +113,16 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     //Log.i("JSON object", String.valueOf(reading));
                     deviceStatus = status.getString("status");
                     device_statusTV.setText(deviceStatus);
-                    if(deviceStatus.equals("Off")){
-                        lightControl.setClickable(false);
-                    }
-                    else if(deviceStatus.equals("On-0")){
-                        lightControl.setChecked(false);
-                    }
-                    else if(deviceStatus.equals("On-255")){
-                        lightControl.setChecked(true);
+                    switch (deviceStatus) {
+                        case "Off":
+                            lightControl.setClickable(false);
+                            break;
+                        case "On-0":
+                            lightControl.setChecked(false);
+                            break;
+                        case "On-255":
+                            lightControl.setChecked(true);
+                            break;
                     }
                 }
             }
@@ -160,6 +162,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                                 getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
                         deviceStatus = "On-0";
                         device_statusTV.setText(deviceStatus);
+                        lightControl.setChecked(false);
                         lightControl.setClickable(true);
                         break;
                 }

@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textColor="#c1d045"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

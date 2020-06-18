@@ -1,6 +1,7 @@
 package Userprofile;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -54,6 +55,11 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
         // Display devices info
         Garden_Database_Control.FetchDevicesInfo(this, this);
 
+        // Set back button
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -117,6 +123,9 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 UserLoginManagement.getInstance(this).logOut();
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
+                return true;
+            case android.R.id.home:
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

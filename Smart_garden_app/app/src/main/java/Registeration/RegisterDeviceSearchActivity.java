@@ -1,8 +1,14 @@
 package Registeration;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -11,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgarden.Constants;
@@ -25,7 +33,10 @@ import org.json.JSONObject;
 
 import Helper.DeviceInformation;
 import IOT_Server.IOT_Server_Access;
+import Login_RegisterUser.HomeActivity;
+import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
+import Userprofile.PlantListView;
 
 public class RegisterDeviceSearchActivity extends AppCompatActivity {
     MqttAndroidClient client;
@@ -119,7 +130,28 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
             }
         });
+        // Setup menu
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void startLoading(){
         searchDeviceBtn.setEnabled(false);
