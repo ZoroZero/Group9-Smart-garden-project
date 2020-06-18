@@ -14,13 +14,13 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txt_menu_view_device"
+        android:id="@+id/txt_menu_home"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
-        android:text=" View devices            "
+        android:text=" Home                             "
         android:textColor="#39ac39"
         android:textSize="18sp"
         android:background="#ffffff"
@@ -28,10 +28,10 @@
         app:layout_constraintTop_toBottomOf="@+id/smartGarden" />
 
     <ImageButton
-        android:id="@+id/btn_menu_view_device"
+        android:id="@+id/btn_menu_home"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/button_view_device"
+        android:src="@drawable/button_home"
         android:layout_gravity="center"
         android:background="#ffffff"
         app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
@@ -45,13 +45,13 @@
         android:text="                                                              "
         android:background="#ffffff"
         app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
-        app:layout_constraintTop_toBottomOf="@+id/txt_menu_view_device" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_home" />
 
     <TextView
         android:id="@+id/txt_menu_search_device"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text=" Search devices      "
+        android:text=" Search devices             "
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
         android:textSize="18sp"
@@ -153,7 +153,7 @@
         android:id="@+id/txt_menu_view_report"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text=" View report            "
+        android:text=" View report                  "
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
         android:textSize="18sp"
@@ -187,7 +187,7 @@
         android:id="@+id/txt_menu_setting"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text=" Setting                    "
+        android:text=" Setting                         "
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
         android:textSize="18sp"
@@ -218,10 +218,10 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_menu_setting" />
 
     <TextView
-        android:id="@+id/txt_menu_log_out"
+        android:id="@+id/txt_menu_notification"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text=" Log out                    "
+        android:text=" Notification                    "
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
         android:textSize="18sp"
@@ -232,6 +232,40 @@
         app:layout_constraintTop_toBottomOf="@+id/space5"/>
 
     <ImageButton
+        android:id="@+id/btn_menu_notification"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/button_notification"
+        android:layout_gravity="center_vertical"
+        android:background="#ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintTop_toBottomOf="@+id/space5"/>
+
+    <TextView
+        android:id="@+id/space6"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:text="                                                              "
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/txt_menu_notification" />
+
+    <TextView
+        android:id="@+id/txt_menu_log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text=" Log out                         "
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        android:textColor="#39ac39"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu_add_device"
+        app:layout_constraintTop_toBottomOf="@+id/space6"/>
+
+    <ImageButton
         android:id="@+id/btn_menu_log_out"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -240,6 +274,6 @@
         android:background="#ffffff"
         app:layout_constraintEnd_toStartOf="@+id/txt_menu_add_new_device"
         app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintTop_toBottomOf="@+id/space5"/>
+        app:layout_constraintTop_toBottomOf="@+id/space6"/>
 
 </android.support.constraint.ConstraintLayout>
