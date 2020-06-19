@@ -27,6 +27,7 @@ import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
 import Userprofile.PlantListView;
 import Userprofile.ProfileActivity;
+import Helper.Helper;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
 
@@ -116,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     get_device_name[i] = obj.getString("device_name");
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
-                    if(get_device_id[i].contains(Constants.OUTPUT_ID) || get_device_id[i].contains("Speaker"))
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         device_type[i] = "Output";
                     else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         device_type[i] = "Light Sensor";

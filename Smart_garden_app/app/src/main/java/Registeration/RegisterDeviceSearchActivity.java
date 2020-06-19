@@ -1,12 +1,8 @@
 package Registeration;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,21 +18,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgarden.Constants;
-import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.JSONObject;
 
 import Helper.DeviceInformation;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.HomeActivity;
-import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
-import Userprofile.PlantListView;
+import Helper.Helper;
 
 public class RegisterDeviceSearchActivity extends AppCompatActivity {
     MqttAndroidClient client;
@@ -82,10 +75,10 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                 }
                 else if(device_type.equals("output")){
-//                    if(!device_id.contains(Constants.OUTPUT_ID)){
-//                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
+                    if(!Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)){
+                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     goToSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
                     goToSetting.putExtra("device_id", device_id);
                     goToSetting.putExtra("device_type", device_type);
@@ -93,10 +86,10 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     startActivity(goToSetting);
                 }
                 else{
-//                    if(device_id.contains("Light_D")) {
-//                        Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
+                    if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
+                        Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     check_sensor_exist(device_id, device_name);
                 }
                 //searchDevice();

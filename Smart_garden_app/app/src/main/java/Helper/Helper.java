@@ -29,4 +29,14 @@ public class Helper {
 
         return null;
     }
+
+    public static boolean stringContainsItemFromList(String inputStr, String[] items)
+    {
+        for (String item : items) {
+            if (inputStr.contains(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

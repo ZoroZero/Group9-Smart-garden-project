@@ -31,6 +31,7 @@ import Database.Garden_Database_Control;
 import DeviceController.Device_Control;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
+import Helper.Helper;
 
 public class RegisterDeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
 
@@ -86,10 +87,10 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
-//                    if(!linked_device_id.contains(Constants.OUTPUT_ID)){
-//                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
+                    if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
+                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     Garden_Database_Control.registerDevice(device_id, device_name,
                             linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
 //                    String message = "[{ \"device_id\": \"" + linked_device_id +"\", " +

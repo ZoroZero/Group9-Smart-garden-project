@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 import Database.Garden_Database_Control;
+import Helper.Helper;
 import Helper.VolleyCallBack;
 import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
@@ -69,7 +70,7 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                     get_device_name[i] = obj.getString("device_name");
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
-                    if(get_device_id[i].contains(Constants.OUTPUT_ID) || get_device_id[i].contains("Speaker"))
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         device_type[i] = "Output";
                     else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         device_type[i] = "Light Sensor";

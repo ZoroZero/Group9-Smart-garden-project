@@ -1,25 +1,21 @@
 package Userprofile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
@@ -28,7 +24,6 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
@@ -37,6 +32,7 @@ import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
+import Helper.Helper;
 
 public class ProfileActivity extends AppCompatActivity implements VolleyCallBack {
     private ListView deviceListView;
@@ -160,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
-                    if(get_device_id[i].contains(Constants.OUTPUT_ID) || get_device_id[i].contains("Speaker"))
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         device_type[i] = "Output";
                     else if(get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         device_type[i] = "Light Sensor";
@@ -175,7 +171,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                 deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent showDeviceDetail = null;
+                        Intent showDeviceDetail;
                         if(device_type[position].contains("Sensor")) {
                             showDeviceDetail = new Intent(getApplicationContext(), DeviceDetailActivity.class);
                         }
