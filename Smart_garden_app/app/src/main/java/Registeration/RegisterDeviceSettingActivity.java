@@ -86,10 +86,10 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
-                    if(!linked_device_id.contains(Constants.OUTPUT_ID)){
-                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+//                    if(!linked_device_id.contains(Constants.OUTPUT_ID)){
+//                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
                     Garden_Database_Control.registerDevice(device_id, device_name,
                             linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
 //                    String message = "[{ \"device_id\": \"" + linked_device_id +"\", " +

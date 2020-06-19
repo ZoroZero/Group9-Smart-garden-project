@@ -11,7 +11,7 @@ import IOT_Server.IOT_Server_Access;
 public class Device_Control {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void turnDeviceOn(String device_id, String device_name, Context context){
-        String control_message = "[{ \"device_id\": \"" + device_id + "\", " +
+        String control_message = "[{ \"device_id\": \"" + device_id  +
                 "\", \"values\" : [\"1\", \"255\"] } ]";
         IOT_Server_Access.Publish(device_name + "/" + device_id,
                 control_message, context);
@@ -20,7 +20,7 @@ public class Device_Control {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void turnDeviceOff(String device_id, String device_name, Context context){
-        String control_message = "[{ \"device_id\": \"" + device_id + "\", " +
+        String control_message = "[{ \"device_id\": \"" + device_id  +
                 "\", \"values\" : [\"1\", \"0\"] } ]";
         IOT_Server_Access.Publish(device_name + "/" + device_id,
                 control_message, context);
@@ -29,7 +29,7 @@ public class Device_Control {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void putDeviceToOff(String device_id, String device_name, Context context){
-        String control_message = "[{ \"device_id\": \"" + device_id + "\", " +
+        String control_message = "[{ \"device_id\": \"" + device_id +
                 "\", \"values\" : [\"0\", \"0\"] } ]";
         IOT_Server_Access.Publish(device_name + "/" + device_id,
                 control_message, context);

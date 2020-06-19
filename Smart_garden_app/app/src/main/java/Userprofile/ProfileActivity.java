@@ -160,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     linked_device_id[i] = obj.getString("linked_device_id");
                     linked_device_name[i] = obj.getString("linked_device_name");
                     linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
-                    if(get_device_id[i].contains(Constants.OUTPUT_ID))
+                    if(get_device_id[i].contains(Constants.OUTPUT_ID) || get_device_id[i].contains("Speaker"))
                         device_type[i] = "Output";
                     else if(get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         device_type[i] = "Light Sensor";

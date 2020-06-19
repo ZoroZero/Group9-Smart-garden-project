@@ -35,7 +35,7 @@ public class Constants {
     public static final String GET_STATUS = ROOT_URL + "/getOutputInfo.php";
 
     // Device id identifier
-    public static String OUTPUT_ID = "Light_D";
+    public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 
     public static String LIGHT_SENSOR_ID = "Light";
 

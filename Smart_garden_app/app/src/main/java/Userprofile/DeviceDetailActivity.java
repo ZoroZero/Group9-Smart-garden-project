@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,6 +51,16 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
         // Get reading
         Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("device_detail.device_id"), this, this);
+
+        final Handler handler=new Handler();
+        handler.post(new Runnable(){
+            @Override
+            public void run() {
+                // Get reading
+                Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("device_detail.device_id"), getApplicationContext(),  DeviceDetailActivity.this);
+                handler.postDelayed(this,500); // set time here to refresh textView
+            }
+        });
     }
 
     @Override
@@ -81,4 +92,6 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             e.printStackTrace();
         }
     }
+
+
 }

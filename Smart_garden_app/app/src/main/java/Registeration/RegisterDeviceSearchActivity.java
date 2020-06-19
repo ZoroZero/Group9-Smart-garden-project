@@ -82,10 +82,10 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                 }
                 else if(device_type.equals("output")){
-                    if(!device_id.contains(Constants.OUTPUT_ID)){
-                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+//                    if(!device_id.contains(Constants.OUTPUT_ID)){
+//                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
                     goToSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
                     goToSetting.putExtra("device_id", device_id);
                     goToSetting.putExtra("device_type", device_type);
@@ -93,10 +93,10 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     startActivity(goToSetting);
                 }
                 else{
-                    if(device_id.contains("Light_D")) {
-                        Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
+//                    if(device_id.contains("Light_D")) {
+//                        Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
                     check_sensor_exist(device_id, device_name);
                 }
                 //searchDevice();
