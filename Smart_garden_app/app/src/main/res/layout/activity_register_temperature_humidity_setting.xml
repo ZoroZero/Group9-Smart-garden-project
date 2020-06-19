@@ -19,7 +19,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
             android:id="@+id/registerDeviceSetting"
@@ -84,11 +84,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deviceTypeTextView">
 
-            <EditText
-                android:id="@+id/thresholdInputEditText"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/PreferredTempTV"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="15dp"
+                android:text="Prefered temperature:"
+                android:textColor="#C1D045"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/register_TempHumi_thresholdTemp_EditText"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:inputType="number"
@@ -98,20 +109,49 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/PreferredMeasurementTV"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
             <TextView
-                android:id="@+id/PreferredMeasurementTV"
+                android:id="@+id/PreferredHumiTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="Prefered threshold:"
+                android:text="Prefered humidity:"
                 android:textColor="#C1D045"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/register_TempHumi_thresholdHumi_EditText"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="0"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -124,7 +164,7 @@
             android:textColor="#C1D045"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
         <EditText
             android:id="@+id/registerDevice_Linked_device_id_ET"
@@ -184,7 +224,7 @@
             app:layout_constraintTop_toBottomOf="@+id/registerDevice_Linked_device_name_ET" />
 
         <Button
-            android:id="@+id/useDefaultButton"
+            android:id="@+id/register_TempHumi_useDefaultButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -200,7 +240,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/register_setting_progressBarHolder"
+        android:id="@+id/register_TempHumi_setting_progressBarHolder"
         android:animateLayoutChanges="true"
         android:visibility="gone"
         android:alpha="0.4"

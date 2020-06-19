@@ -133,14 +133,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
-                android:text="Sensor" />
+                android:text="Light Sensor" />
 
             <RadioButton
                 android:id="@+id/radio_output"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
-                android:text="Output" />
+                android:text="Temperature Humidity Sensor" />
         </RadioGroup>
 
         <Button

@@ -1,8 +1,11 @@
 package Registeration;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.Helper;
 import Helper.VolleyCallBack;
@@ -39,6 +43,7 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
         //Set text
         type.setText(getIntent().getStringExtra("register_type"));
         message.setText(getIntent().getStringExtra("register_message"));
+
         //Set button on click event
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,10 +52,7 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
             }
         });
 
-        //Update information if success
-        //if(Objects.requireNonNull(getIntent().getStringExtra("register_message")).contains("Sucessfully")){
         Garden_Database_Control.FetchDevicesInfo(this, this);
-        //}
     }
 
     @Override
@@ -78,9 +80,29 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                         device_type[i] = "TempHumi Sensor";
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
+
+                //Start background service to record device measure
+                RecordMeasurementService mYourService = new RecordMeasurementService();
+                Intent mServiceIntent = new Intent(this, mYourService.getClass());
+                if (!isMyServiceRunning(mYourService.getClass())) {
+                    startService(mServiceIntent);
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private boolean isMyServiceRunning(Class serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        assert manager != null;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
     }
 }

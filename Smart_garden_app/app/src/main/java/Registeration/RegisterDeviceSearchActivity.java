@@ -74,24 +74,11 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                 else if(checkUserHasDevice(device_id, device_name)){
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                 }
-                else if(device_type.equals("output")){
-                    if(!Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)){
-                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    goToSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
-                    goToSetting.putExtra("device_id", device_id);
-                    goToSetting.putExtra("device_type", device_type);
-                    goToSetting.putExtra("device_name", device_name);
-                    startActivity(goToSetting);
+                if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
+                    Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                else{
-                    if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
-                        Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    check_sensor_exist(device_id, device_name);
-                }
+                check_sensor_exist(device_id, device_name);
                 //searchDevice();
             }
         });
@@ -108,7 +95,14 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
                 //deviceSetting.putExtra("device_id", jsonObject.getString("device_id"));
                 // deviceSetting.putExtra("device_name", jsonObject.getString("device_name"));
-                Intent deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
+                Intent deviceSetting = null;
+                if(device_type.equals("Light sensor")) {
+                    deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
+                }
+                else if(device_type.equals("Temperature humidity sensor")){
+                    deviceSetting = new Intent(getApplicationContext(), RegisterTemperatureHumiditySettingActivity.class);
+                }
+                assert deviceSetting != null;
                 deviceSetting.putExtra("device_id", device_id);
                 deviceSetting.putExtra("device_type", device_type);
                 deviceSetting.putExtra("device_name", device_name);
@@ -192,11 +186,11 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.radio_sensor:
                 if (checked)
-                    device_type = "sensor";
+                    device_type = "Light sensor";
                 break;
             case R.id.radio_output:
                 if (checked)
-                    device_type = "output";
+                    device_type = "Temperature humidity sensor";
                 break;
         }
     }
