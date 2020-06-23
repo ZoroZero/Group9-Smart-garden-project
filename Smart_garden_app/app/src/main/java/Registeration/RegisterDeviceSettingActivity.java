@@ -1,5 +1,6 @@
 package Registeration;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,9 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         linkedDeviceId = findViewById(R.id.registerDevice_Linked_device_id_ET);
         linkedDeviceName = findViewById(R.id.registerDevice_Linked_device_name_ET);
         progressBarHolder = findViewById(R.id.register_setting_progressBarHolder);
+
+        Button useDefaultBtn = findViewById(R.id.useDefaultButton);
+
         // Set device_type
         String device_type = getIntent().getStringExtra("device_type");
         assert device_type != null;
@@ -86,18 +90,22 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(Objects.equals(getIntent().getStringExtra("device_type"), "sensor")){
-                    if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
-                        Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Garden_Database_Control.registerDevice(device_id, device_name,
-                            linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
-                    Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+                if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
+                    Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                else {
-                    checkLinkedDevice(device_id, device_name, linked_device_id, linked_device_name, threshold);
-                }
+                Garden_Database_Control.registerDevice(device_id, device_name,
+                        linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+            }
+        });
+
+        // Use default
+        useDefaultBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                thresholdET.setText(Constants.DEFAULT_LIGHT+"");
             }
         });
 
@@ -118,6 +126,8 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
 
             }
         });
+
+
     }
 
     protected void checkLinkedDevice(final String device_id, final String device_name,

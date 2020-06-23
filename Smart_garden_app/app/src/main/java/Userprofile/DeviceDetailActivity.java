@@ -1,8 +1,12 @@
 package Userprofile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.Objects;
+
 import Database.Garden_Database_Control;
 import Helper.VolleyCallBack;
 
@@ -23,6 +29,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
     private TextView device_lastReadingTV;
     private TextView device_lastReadingTimeTV;
+    private TextView device_readingTypeTV;
+    private TextView device_lastReading1TV;
+    private TextView device_readingType1TV;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +43,21 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         TextView device_nameTV = findViewById(R.id.deviceDetail_DeviceName_TV);
         TextView device_typeTV = findViewById(R.id.deviceDetail_DeviceType_TV);
         device_lastReadingTV = findViewById(R.id.deviceDetail_DeviceLastReading_TV);
+        device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
         device_lastReadingTimeTV = findViewById(R.id.deviceDetail_DeviceLastReadingTime_TV);
+        device_lastReading1TV = findViewById(R.id.deviceDetail_DeviceLastReading1_TV);
+        device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
+
+        ConstraintLayout reading1 = findViewById(R.id.reading1);
         Button returnBtn = findViewById(R.id.item_returnButton);
 
         // Set text
         device_idTV.setText(getIntent().getStringExtra("device_detail.device_id"));
         device_nameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
+        if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).contains("Light")){
+            reading1.setVisibility(View.GONE);
+        }
 
         // Set return button
         returnBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +81,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
         JSONObject jsonObject;
@@ -74,17 +93,19 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     JSONObject reading  = jsonArray.getJSONObject(0);
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
-                    String readingText = "";
-                    readingText = reading.getString("type") + ": " + reading.getInt("measurement");
+                    //String readingText = "";
+                    device_readingTypeTV.setText(reading.getString("type"));
+                    device_lastReadingTV.setText(reading.getInt("measurement")+"");
                     if(type.equals("Humid")){
                         JSONObject tempReading  = jsonArray.getJSONObject(1);
-                        readingText += " " + tempReading.getString("type") + ": " + tempReading.getInt("measurement");
+                        device_readingType1TV.setText(tempReading.getString("type"));
+                        device_lastReading1TV.setText(tempReading.getInt("measurement")+"");
                     }
-                    device_lastReadingTV.setText(readingText);
                     device_lastReadingTimeTV.setText(reading.getString("date"));
                 }
                 else{
                     device_lastReadingTV.setText("No record");
+                    device_lastReading1TV.setText("No record");
                     device_lastReadingTimeTV.setText("No record");
                 }
             }

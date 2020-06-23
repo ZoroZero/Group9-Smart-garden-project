@@ -24,6 +24,8 @@ import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import Helper.DeviceInformation;
 import IOT_Server.IOT_Server_Access;
@@ -42,6 +44,8 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
     private String device_type = "";
     private String device_id;
     private String device_name;
+
+    private boolean deviceExist = false;
 
     // Loading animation
     AlphaAnimation inAnimation;
@@ -91,10 +95,20 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                //JSONObject jsonObject = new JSONObject(new String(message.getPayload()));
+                JSONArray jsonObject = new JSONArray(new String(message.getPayload()));
 
-                //deviceSetting.putExtra("device_id", jsonObject.getString("device_id"));
-                // deviceSetting.putExtra("device_name", jsonObject.getString("device_name"));
+                JSONObject device_info = jsonObject.getJSONObject(0);
+                // Check light sensor id
+                if(device_type.contains("Light") && !device_info.getString("device_id").contains("Light")){
+                    Toast.makeText(getApplicationContext(), "Invalid light sensor id", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                //Check Temp humid sensor id
+                if(device_type.contains("Temperature humidity") && !device_info.getString("device_id").contains("TempHumi")){
+                    Toast.makeText(getApplicationContext(), "Invalid temperature humidity sensor id", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent deviceSetting = null;
                 if(device_type.equals("Light sensor")) {
                     deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
@@ -165,6 +179,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 if(goToSetting != null) {
                     stopLoading();
+                    IOT_Server_Access.Unsubscribe(topic);
                     startActivity(goToSetting);
                     finish();
                     this.cancel();
@@ -172,7 +187,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 stopLoading();
-                Toast.makeText(getApplicationContext(), "No device " + topic + " found", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No device " + topic + " with " + device_type + " found", Toast.LENGTH_LONG).show();
                 IOT_Server_Access.Unsubscribe(topic);
             }
         }.start();

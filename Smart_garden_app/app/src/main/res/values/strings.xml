@@ -10,4 +10,6 @@
     <string name="view_report">View report</string>
     <string name="view_plant_list">View plant list</string>
     <string name="setting">Setting</string>
+
+    <string name="device_detail">Device detail</string>
 </resources>

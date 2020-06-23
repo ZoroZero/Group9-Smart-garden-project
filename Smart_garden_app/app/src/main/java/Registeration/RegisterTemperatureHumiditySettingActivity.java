@@ -1,12 +1,9 @@
 package Registeration;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -15,23 +12,21 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 import Database.Garden_Database_Control;
 import DeviceController.Device_Control;
-import IOT_Server.IOT_Server_Access;
 import Helper.Helper;
 import Helper.VolleyCallBack;
+import IOT_Server.IOT_Server_Access;
 
 public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivity implements VolleyCallBack {
 
@@ -43,12 +38,7 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
     private EditText thresholdHumidET;
     private EditText linkedDeviceId;
     private EditText linkedDeviceName;
-    private boolean linked = false;
-    private Button submitBtn;
 
-    // Search button
-    AlphaAnimation inAnimation;
-    AlphaAnimation outAnimation;
     FrameLayout progressBarHolder;
 
     @Override
@@ -65,11 +55,12 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         TextView deviceTypeTV = findViewById(R.id.deviceTypeTextView);
         thresholdTempET = findViewById(R.id.register_TempHumi_thresholdTemp_EditText);
         thresholdHumidET = findViewById(R.id.register_TempHumi_thresholdHumi_EditText);
-        submitBtn = findViewById(R.id.submitSettingButton);
+        Button submitBtn = findViewById(R.id.submitSettingButton);
         linkedDeviceId = findViewById(R.id.registerDevice_Linked_device_id_ET);
         linkedDeviceName = findViewById(R.id.registerDevice_Linked_device_name_ET);
         progressBarHolder = findViewById(R.id.register_setting_progressBarHolder);
 
+        Button useDefaultBtn = findViewById(R.id.register_TempHumi_useDefaultButton);
         // Set device_type
         String device_type = getIntent().getStringExtra("device_type");
         assert device_type != null;
@@ -107,6 +98,14 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
             }
         });
 
+        useDefaultBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                thresholdTempET.setText(Constants.DEFAULT_TEMP +"");
+                thresholdHumidET.setText(Constants.DEFAULT_HUMID +"");
+            }
+        });
     }
 
 
