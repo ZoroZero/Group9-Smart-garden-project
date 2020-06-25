@@ -45,6 +45,8 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
     private EditText linkedDeviceName;
     private boolean linked = false;
     private Button submitBtn;
+    private String linked_device_id;
+    private String linked_device_name;
 
     // Search button
     AlphaAnimation inAnimation;
@@ -84,8 +86,8 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 final String threshold = thresholdET.getText().toString();
                 final String device_id = getIntent().getStringExtra("device_id");
                 final String device_name = getIntent().getStringExtra("device_name");
-                final String linked_device_id = linkedDeviceId.getText().toString();
-                final String linked_device_name = linkedDeviceName.getText().toString();
+                linked_device_id = linkedDeviceId.getText().toString();
+                linked_device_name = linkedDeviceName.getText().toString();
                 if (linked_device_id.equals("") || linked_device_name.equals("")) {
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
@@ -94,6 +96,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 Garden_Database_Control.registerDevice(device_id, device_name,
                         linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
                 Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
@@ -171,6 +174,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         submitBtn.setEnabled(true);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSuccessResponse(String result) {
         JSONObject jsonObject = null;
@@ -179,6 +183,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
         Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
         assert jsonObject != null;
         try {

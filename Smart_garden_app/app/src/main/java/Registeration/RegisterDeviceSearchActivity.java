@@ -74,9 +74,11 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                 device_name = device_nameET.getText().toString();
                 if(device_id.equals("") || device_name.equals("") || device_type.equals("")){
                     Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 else if(checkUserHasDevice(device_id, device_name)){
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
                     Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();

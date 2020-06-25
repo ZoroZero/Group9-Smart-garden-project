@@ -24,8 +24,8 @@ import Helper.Helper;
 public class IOT_Server_Access {
     @SuppressLint("StaticFieldLeak")
     public static MqttAndroidClient client = null;
-    static String username = "BKvm";
-    static String password = "Hcmut_CSE_2020";
+    private static String username = "BKvm";
+    private static String password = "Hcmut_CSE_2020";
     // Connect to MQTT server
     public static void connect(final Context context){
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
@@ -93,9 +93,9 @@ public class IOT_Server_Access {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
             MqttMessage message = new MqttMessage(encodedPayload);
             client.publish(topic, message);
-            Toast.makeText(context, "Successfully publish message", Toast.LENGTH_SHORT).show();
+            Log.i("Publish message", "Successfully publish message");
         } catch (MqttException e) {
-            Toast.makeText(context, "Failed to publish", Toast.LENGTH_SHORT).show();
+            Log.i("Publish message", "Failed to publish message");
             e.printStackTrace();
         }
     }

@@ -1,18 +1,18 @@
 package Userprofile;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.smartgarden.R;
 
@@ -61,7 +61,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                 if (isChecked) {
                     switch (deviceStatus) {
                         case "Off":
-                            Toast.makeText(getApplicationContext(), "Can not turn on right now", Toast.LENGTH_SHORT).show();
+                            Log.i("Message", "Can not turn on right now");
                             break;
                         case "On-0":
                             Device_Control.turnDeviceOn(getIntent().getStringExtra("device_detail.device_id"),
@@ -70,7 +70,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                             device_statusTV.setText(deviceStatus);
                             break;
                         case "On-255":
-                            Toast.makeText(getApplicationContext(), "Device is already on now", Toast.LENGTH_SHORT).show();
+                            Log.i("Message", "Device is already on now");
                             break;
                     }
                 } else {
@@ -84,7 +84,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                             device_statusTV.setText(deviceStatus);
                             break;
                         case "On-0":
-                            Toast.makeText(getApplicationContext(), "Device is already off now", Toast.LENGTH_SHORT).show();
+                            Log.i("Message", "Device is already off");
                             break;
                     }
                 }
@@ -94,6 +94,15 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         sleep_Btn.setOnClickListener(this);
         return_Btn.setOnClickListener(this);
 
+        final Handler handler=new Handler();
+        handler.post(new Runnable(){
+            @Override
+            public void run() {
+                // Get reading
+                getDeviceInfo();
+                handler.postDelayed(this,500); // set time here to refresh textView
+            }
+        });
     }
 
     private void getDeviceInfo(){
@@ -147,7 +156,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                         lightControl.setClickable(false);
                         break;
                     case "Off":
-                        Toast.makeText(getApplicationContext(), "Device is already at sleep now", Toast.LENGTH_SHORT).show();
+                        Log.i("Message", "Device is already at sleep now");
                         break;
                 }
                 break;
@@ -155,7 +164,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                 switch (deviceStatus) {
                     case "On-0":
                     case "On-255":
-                        Toast.makeText(getApplicationContext(), "Device is already activate now", Toast.LENGTH_SHORT).show();
+                        Log.i("Message", "Device is already activate now");
                         break;
                     case "Off":
                         Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),

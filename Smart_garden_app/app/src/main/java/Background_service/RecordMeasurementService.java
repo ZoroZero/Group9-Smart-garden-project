@@ -161,19 +161,9 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                 String message = jsonObject.getString("message");
                 if (message.equals("Turn on")) {
                     int position = jsonObject.getInt("position");
-//                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
-//                            "\", \"values\" : [\"1\", \"255\"] } ]";
-//                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
-//                            control_message, getApplicationContext());
-//                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-255", getApplicationContext());
                     Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
                 } else if (message.equals("Turn off")) {
                     int position = jsonObject.getInt("position");
-//                    String control_message = "[{ \"device_id\": \"" + sensors.get(position).getLinked_device_id() + "\", " +
-//                            "\", \"values\" : [\"1\", \"0\"] } ]";
-//                    IOT_Server_Access.Publish(sensors.get(position).getLinked_device_name() + "/" + sensors.get(position).getLinked_device_id(),
-//                            control_message, getApplicationContext());
-//                    Garden_Database_Control.updateOutputStatus(sensors.get(position).getLinked_device_id(), "On-0", getApplicationContext());
                     Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
                 }
             } catch (JSONException e) {

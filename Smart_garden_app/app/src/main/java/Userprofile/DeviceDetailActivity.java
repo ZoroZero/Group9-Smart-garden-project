@@ -94,12 +94,17 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
                     //String readingText = "";
-                    device_readingTypeTV.setText(reading.getString("type"));
-                    device_lastReadingTV.setText(reading.getInt("measurement")+"");
+                    if(type.equals("Humid")) {
+                        device_readingTypeTV.setText("Humidity");
+                    }
+                    else{
+                        device_readingTypeTV.setText("Light intensity");
+                    }
+                    device_lastReadingTV.setText(reading.getInt("measurement")+"%");
                     if(type.equals("Humid")){
                         JSONObject tempReading  = jsonArray.getJSONObject(1);
-                        device_readingType1TV.setText(tempReading.getString("type"));
-                        device_lastReading1TV.setText(tempReading.getInt("measurement")+"");
+                        device_readingType1TV.setText("Temperature");
+                        device_lastReading1TV.setText(tempReading.getInt("measurement")+"\u2103");
                     }
                     device_lastReadingTimeTV.setText(reading.getString("date"));
                 }
