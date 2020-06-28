@@ -166,9 +166,12 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                             sensors.get(position).getLinked_device_name(), getApplicationContext());
 
                     // Send notification
-                    NotificationHelper.displayNotification("Warning",
+                    NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
                             "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
                             getApplicationContext());
+//                    NotificationHelper.displayNotification("Warning",
+//                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
+//                            getApplicationContext());
                 } else if (message.equals("Turn off")) {
                     int position = jsonObject.getInt("position");
                     Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());

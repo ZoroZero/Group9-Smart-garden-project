@@ -99,13 +99,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 } );
 
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-//            NotificationChannel channel= new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_Name, NotificationManager.IMPORTANCE_DEFAULT);
-//            channel.setDescription(Constants.CHANNEL_DESC);
-//            NotificationManager manager = getSystemService(NotificationManager.class);
-//            assert manager != null;
-//            manager.createNotificationChannel(channel);
-//        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel= new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_Name, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(Constants.CHANNEL_DESC);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            assert manager != null;
+            manager.createNotificationChannel(channel);
+        }
     }
 
     @Override
