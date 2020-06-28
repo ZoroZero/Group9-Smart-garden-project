@@ -1,7 +1,7 @@
 package com.example.smartgarden;
 
 public class Constants {
-    public static final String ROOT_URL = "//Android/v1";
+    private static final String ROOT_URL = "//Android/v1";
 
     private static final String MQTT_URL = "//Android/MQTT";
     // Register url
@@ -48,4 +48,12 @@ public class Constants {
     public static int DEFAULT_TEMP = 30;
 
     public static int DEFAULT_HUMID = 80;
+
+
+    // Notification
+    public static String CHANNEL_ID = "smart_garden";
+
+    public static String CHANNEL_Name = "Smart garden";
+
+    public static String CHANNEL_DESC = "Smart garden notification";
 }

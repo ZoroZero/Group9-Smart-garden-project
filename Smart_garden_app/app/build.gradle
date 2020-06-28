@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -34,6 +35,7 @@ dependencies {
         exclude module: 'support-v4'
     }
 
+    def firebase_messaging_version = '17.3.3'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.squareup.okhttp:okhttp:2.4.0'
@@ -42,9 +44,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 //<<<<<<< HEAD
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+    // Add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -54,6 +59,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.itextpdf:itextg:5.5.10'
-
 //>>>>>>> origin/Duy
 }

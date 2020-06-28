@@ -1,20 +1,30 @@
 package Login_RegisterUser;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,6 +79,33 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         // Get device info
         Garden_Database_Control.FetchDevicesInfo(this, this);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Smart_garden");
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Get id", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        Log.d("TAG", token);
+                        //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
+                    }
+                } );
+
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//            NotificationChannel channel= new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_Name, NotificationManager.IMPORTANCE_DEFAULT);
+//            channel.setDescription(Constants.CHANNEL_DESC);
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            assert manager != null;
+//            manager.createNotificationChannel(channel);
+//        }
     }
 
     @Override
@@ -132,6 +169,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if (!isMyServiceRunning(mYourService.getClass())) {
                     startService(mServiceIntent);
                 }
+
             }
         }catch (Exception e){
             e.printStackTrace();

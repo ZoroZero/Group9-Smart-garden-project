@@ -93,6 +93,14 @@
             android:name="Background_service.RecordMeasurementService"
             tools:ignore="InnerclassSeparator" />
 
+        <service android:name="AppNotification.AppFirebaseMessagingService"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

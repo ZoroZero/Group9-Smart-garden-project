@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import AppNotification.NotificationHelper;
 import Database.Garden_Database_Control;
 import DeviceController.Device_Control;
 import Helper.DeviceInformation;
@@ -161,7 +162,13 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                 String message = jsonObject.getString("message");
                 if (message.equals("Turn on")) {
                     int position = jsonObject.getInt("position");
-                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
+                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
+                            sensors.get(position).getLinked_device_name(), getApplicationContext());
+
+                    // Send notification
+                    NotificationHelper.displayNotification("Warning",
+                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
+                            getApplicationContext());
                 } else if (message.equals("Turn off")) {
                     int position = jsonObject.getInt("position");
                     Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
