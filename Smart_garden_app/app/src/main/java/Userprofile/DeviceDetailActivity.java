@@ -23,6 +23,7 @@ import org.w3c.dom.Text;
 import java.util.Objects;
 
 import Database.Garden_Database_Control;
+import DeviceController.DeviceSettingActivity;
 import Helper.VolleyCallBack;
 
 public class DeviceDetailActivity extends AppCompatActivity implements VolleyCallBack {
@@ -50,6 +51,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
         ConstraintLayout reading1 = findViewById(R.id.reading1);
         Button returnBtn = findViewById(R.id.item_returnButton);
+        Button changeSettingBtn = findViewById(R.id.device_changeSettingBtn);
 
         // Set text
         device_idTV.setText(getIntent().getStringExtra("device_detail.device_id"));
@@ -67,6 +69,17 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             }
         });
 
+        // Set change setting button
+        changeSettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent changeSetting = new Intent(getApplicationContext(), DeviceSettingActivity.class);
+                changeSetting.putExtra("device_setting.device_id", getIntent().getStringExtra("device_detail.device_id"));
+                changeSetting.putExtra("device_setting.device_name", getIntent().getStringExtra("device_detail.device_name"));
+                changeSetting.putExtra("device_setting.device_type", getIntent().getStringExtra("device_detail.device_type"));
+                startActivity(changeSetting);
+            }
+        });
         // Get reading
         Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("device_detail.device_id"), this, this);
 

@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/background_gradient"
     tools:context="Login_RegisterUser.HomeActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
+        android:background="@drawable/background_gradient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,8 +46,9 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/common_google_signin_btn_text_dark_default"
+                        android:textColor="#a2bca3"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +63,7 @@
                         android:gravity="center"
                         android:text="What you want to do?"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/common_google_signin_btn_text_dark_default"
+                        android:textColor="#a2bca3"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -101,7 +102,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="5dp"
                         android:text="\nView your devices"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -118,7 +119,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="8dp"
                         android:text="Check your plants"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textStyle="bold" />
 
 
@@ -149,7 +150,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="5dp"
                         android:text="@string/register_device"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textStyle="bold" />
 
                     <Button
@@ -165,7 +166,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="5dp"
                         android:text="@string/register_plant"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textStyle="bold" />
 
 
@@ -198,7 +199,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="5dp"
                         android:text="@string/view_report"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textStyle="bold" />
 
                     <Button
@@ -214,7 +215,7 @@
                         android:paddingRight="16dp"
                         android:paddingBottom="5dp"
                         android:text="@string/log_out"
-                        android:textColor="#708238"
+                        android:textColor="#a2bca3"
                         android:textStyle="bold" />
 
 
