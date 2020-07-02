@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,29 +26,28 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:background="#ffffff">
+                android:background="@drawable/round_header">
 
                 <TextView
                     android:id="@+id/registerDeviceTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Register new device"
-                    android:textColor="#c1d045"
+                    android:textColor="#9AB59A"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/Page_line"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="#c0c0c0"
+                    android:background="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,68 +58,100 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="40dp"
                     android:text="Device ID"
-                    android:textColor="#C1D045"
-                    android:textSize="24sp"
+                    android:textColor="#9AB59A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/registerDeviceTextView" />
 
-                <EditText
-                    android:id="@+id/registerDeviceIDEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout13"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:ems="10"
-                    android:hint="Enter device ID"
-                    android:inputType="textPersonName"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceIDTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceIDTextView">
+
+                    <EditText
+                        android:id="@+id/registerDeviceIDEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:ems="10"
+                        android:hint="Enter device ID"
+                        android:inputType="textPersonName"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/registerDeviceNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="32dp"
-                    android:text="Device Name"
-                    android:textColor="#C1D045"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceIDEditText" />
-
-                <EditText
-                    android:id="@+id/registerDeviceNameEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginEnd="15dp"
-                    android:ems="10"
-                    android:hint="Enter device name"
-                    android:inputType="textPersonName"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="Device Name"
+                    android:textColor="#9AB59A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout13" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameTextView">
+
+                    <EditText
+                        android:id="@+id/registerDeviceNameEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:ems="10"
+                        android:hint="Enter device name"
+                        android:inputType="textPersonName"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/Registerdevice_TV3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="32dp"
+                    android:lineSpacingExtra="18sp"
                     android:text="Device Type"
-                    android:textColor="#C1D045"
-                    android:textSize="24sp"
+                    android:textColor="#9AB59A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceNameEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout14" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup2"
@@ -140,14 +172,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="onRadioButtonClicked"
-                        android:text="Light Sensor" />
+                        android:text="Light Sensor"
+                        android:textColor="#9AB59A"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <RadioButton
                         android:id="@+id/radio_output"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="onRadioButtonClicked"
-                        android:text="Temperature Humidity Sensor" />
+                        android:text="Temperature Humidity Sensor"
+                        android:textColor="#9AB59A"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </RadioGroup>
 
                 <Button
@@ -155,9 +193,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:background="#C1D045"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:text="Submit"
-                    android:textColor="#C238EB"
+                    android:textColor="#708238"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
@@ -168,18 +208,18 @@
 
     <FrameLayout
         android:id="@+id/progressBarHolder"
-        android:animateLayoutChanges="true"
-        android:visibility="gone"
-        android:alpha="0.4"
-        android:background="#000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:animateLayoutChanges="true"
+        android:background="#000000"
+        android:visibility="gone">
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:indeterminate="true" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

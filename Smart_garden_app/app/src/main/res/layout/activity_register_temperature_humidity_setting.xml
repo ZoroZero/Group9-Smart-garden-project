@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,18 +27,18 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:background="#FFFFFF">
+                android:background="@drawable/round_header">
 
                 <TextView
                     android:id="@+id/registerDeviceSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Register new device"
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,31 +57,42 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/registerDeviceSetting" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout17"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="24dp"
-                    android:text="Device type:"
-                    android:textColor="#C1D045"
-                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerDeviceSetting" />
+                    app:layout_constraintTop_toBottomOf="@+id/Page_line">
 
-                <TextView
-                    android:id="@+id/deviceTypeTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Device type"
-                    android:textColor="#C238EB"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="Device type:"
+                        android:textColor="#9AB59A"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/deviceTypeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Device type"
+                        android:textColor="#C238EB"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout2"
@@ -88,7 +101,7 @@
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deviceTypeTextView">
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout17">
 
                     <TextView
                         android:id="@+id/PreferredTempTV"
@@ -96,8 +109,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:text="Prefered temperature(\u2103):"
-                        android:textColor="#C1D045"
+                        android:textColor="#9AB59A"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -136,8 +150,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:text="Prefered humidity(%):"
-                        android:textColor="#C1D045"
+                        android:textColor="#9AB59A"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -167,8 +182,9 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="24dp"
                     android:text="Linked device id: "
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
@@ -193,11 +209,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="24dp"
                     android:text="Linked device name: "
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/registerDevice_Linked_device_id_ET" />
 
@@ -222,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:background="#C1D045"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:text="Submit"
                     android:textColor="#C238EB"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -234,11 +250,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:background="#C1D045"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Use default"
                     android:textColor="#C238EB"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/submitSettingButton" />
@@ -249,18 +267,18 @@
 
     <FrameLayout
         android:id="@+id/register_TempHumi_setting_progressBarHolder"
-        android:animateLayoutChanges="true"
-        android:visibility="gone"
-        android:alpha="0.4"
-        android:background="#000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:animateLayoutChanges="true"
+        android:background="#000000"
+        android:visibility="gone">
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:indeterminate="true" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

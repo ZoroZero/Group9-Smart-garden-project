@@ -34,6 +34,9 @@ public class Constants {
     // Get output status
     public static final String GET_STATUS = ROOT_URL + "/getOutputInfo.php";
 
+    // Change device threshold
+    public static final String CHANGE_THRESHOLD = ROOT_URL + "/changeDeviceThreshold.php";
+
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 

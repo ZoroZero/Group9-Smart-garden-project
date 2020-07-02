@@ -21,41 +21,35 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
+        <activity android:name="DeviceController.DeviceSettingActivity"></activity>
         <!-- Activity -->
         <activity
             android:name="Registeration.RegisterTemperatureHumiditySettingActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
-
-        <activity android:name="Userprofile.OutputDetailActivity"
+        <activity
+            android:name="Userprofile.OutputDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
-
-        <activity android:name="Login_RegisterUser.HomeActivity"
+        <activity
+            android:name="Login_RegisterUser.HomeActivity"
             tools:ignore="InnerclassSeparator" />
-
-        <activity android:name="Userprofile.DeviceDetailActivity"
+        <activity
+            android:name="Userprofile.DeviceDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Userprofile.PlantDetailActivity"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Userprofile.PlantListView"
             tools:ignore="InnerclassSeparator" />
-
-
         <activity
             android:name="Userprofile.ProfileActivity"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Login_RegisterUser.RegisterUserActivity"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Login_RegisterUser.LoginActivity"
             android:label="@string/app_name"
@@ -67,37 +61,31 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-
         <activity
             android:name="Registeration.RegisterDeviceSearchActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Registeration.RegisterDeviceSettingActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Registeration.RegisterPlant"
             android:label="@string/register_plant"
             tools:ignore="InnerclassSeparator" />
-
         <activity
             android:name="Registeration.RegisterMessageActivity"
-            tools:ignore="InnerclassSeparator" />
-
-        <!-- Service -->
+            tools:ignore="InnerclassSeparator" /> <!-- Service -->
         <service android:name="org.eclipse.paho.android.service.MqttService" /> <!-- <service android:name="org.eclipse.paho.android.service.MqttService" /> -->
         <service
             android:name="Background_service.RecordMeasurementService"
             tools:ignore="InnerclassSeparator" />
-
-        <service android:name="AppNotification.AppFirebaseMessagingService"
-            android:exported="true"
-            android:enabled="true">
+        <service
+            android:name="AppNotification.AppFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
