@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -36,7 +37,7 @@ import Helper.Helper;
 
 public class DeviceListOverViewActivity extends AppCompatActivity implements VolleyCallBack {
     private GridView deviceListView;
-
+    private TextView deviceCountTV;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,9 @@ public class DeviceListOverViewActivity extends AppCompatActivity implements Vol
         setContentView(R.layout.activity_device_list_overview);
 
         IOT_Server_Access.connect(getApplicationContext());
-
+        // Components
         deviceListView = findViewById(R.id.DeviceList_DeviceList_View);
-
+        deviceCountTV = findViewById(R.id.DeviceOverView_DeviceCount_TV);
         // Display devices info
         Garden_Database_Control.FetchDevicesInfo(this, this);
 
@@ -134,6 +135,7 @@ public class DeviceListOverViewActivity extends AppCompatActivity implements Vol
         return sb;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
         try {
@@ -180,6 +182,7 @@ public class DeviceListOverViewActivity extends AppCompatActivity implements Vol
                     }
                 });
 
+                deviceCountTV.setText(get_device_id.length + " devices");
             }
         } catch (Exception e) {
             e.printStackTrace();
