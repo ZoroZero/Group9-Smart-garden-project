@@ -21,8 +21,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="DeviceController.DeviceSettingActivity"></activity>
-        <!-- Activity -->
+        <activity android:name="Userprofile.DeviceListViewActivity"></activity>
+        <activity android:name="DeviceController.DeviceSettingActivity" /> <!-- Activity -->
         <activity
             android:name="Registeration.RegisterTemperatureHumiditySettingActivity"
             android:label="@string/register_device"
@@ -45,7 +45,7 @@
             android:name="Userprofile.PlantListView"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.ProfileActivity"
+            android:name="Userprofile.DeviceListOverViewActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.RegisterUserActivity"

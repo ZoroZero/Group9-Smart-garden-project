@@ -18,7 +18,6 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -65,7 +64,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), DeviceListOverViewActivity.class));
             }
         });
 

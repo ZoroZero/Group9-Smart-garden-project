@@ -10,25 +10,27 @@ import android.widget.TextView;
 
 import com.example.smartgarden.R;
 
+import java.util.Vector;
+
+import Helper.DeviceInformation;
+
 public class DeviceDetailAdapter extends BaseAdapter {
     private LayoutInflater mInfoInflater;
-    private String[] device_ids;
-    private String[] device_names;
+    private Vector<DeviceInformation> devices;
 
-    public DeviceDetailAdapter(Context context, String[] device_ids, String[] device_names){
-        this.device_ids = device_ids;
-        this.device_names = device_names;
+    public DeviceDetailAdapter(Context context, Vector<DeviceInformation> devices){
+        this.devices = devices;
         mInfoInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return device_ids.length;
+        return devices.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return device_ids[position];
+        return devices.elementAt(position);
     }
 
     @Override
@@ -44,8 +46,8 @@ public class DeviceDetailAdapter extends BaseAdapter {
         TextView nameText = v.findViewById(R.id.detail_device_id);
         TextView desText = v.findViewById(R.id.device_detail_name);
         // Get name from array
-        String id = device_ids[position];
-        String name = device_names[position];
+        String id = devices.elementAt(position).getDevice_id();;
+        String name = devices.elementAt(position).getDevice_name();
         // Set texts
         nameText.setText("Device topic: " + id);
         desText.setText("Device type: " + name);

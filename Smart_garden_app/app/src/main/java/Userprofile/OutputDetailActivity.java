@@ -177,7 +177,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.item_returnButton:
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), DeviceListOverViewActivity.class));
                 finish();
                 break;
         }

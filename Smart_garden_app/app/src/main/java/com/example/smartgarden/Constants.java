@@ -44,6 +44,8 @@ public class Constants {
 
     public static String TEMPHUMI_SENSOR_ID = "TempHumi";
 
+    public static String[] DEVICE_TYPE = {"sensor", "output"};
+
 
     // Default value for register device
     public static int DEFAULT_LIGHT = 200;
