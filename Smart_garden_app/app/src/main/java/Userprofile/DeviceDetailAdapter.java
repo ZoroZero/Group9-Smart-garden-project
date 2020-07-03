@@ -24,7 +24,7 @@ import Helper.VolleyCallBack;
 public class DeviceDetailAdapter extends BaseAdapter {
     private LayoutInflater mInfoInflater;
     private Vector<DeviceInformation> devices;
-    private TextView status;
+
     public DeviceDetailAdapter(Context context, Vector<DeviceInformation> devices){
         this.devices = devices;
         mInfoInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,17 +53,19 @@ public class DeviceDetailAdapter extends BaseAdapter {
         TextView device_Id = v.findViewById(R.id.DeviceAdapter_DeviceId_TV);
         TextView Device_type = v.findViewById(R.id.DeviceAdapter_DeviceType_TV);
         ImageView device_icon = v.findViewById(R.id.DeviceAdapter_DeviceIcon_IV);
-        status = v.findViewById(R.id.DeviceAdapter_DeviceStatus_TV);
+        TextView status = v.findViewById(R.id.DeviceAdapter_DeviceStatus_TV);
+
         // Get name from array
         String id = devices.elementAt(position).getDevice_id();;
         String type = devices.elementAt(position).getDevice_type();
         switch(type){
-            case "Output":status.setText("Status");
+            case "Output":
+                status.setText("Status");
             case "Light Sensor": status.setVisibility(View.GONE);
             case "TempHumi Sensor": status.setVisibility(View.GONE);
         }
         // Set texts
-        device_Id.setText("Device id: " + id);
+        device_Id.setText("ID: " + id);
         Device_type.setText(type.toUpperCase());
         device_icon.setImageResource(R.drawable.ic_view_device_list_black_24dp);
         return v;
