@@ -31,6 +31,8 @@ repositories {
 }
 
 dependencies {
+    compile 'pl.pawelkleczkowski.customgauge:CustomGauge:1.0.4'
+
     implementation('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {
         exclude module: 'support-v4'
     }

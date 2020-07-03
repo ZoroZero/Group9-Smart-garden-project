@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.smartgarden.R;
@@ -32,6 +33,9 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
     private TextView device_readingTypeTV;
     private TextView device_lastReading1TV;
     private TextView device_readingType1TV;
+    private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
+    private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
+    private Handler handler = new Handler();
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,8 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         device_lastReadingTimeTV = findViewById(R.id.deviceDetail_DeviceLastReadingTime_TV);
         device_lastReading1TV = findViewById(R.id.deviceDetail_DeviceLastReading1_TV);
         device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
-
+        readingBar = findViewById(R.id.deviceDetail_DeviceLastReading);
+        readingBar1 = findViewById(R.id.deviceDetail_DeviceLastReading1);
         ConstraintLayout reading1 = findViewById(R.id.reading1);
         Button returnBtn = findViewById(R.id.item_returnButton);
         Button changeSettingBtn = findViewById(R.id.device_changeSettingBtn);
@@ -58,6 +63,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).contains("Light")){
             reading1.setVisibility(View.GONE);
+
         }
 
         // Set return button
@@ -102,10 +108,9 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             if(!jsonObject.getBoolean("error")){
                 if(jsonObject.has("reading")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("reading");
-                    JSONObject reading  = jsonArray.getJSONObject(0);
+                    final JSONObject reading  = jsonArray.getJSONObject(0);
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
-                    //String readingText = "";
                     if(type.equals("Humid")) {
                         device_readingTypeTV.setText("Humidity");
                     }
@@ -113,12 +118,15 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                         device_readingTypeTV.setText("Light intensity");
                     }
                     device_lastReadingTV.setText(reading.getInt("measurement")+"%");
+                    readingBar.setValue(reading.getInt("measurement"));
                     if(type.equals("Humid")){
                         JSONObject tempReading  = jsonArray.getJSONObject(1);
                         device_readingType1TV.setText("Temperature");
                         device_lastReading1TV.setText(tempReading.getInt("measurement")+"\u2103");
+                        readingBar1.setValue(tempReading.getInt("measurement"));
                     }
                     device_lastReadingTimeTV.setText(reading.getString("date"));
+
                 }
                 else{
                     device_lastReadingTV.setText("No record");
