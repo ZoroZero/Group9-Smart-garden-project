@@ -43,4 +43,5 @@ public class DeviceInformation {
     public String getDevice_type(){
         return this.device_type;
     }
+
 }

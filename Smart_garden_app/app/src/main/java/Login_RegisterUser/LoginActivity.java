@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.example.smartgarden.R;
 
 import Database.Garden_Database_Control;
-import Userprofile.ProfileActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 

@@ -12,6 +12,7 @@ public class UserLoginManagement {
     private static Context ctx;
     private DeviceInformation[] user_device_information;
     private Vector<DeviceInformation> sensor;
+    private Vector<DeviceInformation> output;
 
     private static final String SHARED_PREF_NAME = "mysharedpref12";
     private static final String KEY_USER_ID = "user_ID";
@@ -46,13 +47,14 @@ public class UserLoginManagement {
     }
 
     // Logout
-    public boolean logOut(){
+    public void logOut(){
+        sensor.clear();
+        output.clear();
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
 
-        return true;
     }
 
     // Store user device information
@@ -60,12 +62,16 @@ public class UserLoginManagement {
                                  String[] linked_device_id_list, String[] linked_device_name_list,
                                  String[] device_type_list){
         sensor = new Vector<>();
+        output = new Vector<>();
         user_device_information = new DeviceInformation[device_id_list.length];
         for(int i =0; i < device_id_list.length; i++){
             user_device_information[i] = new DeviceInformation(device_id_list[i], device_name_list[i],
                     linked_device_id_list[i], linked_device_name_list[i], device_type_list[i]);
             if(!device_type_list[i].equals("Output")){
                 sensor.addElement(user_device_information[i]);
+            }
+            else{
+                output.addElement(user_device_information[i]);
             }
             //device_list_Str.append(user_device_information[i].toString()).append(";");
         }
@@ -91,4 +97,6 @@ public class UserLoginManagement {
     }
 
     public Vector<DeviceInformation> getSensor() { return sensor;}
+
+    public Vector<DeviceInformation> getOutput() { return output;}
 }

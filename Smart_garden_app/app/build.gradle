@@ -31,9 +31,12 @@ repositories {
 }
 
 dependencies {
+    compile 'pl.pawelkleczkowski.customgauge:CustomGauge:1.0.4'
+
     implementation('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {
         exclude module: 'support-v4'
     }
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     def firebase_messaging_version = '17.3.3'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

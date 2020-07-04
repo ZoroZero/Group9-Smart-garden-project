@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
@@ -36,7 +35,7 @@ import IOT_Server.IOT_Server_Access;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
 import Userprofile.PlantListView;
-import Userprofile.ProfileActivity;
+import Userprofile.DeviceListOverViewActivity;
 import Helper.Helper;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
@@ -112,7 +111,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.Home_ViewDeviceList_Btn:
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), DeviceListOverViewActivity.class));
                 return;
             case R.id.Home_ViewPlantList_Btn:
                 startActivity(new Intent(getApplicationContext(), PlantListView.class));

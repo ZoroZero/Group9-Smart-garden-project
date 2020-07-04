@@ -19,16 +19,12 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
-import Userprofile.DeviceDetailAdapter;
-import Userprofile.ProfileActivity;
 
 public class RegisterMessageActivity extends AppCompatActivity implements VolleyCallBack {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

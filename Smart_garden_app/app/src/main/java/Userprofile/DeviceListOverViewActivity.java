@@ -11,7 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -34,20 +35,19 @@ import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
 import Helper.Helper;
 
-public class ProfileActivity extends AppCompatActivity implements VolleyCallBack {
-    private ListView deviceListView;
-
+public class DeviceListOverViewActivity extends AppCompatActivity implements VolleyCallBack {
+    private GridView deviceListView;
+    private TextView deviceCountTV;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_device_list_overview);
 
         IOT_Server_Access.connect(getApplicationContext());
-        //TextView usernameTextView = findViewById(R.id.PlantListViewTextView);
-        deviceListView = findViewById(R.id.PlantList_PLantListView);
-        //usernameTextView.setText("Hello " + UserLoginManagement.getInstance(this).getUsername().toUpperCase());
-
+        // Components
+        deviceListView = findViewById(R.id.DeviceList_DeviceList_View);
+        deviceCountTV = findViewById(R.id.DeviceOverView_DeviceCount_TV);
         // Display devices info
         Garden_Database_Control.FetchDevicesInfo(this, this);
 
@@ -135,6 +135,7 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
         return sb;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
         try {
@@ -163,37 +164,25 @@ public class ProfileActivity extends AppCompatActivity implements VolleyCallBack
                     else if(get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
                         device_type[i] = "TempHumi Sensor";
                 }
-                DeviceDetailAdapter itemAdapter = new DeviceDetailAdapter(getApplicationContext(), device_topic, device_type);
+
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
+                int[] deviceCount = {UserLoginManagement.getInstance(getApplicationContext()).getSensor().size(),
+                        UserLoginManagement.getInstance(getApplicationContext()).getOutput().size()};
+                DeviceTypeItemAdapter itemAdapter = new DeviceTypeItemAdapter(getApplicationContext(), Constants.DEVICE_TYPE, deviceCount);
                 deviceListView.setAdapter(itemAdapter);
 
                 // Set device change tab when click
                 deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent showDeviceDetail;
-                        if(device_type[position].contains("Sensor")) {
-                            showDeviceDetail = new Intent(getApplicationContext(), DeviceDetailActivity.class);
-                        }
-                        else {
-                            showDeviceDetail = new Intent(getApplicationContext(), OutputDetailActivity.class);
-                        }
-                        showDeviceDetail.putExtra("device_detail.device_id",
-                                get_device_id[position]);
-                        showDeviceDetail.putExtra("device_detail.device_name",
-                                get_device_name[position]);
-                        showDeviceDetail.putExtra("device_detail.device_type",
-                                device_type[position]);
-                        showDeviceDetail.putExtra("device_detail.linked_device_id",
-                                linked_device_id[position]);
-                        showDeviceDetail.putExtra("device_detail.linked_device_name",
-                                linked_device_name[position]);
-
-                        startActivity(showDeviceDetail);
+                        Intent showDeviceListDetail =  new Intent(getApplicationContext(), DeviceListViewActivity.class);
+                        showDeviceListDetail.putExtra("device_list.type",
+                                Constants.DEVICE_TYPE[position]);
+                        startActivity(showDeviceListDetail);
                     }
                 });
 
-
+                deviceCountTV.setText(get_device_id.length + " devices");
             }
         } catch (Exception e) {
             e.printStackTrace();
