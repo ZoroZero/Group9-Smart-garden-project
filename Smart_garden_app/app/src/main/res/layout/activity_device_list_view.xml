@@ -48,7 +48,15 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="0.5"
-                android:src="@drawable/ic_register_plant_50dp" />
+                android:src="@drawable/ic_register_plant_50dp"
+                app:srcCompat="@drawable/sensor_icon_50dp" />
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.01"
+                android:background="?android:attr/listDivider" />
 
             <TextView
                 android:id="@+id/DeviceList_AllDevice_TV"
@@ -56,10 +64,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:text="All devices:"
+                android:text="Sensors:"
                 android:textColor="#9AB59A"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

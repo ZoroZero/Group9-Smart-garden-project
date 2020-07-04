@@ -6,13 +6,15 @@ public class DeviceInformation {
     private String linked_device_id;
     private String linked_device_name;
     private String device_type;
+    private String threshold;
 
-    public DeviceInformation(String device_id, String device_name, String linked_device_id, String linked_device_name, String device_type){
+    public DeviceInformation(String device_id, String device_name, String linked_device_id, String linked_device_name, String device_type, String threshold){
         this.device_id = device_id;
         this.device_name = device_name;
         this.linked_device_id = linked_device_id;
         this.linked_device_name = linked_device_name;
         this.device_type = device_type;
+        this.threshold = threshold;
     }
 
     public String toString(){
@@ -42,6 +44,10 @@ public class DeviceInformation {
 
     public String getDevice_type(){
         return this.device_type;
+    }
+
+    public String getThreshold(){
+        return this.threshold;
     }
 
 }

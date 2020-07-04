@@ -59,25 +59,29 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                 JSONArray jsonArray = jsonObject.getJSONArray("list");
                 final String[] get_device_id = new String[jsonArray.length()];
                 final String[] get_device_name = new String[jsonArray.length()];
-                final String[] linked_device_id = new String[jsonArray.length()];
-                final String[] linked_device_name = new String[jsonArray.length()];
-                final String[] device_type = new String[jsonArray.length()];
+                final String[] get_linked_device_id = new String[jsonArray.length()];
+                final String[] get_linked_device_name = new String[jsonArray.length()];
+                final String[] get_device_type = new String[jsonArray.length()];
+                final String[] get_threshold = new String[jsonArray.length()];
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
                     get_device_name[i] = obj.getString("device_name");
-                    linked_device_id[i] = obj.getString("linked_device_id");
-                    linked_device_name[i] = obj.getString("linked_device_name");
+                    get_linked_device_id[i] = obj.getString("linked_device_id");
+                    get_linked_device_name[i] = obj.getString("linked_device_name");
+                    get_threshold[i] = obj.getString("threshold");
                     if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
-                        device_type[i] = "Output";
+                        get_device_type[i] = "Output";
                     else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
-                        device_type[i] = "Light Sensor";
+                        get_device_type[i] = "Light Sensor";
                     else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
-                        device_type[i] = "TempHumi Sensor";
-                }
-                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
+                        get_device_type[i] = "TempHumi Sensor";
 
-                //Start background service to record device measure
+                }
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+                        get_linked_device_name, get_device_type, get_threshold);
+
+                // Start background service to record device measure
                 RecordMeasurementService mYourService = new RecordMeasurementService();
                 Intent mServiceIntent = new Intent(this, mYourService.getClass());
                 if (!isMyServiceRunning(mYourService.getClass())) {

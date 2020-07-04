@@ -45,7 +45,6 @@
                         android:layout_weight="0.5"
                         android:background="#FFFFFF"
                         android:paddingLeft="10dp"
-                        android:paddingTop="8dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="8dp">
 
@@ -53,7 +52,7 @@
                             android:id="@+id/deviceDetail_readingType1_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
+                            android:layout_marginStart="10dp"
                             android:textColor="#708238"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -63,8 +62,8 @@
 
                         <pl.pawelkleczkowski.customgauge.CustomGauge
                             android:id="@+id/deviceDetail_DeviceLastReading1"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginEnd="15dp"
                             android:paddingLeft="10dp"
@@ -77,7 +76,7 @@
                             app:gaugeStartAngle="135"
                             app:gaugeStartValue="0"
                             app:gaugeStrokeCap="ROUND"
-                            app:gaugeStrokeColor="#C238EB"
+                            app:gaugeStrokeColor="#02628E"
                             app:gaugeStrokeWidth="10dp"
                             app:gaugeSweepAngle="270"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -116,27 +115,25 @@
                         android:layout_weight="0.5"
                         android:background="#FFFFFF"
                         android:paddingLeft="10dp"
-                        android:paddingTop="8dp"
-                        android:paddingRight="10dp"
-                        android:paddingBottom="8dp">
+                        android:paddingRight="10dp">
 
                         <TextView
                             android:id="@+id/deviceDetail_readingType_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
+                            android:layout_marginStart="10dp"
                             android:gravity="center"
                             android:textColor="#708238"
                             android:textSize="18sp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:textStyle="bold" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <pl.pawelkleczkowski.customgauge.CustomGauge
                             android:id="@+id/deviceDetail_DeviceLastReading"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginEnd="15dp"
                             android:paddingLeft="10dp"
@@ -150,7 +147,7 @@
                             app:gaugeStartAngle="135"
                             app:gaugeStartValue="0"
                             app:gaugeStrokeCap="ROUND"
-                            app:gaugeStrokeColor="#C238EB"
+                            app:gaugeStrokeColor="#02628E"
                             app:gaugeStrokeWidth="10dp"
                             app:gaugeSweepAngle="270"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -235,7 +232,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="12dp"
-                        android:text="Device ID:"
+                        android:text="Device Topic:"
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -243,7 +240,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
                     <TextView
-                        android:id="@+id/DeviceDetail_DeviceID_TV"
+                        android:id="@+id/DeviceDetail_DeviceTopic_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -266,13 +263,13 @@
                         app:layout_constraintTop_toBottomOf="@+id/deviceId" />
 
                     <TextView
-                        android:id="@+id/deviceName"
+                        android:id="@+id/deviceThreshold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="12dp"
-                        android:text="Device Name:"
+                        android:text="Device threshold:"
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -280,7 +277,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
                     <TextView
-                        android:id="@+id/deviceDetail_DeviceName_TV"
+                        android:id="@+id/deviceDetail_DeviceThreshold_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -300,7 +297,7 @@
                         android:background="?android:attr/listDivider"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/deviceName" />
+                        app:layout_constraintTop_toBottomOf="@+id/deviceThreshold" />
 
                     <TextView
                         android:id="@+id/lastReadingTime"
@@ -337,6 +334,7 @@
                         android:paddingRight="10dp"
                         android:text="Change setting"
                         android:textColor="#C238EB"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/lastReadingTime" />
@@ -351,6 +349,7 @@
                         android:background="@drawable/round_green_shadow_btn"
                         android:text="Return"
                         android:textColor="#C238EB"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

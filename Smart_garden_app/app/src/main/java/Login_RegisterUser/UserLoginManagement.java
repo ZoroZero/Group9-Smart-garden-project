@@ -60,13 +60,14 @@ public class UserLoginManagement {
     // Store user device information
     public void storeUserDevices(String[] device_id_list, String[] device_name_list,
                                  String[] linked_device_id_list, String[] linked_device_name_list,
-                                 String[] device_type_list){
+                                 String[] device_type_list, String[] threshold_list){
         sensor = new Vector<>();
         output = new Vector<>();
         user_device_information = new DeviceInformation[device_id_list.length];
         for(int i =0; i < device_id_list.length; i++){
             user_device_information[i] = new DeviceInformation(device_id_list[i], device_name_list[i],
-                    linked_device_id_list[i], linked_device_name_list[i], device_type_list[i]);
+                    linked_device_id_list[i], linked_device_name_list[i],
+                    device_type_list[i], threshold_list[i]);
             if(!device_type_list[i].equals("Output")){
                 sensor.addElement(user_device_information[i]);
             }

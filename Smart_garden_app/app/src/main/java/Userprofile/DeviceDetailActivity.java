@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.smartgarden.R;
@@ -35,7 +34,8 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
     private TextView device_readingType1TV;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
-    private Handler handler = new Handler();
+
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,8 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         setContentView(R.layout.activity_device_detail);
 
         // Component
-        TextView device_idTV = findViewById(R.id.DeviceDetail_DeviceID_TV);
-        TextView device_nameTV = findViewById(R.id.deviceDetail_DeviceName_TV);
+        TextView device_TopicTV = findViewById(R.id.DeviceDetail_DeviceTopic_TV);
+        TextView device_nameTV = findViewById(R.id.deviceDetail_DeviceThreshold_TV);
         TextView device_typeTV = findViewById(R.id.deviceDetail_DeviceType_TV);
         device_lastReadingTV = findViewById(R.id.deviceDetail_DeviceLastReading_TV);
         device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
@@ -58,7 +58,8 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         Button changeSettingBtn = findViewById(R.id.device_changeSettingBtn);
 
         // Set text
-        device_idTV.setText(getIntent().getStringExtra("device_detail.device_id"));
+        device_TopicTV.setText(getIntent().getStringExtra("device_detail.device_name") +
+                "/" + getIntent().getStringExtra("device_detail.device_id"));
         device_nameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).contains("Light")){

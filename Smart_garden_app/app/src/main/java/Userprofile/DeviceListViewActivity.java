@@ -1,12 +1,9 @@
 package Userprofile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,47 +12,54 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.smartgarden.Constants;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.util.Objects;
 import java.util.Vector;
 
-import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
-import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
-import Helper.*;
 public class DeviceListViewActivity extends AppCompatActivity {
 
     private Vector<DeviceInformation> deviceInformationVector;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list_view);
 
+        // Components
+        ListView deviceListView = findViewById(R.id.DeviceList_ListView);
+        ImageView icon = findViewById(R.id.DeviceList_Icon);
+
         // Get device list
-        if(getIntent().getStringExtra("device_list.type").equals("sensor")){
+        if(Objects.equals(getIntent().getStringExtra("device_list.type"), "sensor")){
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getSensor();
+            icon.setImageResource(R.drawable.sensor_icon_50dp);
         }
         else{
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getOutput();
+            icon.setImageResource(R.drawable.light_iot_icon_50);
         }
 
         IOT_Server_Access.connect(getApplicationContext());
-        ListView deviceListView = findViewById(R.id.DeviceList_ListView);
+
+
 
         // Set back button
         ActionBar actionBar = getSupportActionBar();
@@ -70,7 +74,7 @@ public class DeviceListViewActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent showDeviceListDetail;
-                if(getIntent().getStringExtra("device_list.type").equals("sensor")){
+                if(Objects.equals(getIntent().getStringExtra("device_list.type"), "sensor")){
                     showDeviceListDetail =  new Intent(getApplicationContext(), DeviceDetailActivity.class);
                 }
                 else{
