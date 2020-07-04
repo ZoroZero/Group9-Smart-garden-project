@@ -11,17 +11,12 @@ import android.widget.TextView;
 
 import com.example.smartgarden.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Vector;
 
-import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
-import Helper.VolleyCallBack;
+import com.example.smartgarden.Constants;
 
-public class DeviceDetailAdapter extends BaseAdapter {
+public class DeviceDetailAdapter extends BaseAdapter{
     private LayoutInflater mInfoInflater;
     private Vector<DeviceInformation> devices;
 
@@ -50,24 +45,37 @@ public class DeviceDetailAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         @SuppressLint({"ViewHolder", "InflateParams"}) View v = mInfoInflater.inflate(R.layout.device_detail_view, null);
         // Get view component
-        TextView device_Id = v.findViewById(R.id.DeviceAdapter_DeviceId_TV);
+        TextView device_TopicTV = v.findViewById(R.id.DeviceAdapter_DeviceTopic_TV);
         TextView Device_type = v.findViewById(R.id.DeviceAdapter_DeviceType_TV);
+        TextView linked_TopicTV = v.findViewById(R.id.DeviceAdapter_LinkedTopic_TV);
         ImageView device_icon = v.findViewById(R.id.DeviceAdapter_DeviceIcon_IV);
-        TextView status = v.findViewById(R.id.DeviceAdapter_DeviceStatus_TV);
+        ImageView next_icon = v.findViewById(R.id.DeviceAdapter_NextIcon);
 
         // Get name from array
-        String id = devices.elementAt(position).getDevice_id();;
+        String id = devices.elementAt(position).getDevice_id();
         String type = devices.elementAt(position).getDevice_type();
-        switch(type){
-            case "Output":
-                status.setText("Status");
-            case "Light Sensor": status.setVisibility(View.GONE);
-            case "TempHumi Sensor": status.setVisibility(View.GONE);
-        }
+        String name = devices.elementAt(position).getDevice_name();
+
+
         // Set texts
-        device_Id.setText("ID: " + id);
-        Device_type.setText(type.toUpperCase());
-        device_icon.setImageResource(R.drawable.ic_view_device_list_black_24dp);
+        device_TopicTV.setText("Topic: " + name + "/" + id );
+        Device_type.setText(type);
+        linked_TopicTV.setText("Linked topic:" + devices.elementAt(position).getLinked_device_name()+ "/"+
+                devices.elementAt(position).getLinked_device_id());
+
+        next_icon.setImageResource(R.drawable.ic_baseline_navigate_next_24);
+        switch(type){
+            case Constants.LIGHT_SENSOR_TYPE:
+                device_icon.setImageResource(R.drawable.ic_light_sensor_icon);
+                return v;
+            case Constants.TEMPHUMI_SENSOR_TYPE:
+                device_icon.setImageResource(R.drawable.ic_temphumi_sensor_icon);
+                return v;
+            case Constants.OUTPUT_TYPE:
+                device_icon.setImageResource(R.drawable.ic_display_light_icon);
+                return v;
+        }
         return v;
     }
+
 }

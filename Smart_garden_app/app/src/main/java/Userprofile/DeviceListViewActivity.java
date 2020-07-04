@@ -87,6 +87,8 @@ public class DeviceListViewActivity extends AppCompatActivity {
                         deviceInformationVector.elementAt(position).getDevice_name());
                 showDeviceListDetail.putExtra("device_detail.device_type",
                         deviceInformationVector.elementAt(position).getDevice_type());
+                showDeviceListDetail.putExtra("device_detail.device_threshold",
+                        deviceInformationVector.elementAt(position).getThreshold());
                 startActivity(showDeviceListDetail);
             }
         });

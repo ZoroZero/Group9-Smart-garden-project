@@ -46,6 +46,13 @@ public class Constants {
 
     public static String[] DEVICE_TYPE = {"sensor", "output"};
 
+    public static final String LIGHT_SENSOR_TYPE = "Light sensor";
+
+    public static final String TEMPHUMI_SENSOR_TYPE = "Temperature humidity sensor";
+
+    public static final String OUTPUT_TYPE = "Output";
+
+
 
     // Default value for register device
     public static int DEFAULT_LIGHT = 200;

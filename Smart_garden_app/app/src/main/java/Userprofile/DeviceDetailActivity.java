@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.smartgarden.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -44,7 +45,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
         // Component
         TextView device_TopicTV = findViewById(R.id.DeviceDetail_DeviceTopic_TV);
-        TextView device_nameTV = findViewById(R.id.deviceDetail_DeviceThreshold_TV);
+        TextView device_ThresholdTV = findViewById(R.id.deviceDetail_DeviceThreshold_TV);
         TextView device_typeTV = findViewById(R.id.deviceDetail_DeviceType_TV);
         device_lastReadingTV = findViewById(R.id.deviceDetail_DeviceLastReading_TV);
         device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
@@ -60,11 +61,15 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         // Set text
         device_TopicTV.setText(getIntent().getStringExtra("device_detail.device_name") +
                 "/" + getIntent().getStringExtra("device_detail.device_id"));
-        device_nameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
+        device_ThresholdTV.setText(getIntent().getStringExtra("device_detail.device_threshold"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
-        if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).contains("Light")){
+        if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).equals(Constants.LIGHT_SENSOR_TYPE)){
             reading1.setVisibility(View.GONE);
-
+            device_readingTypeTV.setText("Light intensity");
+        }
+        else{
+            device_readingTypeTV.setText("Humidity");
+            device_readingType1TV.setText("Temperature");
         }
 
         // Set return button
@@ -86,9 +91,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                 startActivity(changeSetting);
             }
         });
+
+
         // Get reading
         Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("device_detail.device_id"), this, this);
-
         final Handler handler=new Handler();
         handler.post(new Runnable(){
             @Override
@@ -112,17 +118,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     final JSONObject reading  = jsonArray.getJSONObject(0);
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
-                    if(type.equals("Humid")) {
-                        device_readingTypeTV.setText("Humidity");
-                    }
-                    else{
-                        device_readingTypeTV.setText("Light intensity");
-                    }
                     device_lastReadingTV.setText(reading.getInt("measurement")+"%");
                     readingBar.setValue(reading.getInt("measurement"));
                     if(type.equals("Humid")){
                         JSONObject tempReading  = jsonArray.getJSONObject(1);
-                        device_readingType1TV.setText("Temperature");
                         device_lastReading1TV.setText(tempReading.getInt("measurement")+"\u2103");
                         readingBar1.setValue(tempReading.getInt("measurement"));
                     }

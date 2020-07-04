@@ -71,12 +71,11 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                     get_linked_device_name[i] = obj.getString("linked_device_name");
                     get_threshold[i] = obj.getString("threshold");
                     if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
-                        get_device_type[i] = "Output";
+                        get_device_type[i] = Constants.OUTPUT_TYPE;
                     else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
-                        get_device_type[i] = "Light Sensor";
+                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
                     else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
-                        get_device_type[i] = "TempHumi Sensor";
-
+                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
                         get_linked_device_name, get_device_type, get_threshold);
