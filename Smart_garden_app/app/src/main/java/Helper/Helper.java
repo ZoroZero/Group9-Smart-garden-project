@@ -9,6 +9,7 @@ import com.example.smartgarden.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Vector;
 
 public class Helper {
     private static final String TAG = "Helper";
@@ -38,5 +39,14 @@ public class Helper {
             }
         }
         return false;
+    }
+
+    public static DeviceInformation findDeviceWithDeviceId(String deviceId, Vector<DeviceInformation> devices){
+        for(DeviceInformation deviceInformation: devices){
+            if(deviceInformation.getDevice_id().equals(deviceId)){
+                return deviceInformation;
+            }
+        }
+        return null;
     }
 }

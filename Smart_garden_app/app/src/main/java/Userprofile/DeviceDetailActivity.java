@@ -54,7 +54,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
         readingBar = findViewById(R.id.deviceDetail_DeviceLastReading);
         readingBar1 = findViewById(R.id.deviceDetail_DeviceLastReading1);
-        ConstraintLayout reading1 = findViewById(R.id.reading1);
+        ConstraintLayout reading1 = findViewById(R.id.reading);
         Button returnBtn = findViewById(R.id.item_returnButton);
         Button changeSettingBtn = findViewById(R.id.device_changeSettingBtn);
 
@@ -65,7 +65,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).equals(Constants.LIGHT_SENSOR_TYPE)){
             reading1.setVisibility(View.GONE);
-            device_readingTypeTV.setText("Light intensity");
+            device_readingType1TV.setText("Light intensity");
         }
         else{
             device_readingTypeTV.setText("Humidity");
@@ -118,15 +118,19 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     final JSONObject reading  = jsonArray.getJSONObject(0);
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
-                    device_lastReadingTV.setText(reading.getInt("measurement")+"%");
-                    readingBar.setValue(reading.getInt("measurement"));
-                    if(type.equals("Humid")){
-                        JSONObject tempReading  = jsonArray.getJSONObject(1);
-                        device_lastReading1TV.setText(tempReading.getInt("measurement")+"\u2103");
+                    device_lastReadingTimeTV.setText(reading.getString("date"));
+                    if(type.equals("Humid")) {
+                        device_lastReadingTV.setText(reading.getInt("measurement") + "%");
+                        readingBar.setValue(reading.getInt("measurement"));
+
+                        JSONObject tempReading = jsonArray.getJSONObject(1);
+                        device_lastReading1TV.setText(tempReading.getInt("measurement") + "\u2103");
                         readingBar1.setValue(tempReading.getInt("measurement"));
                     }
-                    device_lastReadingTimeTV.setText(reading.getString("date"));
-
+                    else{
+                        device_lastReading1TV.setText(reading.getInt("measurement") + "%");
+                        readingBar1.setValue(reading.getInt("measurement"));
+                    }
                 }
                 else{
                     device_lastReadingTV.setText("No record");
