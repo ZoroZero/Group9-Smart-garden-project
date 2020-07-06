@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -17,7 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
@@ -34,17 +36,19 @@ import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
 
 public class PlantListView extends AppCompatActivity implements VolleyCallBack {
-    private ListView plantListView;
+    private GridView plantListView;
     private String[] plant_name;
-    private String[] plant_buy_date ;
-    private String[] plant_buy_location ;
-    private String[] plant_amount ;
-    private String[] linked_sensor_id ;
+    private String[] plant_buy_date;
+    private String[] plant_buy_location;
+    private String[] plant_amount;
+    private String[] linked_sensor_id;
+    private TextView totalPlantTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_list_view);
 
+        totalPlantTV = findViewById(R.id.PlantDetail_TotalPlant_TV);
         plantListView = findViewById(R.id.PlantList_PLantListView);
         Garden_Database_Control.FetchPlantsInfo(this, this);
 
@@ -130,6 +134,7 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
         return sb;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
         try {
@@ -142,6 +147,7 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                 plant_buy_location = new String[jsonArray.length()];
                 plant_amount = new String[jsonArray.length()];
                 linked_sensor_id = new String[jsonArray.length()];
+                int total_plant = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     Log.i("JSON Object", String.valueOf(obj));
@@ -150,9 +156,12 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                     plant_buy_location[i] = obj.getString("Buy_location");
                     plant_amount[i] = obj.getInt("Amount") +"";
                     linked_sensor_id[i] = obj.getString("linked_sensor_id");
+                    total_plant += obj.getInt("Amount");
                 }
-                PlantDetailAdapter itemAdapter = new PlantDetailAdapter(getApplicationContext(), plant_name, plant_buy_date, plant_amount);
+                PlantDetailAdapter itemAdapter = new PlantDetailAdapter(getApplicationContext(), plant_name,
+                        plant_buy_date, plant_amount, linked_sensor_id);
                 plantListView.setAdapter(itemAdapter);
+                totalPlantTV.setText(total_plant + " plants");
 
                 plantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

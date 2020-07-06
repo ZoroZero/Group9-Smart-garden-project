@@ -22,172 +22,45 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/round_header">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/PLantDetail_ReadingTimeLabelTV2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/round_header"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Last reading:"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30">
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/PlantDetail_reading"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="0.5"
-                        android:background="#FFFFFF"
-                        android:paddingBottom="8dp">
-
-                        <pl.pawelkleczkowski.customgauge.CustomGauge
-                            android:id="@+id/PlantDetail_DeviceLastReading"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="4dp"
-                            android:paddingLeft="10dp"
-                            android:paddingTop="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingBottom="10dp"
-                            app:gaugeEndValue="100"
-                            app:gaugePointEndColor="#70A1F6"
-                            app:gaugePointStartColor="#AC95FD"
-                            app:gaugeStartAngle="135"
-                            app:gaugeStartValue="0"
-                            app:gaugeStrokeCap="ROUND"
-                            app:gaugeStrokeColor="#CDE9F6"
-                            app:gaugeStrokeWidth="10dp"
-                            app:gaugeSweepAngle="270"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_readingType_TV" />
-
-                        <TextView
-                            android:id="@+id/PlantDetail_DeviceLastReading_TV"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading" />
-
-                        <ImageView
-                            android:id="@+id/PlantDetail_readingTypeIcon_TV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toTopOf="@+id/PlantDetail_DeviceLastReading_TV"
-                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading"
-                            app:srcCompat="@drawable/icon_setting" />
-
-                        <TextView
-                            android:id="@+id/PlantDetail_readingType_TV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="TextView"
-                            android:textColor="#000000"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/PlantDetail_reading1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="0.5"
-                        android:background="#FFFFFF"
-                        android:paddingBottom="8dp">
-
-                        <pl.pawelkleczkowski.customgauge.CustomGauge
-                            android:id="@+id/PlantDetail_DeviceLastReading1"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="4dp"
-                            android:paddingLeft="10dp"
-                            android:paddingTop="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingBottom="10dp"
-                            app:gaugeEndValue="100"
-                            app:gaugePointEndColor="#D09145"
-                            app:gaugePointStartColor="#AE642A"
-                            app:gaugeStartAngle="135"
-                            app:gaugeStartValue="0"
-                            app:gaugeStrokeCap="ROUND"
-                            app:gaugeStrokeColor="#CDE9F6"
-                            app:gaugeStrokeWidth="10dp"
-                            app:gaugeSweepAngle="270"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_readingType1_TV" />
-
-                        <TextView
-                            android:id="@+id/PlantDetail_DeviceLastReading1_TV"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading1" />
-
-                        <ImageView
-                            android:id="@+id/PlantDetail_readingTypeIcon1_TV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:srcCompat="@drawable/icon_setting" />
-
-                        <TextView
-                            android:id="@+id/PlantDetail_readingType1_TV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="TextView"
-                            android:textColor="#000000"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/Detail_LastReadingTime_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Plant name: "
+                    android:textColor="#708238"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout30"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -318,37 +191,163 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Detail_BuyLocation_TV" />
 
-                    <TextView
-                        android:id="@+id/PLantDetail_ReadingTimeLabelTV2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="Reading time:"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/PLantDetail_AmountLabelTV" />
-
-                    <TextView
-                        android:id="@+id/Detail_LastReadingTime_TV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="Plant name: "
-                        android:textColor="#708238"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/Detail_Amount_TV" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/PlantDetail_reading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.5"
+                        android:background="#FFFFFF"
+                        android:paddingBottom="8dp">
+
+                        <pl.pawelkleczkowski.customgauge.CustomGauge
+                            android:id="@+id/PlantDetail_DeviceLastReading"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="10dp"
+                            app:gaugeEndValue="100"
+                            app:gaugePointEndColor="#70A1F6"
+                            app:gaugePointStartColor="#AC95FD"
+                            app:gaugeStartAngle="135"
+                            app:gaugeStartValue="0"
+                            app:gaugeStrokeCap="ROUND"
+                            app:gaugeStrokeColor="#CDE9F6"
+                            app:gaugeStrokeWidth="10dp"
+                            app:gaugeSweepAngle="270"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_readingType_TV" />
+
+                        <TextView
+                            android:id="@+id/PlantDetail_DeviceLastReading_TV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading"
+                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading" />
+
+                        <ImageView
+                            android:id="@+id/PlantDetail_readingTypeIcon_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toTopOf="@+id/PlantDetail_DeviceLastReading_TV"
+                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading"
+                            app:srcCompat="@drawable/icon_setting" />
+
+                        <TextView
+                            android:id="@+id/PlantDetail_readingType_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/PlantDetail_reading1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.5"
+                        android:background="#FFFFFF"
+                        android:paddingBottom="8dp">
+
+                        <pl.pawelkleczkowski.customgauge.CustomGauge
+                            android:id="@+id/PlantDetail_DeviceLastReading1"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="10dp"
+                            app:gaugeEndValue="100"
+                            app:gaugePointEndColor="#D09145"
+                            app:gaugePointStartColor="#AE642A"
+                            app:gaugeStartAngle="135"
+                            app:gaugeStartValue="0"
+                            app:gaugeStrokeCap="ROUND"
+                            app:gaugeStrokeColor="#CDE9F6"
+                            app:gaugeStrokeWidth="10dp"
+                            app:gaugeSweepAngle="270"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_readingType1_TV" />
+
+                        <TextView
+                            android:id="@+id/PlantDetail_DeviceLastReading1_TV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading1" />
+
+                        <ImageView
+                            android:id="@+id/PlantDetail_readingTypeIcon1_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading1"
+                            app:srcCompat="@drawable/icon_setting" />
+
+                        <TextView
+                            android:id="@+id/PlantDetail_readingType1_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
 

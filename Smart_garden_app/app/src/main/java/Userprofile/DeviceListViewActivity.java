@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -36,6 +37,7 @@ import Registeration.RegisterPlant;
 public class DeviceListViewActivity extends AppCompatActivity {
 
     private Vector<DeviceInformation> deviceInformationVector;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
@@ -46,20 +48,23 @@ public class DeviceListViewActivity extends AppCompatActivity {
         // Components
         ListView deviceListView = findViewById(R.id.DeviceList_ListView);
         ImageView icon = findViewById(R.id.DeviceList_Icon);
+        TextView deviceListTypeTv = findViewById(R.id.DeviceListDetail_DeviceType_TV);
+        TextView deviceListCountTV = findViewById(R.id.DeviceListDetail_DeviceCount_TV);
 
         // Get device list
         if(Objects.equals(getIntent().getStringExtra("device_list.type"), "sensor")){
+            deviceListTypeTv.setText("Sensor: ");
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getSensor();
             icon.setImageResource(R.drawable.sensor_icon_50dp);
         }
         else{
+            deviceListTypeTv.setText("Output: ");
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getOutput();
             icon.setImageResource(R.drawable.light_iot_icon_50);
         }
 
+        deviceListCountTV.setText(deviceInformationVector.size() + " devices");
         IOT_Server_Access.connect(getApplicationContext());
-
-
 
         // Set back button
         ActionBar actionBar = getSupportActionBar();
