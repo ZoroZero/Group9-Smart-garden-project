@@ -53,9 +53,8 @@ public class Constants {
     public static final String OUTPUT_TYPE = "Output";
 
 
-
     // Default value for register device
-    public static int DEFAULT_LIGHT = 200;
+    public static int DEFAULT_LIGHT = 20;
 
     public static int DEFAULT_TEMP = 30;
 

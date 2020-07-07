@@ -144,6 +144,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 final String[] get_linked_device_name = new String[jsonArray.length()];
                 final String[] get_device_type = new String[jsonArray.length()];
                 final String[] get_threshold = new String[jsonArray.length()];
+                final String[] get_status = new String[jsonArray.length()];
+                final String[] get_status_date = new String[jsonArray.length()];
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
@@ -151,6 +153,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     get_linked_device_id[i] = obj.getString("linked_device_id");
                     get_linked_device_name[i] = obj.getString("linked_device_name");
                     get_threshold[i] = obj.getString("threshold");
+                    get_status[i] = obj.getString("status");
+                    get_status_date[i] = obj.getString("date");
+                    if(obj.getString("status").equals("null")){
+                        get_status[i] = "No record";
+                        get_status_date[i] = "No record";
+                    }
+
                     if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         get_device_type[i] = Constants.OUTPUT_TYPE;
                     else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
@@ -159,7 +168,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
-                        get_linked_device_name, get_device_type, get_threshold);
+                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
 
                 //Start background service to record device measure
                 RecordMeasurementService mYourService = new RecordMeasurementService();

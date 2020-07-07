@@ -93,17 +93,17 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                     //Log.i("JSON object", String.valueOf(reading));
                     String type = reading.getString("type");
                     readingTimeTV.setText(reading.getString("date"));
-                    if(type.equals("Humid")){
-                        device_lastReadingTV.setText(reading.getInt("measurement")+"%");
-                        readingBar.setValue(reading.getInt("measurement"));
-                        // Get temperature reading
-                        JSONObject tempReading  = jsonArray.getJSONObject(1);
-                        device_lastReading1TV.setText(tempReading.getInt("measurement")+"\u2103");
-                        readingBar1.setValue(tempReading.getInt("measurement"));
+                    if(type.equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
+                        String[] measurements = reading.getString("measurement").split(":");
+                        device_lastReadingTV.setText(measurements[1] + "%");
+                        readingBar.setValue(Integer.parseInt(measurements[1]));
+                        device_lastReading1TV.setText(measurements[0] + "\u2103");
+                        readingBar1.setValue(Integer.parseInt(measurements[0]));
                     }
                     else{
-                        device_lastReading1TV.setText(reading.getInt("measurement")+"%");
-                        readingBar1.setValue(reading.getInt("measurement"));
+                        String measurement = reading.getString("measurement");
+                        device_lastReading1TV.setText(measurement + "%");
+                        readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }
                 else{
