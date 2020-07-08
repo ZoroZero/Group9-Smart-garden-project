@@ -4,11 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context="Userprofile.OutputDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,22 +25,237 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/round_header">
+
+                <LinearLayout
+                    android:id="@+id/DetailReading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/OutputDetail_reading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.5"
+                        android:background="#FFFFFF"
+                        android:paddingBottom="8dp">
+
+                        <pl.pawelkleczkowski.customgauge.CustomGauge
+                            android:id="@+id/OutputDetail_DeviceLastReading"
+                            android:layout_width="150dp"
+                            android:layout_height="140dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="10dp"
+                            app:gaugeEndValue="100"
+                            app:gaugePointEndColor="#70A1F6"
+                            app:gaugePointStartColor="#AC95FD"
+                            app:gaugeStartAngle="135"
+                            app:gaugeStartValue="0"
+                            app:gaugeStrokeCap="ROUND"
+                            app:gaugeStrokeColor="#CDE9F6"
+                            app:gaugeStrokeWidth="10dp"
+                            app:gaugeSweepAngle="270"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/OutputDetail_readingType_TV" />
+
+                        <TextView
+                            android:id="@+id/OutputDetail_DeviceLastReading_TV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/OutputDetail_DeviceLastReading"
+                            app:layout_constraintEnd_toEndOf="@+id/OutputDetail_DeviceLastReading"
+                            app:layout_constraintStart_toStartOf="@+id/OutputDetail_DeviceLastReading" />
+
+                        <ImageView
+                            android:id="@+id/OutputDetail_readingTypeIcon_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/OutputDetail_DeviceLastReading_TV"
+                            app:layout_constraintEnd_toEndOf="@+id/OutputDetail_DeviceLastReading"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/OutputDetail_DeviceLastReading"
+                            app:srcCompat="@drawable/icon_setting" />
+
+                        <TextView
+                            android:id="@+id/OutputDetail_readingType_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/OutputDetail_reading1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0.5"
+                        android:background="#FFFFFF"
+                        android:paddingBottom="8dp">
+
+                        <pl.pawelkleczkowski.customgauge.CustomGauge
+                            android:id="@+id/OutputDetail_DeviceLastReading1"
+                            android:layout_width="150dp"
+                            android:layout_height="140dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="10dp"
+                            app:gaugeEndValue="100"
+                            app:gaugePointEndColor="#D09145"
+                            app:gaugePointStartColor="#AE642A"
+                            app:gaugeStartAngle="135"
+                            app:gaugeStartValue="0"
+                            app:gaugeStrokeCap="ROUND"
+                            app:gaugeStrokeColor="#CDE9F6"
+                            app:gaugeStrokeWidth="10dp"
+                            app:gaugeSweepAngle="270"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/OutputDetail_readingType1_TV" />
+
+                        <TextView
+                            android:id="@+id/OutputDetail_DeviceLastReading1_TV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/OutputDetail_DeviceLastReading1"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="@+id/OutputDetail_DeviceLastReading1" />
+
+                        <ImageView
+                            android:id="@+id/OutputDetail_readingTypeIcon1_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/OutputDetail_DeviceLastReading1"
+                            app:layout_constraintEnd_toEndOf="@+id/OutputDetail_DeviceLastReading1"
+                            app:layout_constraintStart_toStartOf="@+id/OutputDetail_DeviceLastReading1"
+                            app:layout_constraintTop_toTopOf="@+id/OutputDetail_DeviceLastReading1"
+                            app:srcCompat="@drawable/icon_setting" />
+
+                        <TextView
+                            android:id="@+id/OutputDetail_readingType1_TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/outputDevice_DeviceLight_Switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:showText="true"
+                    android:switchMinWidth="200dp"
+                    android:textColor="#708238"
+                    android:textOff="0"
+                    android:textOn="255"
+                    android:thumb="@drawable/mythumb"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/DetailReading"
+                    app:thumbTint="@drawable/switch_thumb"
+                    app:track="@drawable/mytrack"
+                    app:trackTint="@drawable/switch_track" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/outputDevice_DeviceLight_Switch">
+
+                    <ImageButton
+                        android:id="@+id/outputDeviceDetail_Sleep_Btn"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/round_green_shadow_btn"
+                        app:srcCompat="@drawable/ic_power_off_30" />
+
+                    <ImageButton
+                        android:id="@+id/outputDeviceDetail_Wake_Btn"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/round_green_shadow_btn"
+                        app:srcCompat="@drawable/ic_power_on" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:background="#ffffff">
+                android:background="@drawable/round_header">
+
 
                 <TextView
                     android:id="@+id/output_deviceId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Device ID:"
-                    android:textColor="#708238"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +263,7 @@
                     android:id="@+id/OutputDeviceDetail_DeviceID_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:text="TextView"
                     android:textSize="18sp"
@@ -55,11 +275,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Device Name:"
-                    android:textColor="#708238"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/output_deviceId" />
 
@@ -67,7 +288,7 @@
                     android:id="@+id/outputDeviceDetail_DeviceName_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:text="device name"
                     android:textSize="18sp"
@@ -76,14 +297,15 @@
 
                 <TextView
                     android:id="@+id/output_deviceType"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Device type:"
-                    android:textColor="#708238"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/output_deviceName" />
 
@@ -91,7 +313,7 @@
                     android:id="@+id/outputDeviceDetail_DeviceType_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:text="TextView"
                     android:textSize="18sp"
@@ -103,11 +325,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="16dp"
                     android:text="Device status:"
-                    android:textColor="#708238"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/output_deviceType" />
 
@@ -115,89 +338,29 @@
                     android:id="@+id/outputDeviceDetail_DeviceStatus_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:text="TextView"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/outputDeviceDetail_DeviceType_TV" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/outputDevice_DeviceLight_Switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:scaleX="1.3"
-                    android:scaleY="1.3"
-                    android:text="Device light     "
-                    android:textColor="#708238"
-                    android:textOff="0"
-                    android:textOn="255"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/output_deviceStatus"
-                    app:thumbTint="@drawable/switch_thumb"
-                    app:trackTint="@drawable/switch_track" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/outputDevice_DeviceLight_Switch">
-
-                    <Button
-                        android:id="@+id/outputDeviceDetail_Wake_Btn"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/roundedbutton"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="Wake up"
-                        android:textColor="#C238EB" />
-
-                    <Button
-                        android:id="@+id/outputDeviceDetail_Sleep_Btn"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/roundedbutton"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingRight="8dp"
-                        android:paddingBottom="8dp"
-                        android:text="Sleep"
-                        android:textColor="#C238EB" />
-                </LinearLayout>
-
                 <Button
                     android:id="@+id/outputDevice_changeSettingBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="20dp"
-                    android:background="#C1D045"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Change setting"
                     android:textColor="#C238EB"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.497"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+                    app:layout_constraintTop_toBottomOf="@+id/output_deviceStatus" />
 
                 <Button
                     android:id="@+id/item_returnButton"
@@ -205,9 +368,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="20dp"
-                    android:background="#C1D045"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:text="Return"
                     android:textColor="#C238EB"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
