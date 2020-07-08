@@ -67,7 +67,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         // Set hello user
         helloUser.setText("Hello " + UserLoginManagement.getInstance(this).getUsername().toUpperCase());
-
         //Set on click
         viewDeviceListBtn.setOnClickListener(this);
         viewPlantListBtn.setOnClickListener(this);
@@ -79,24 +78,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         // Get device info
         Garden_Database_Control.FetchDevicesInfo(this, this);
 
-        FirebaseMessaging.getInstance().subscribeToTopic("Smart_garden");
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("Get id", "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        Log.d("TAG", token);
-                        //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
-                    }
-                } );
+//        FirebaseMessaging.getInstance().subscribeToTopic("Smart_garden");
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w("Get id", "getInstanceId failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new Instance ID token
+//                        String token = task.getResult().getToken();
+//
+//                        // Log and toast
+//                        Log.d("TAG", token);
+//                        //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
+//                    }
+//                } );
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel= new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_Name, NotificationManager.IMPORTANCE_DEFAULT);

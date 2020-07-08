@@ -1,13 +1,23 @@
 package Userprofile;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.R;
@@ -21,6 +31,7 @@ import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
+import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 
 public class PlantDetailActivity extends AppCompatActivity implements VolleyCallBack {
@@ -36,7 +47,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_detail);
 
-        IOT_Server_Access.connect(this);
+//        IOT_Server_Access.connect(this);
         // Components
 
         TextView plant_nameTV = findViewById(R.id.Detail_Plantname_TV);
@@ -55,6 +66,8 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         readingBar = findViewById(R.id.PlantDetail_DeviceLastReading);
         readingBar1 = findViewById(R.id.PlantDetail_DeviceLastReading1);
         ConstraintLayout readingLayout = findViewById(R.id.PlantDetail_reading);
+
+        Button removePlant_Btn = findViewById(R.id.PlantDetail_RemovePlant_Btn);
         // Set text
         plant_nameTV.setText(getIntent().getStringExtra("plant_detail.plant_name"));
         buy_dateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
@@ -76,8 +89,50 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
         }
+
+
         // Get reading
         Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"), this, this);
+
+        removePlant_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // get prompts.xml view
+                LayoutInflater li = LayoutInflater.from(PlantDetailActivity.this);
+                View promptsView = li.inflate(R.layout.yes_no_user_opinion_layout, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlantDetailActivity.this);
+
+                // set prompts.xml to alert dialog builder
+                alertDialogBuilder.setView(promptsView);
+
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // get user input and set it to result
+                                        // edit text
+                                        askForPassword(PlantDetailActivity.this);
+                                    }
+                                })
+                        .setNegativeButton("No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -115,5 +170,54 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void askForPassword(final Context context){
+        // get layout
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.ask_for_password_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alert dialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // get user input and set it to result
+                                // edit text
+                                String password = Helper.md5(userInput.getText().toString());
+
+                                if(password.equals(UserLoginManagement.getInstance(context).getUserEncryptedPassword())){
+                                    Garden_Database_Control.removePlant(getIntent().getStringExtra("plant_detail.plant_name"),
+                                            getIntent().getStringExtra("plant_detail.buy_date"),
+                                            getIntent().getStringExtra("plant_detail.buy_location"),
+                                            PlantDetailActivity.this);
+                                    startActivity(new Intent(context, HomeActivity.class));
+                                    finish();
+                                }
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 }

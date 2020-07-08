@@ -37,6 +37,9 @@ public class Constants {
     // Change device threshold
     public static final String CHANGE_THRESHOLD = ROOT_URL + "/changeDeviceThreshold.php";
 
+    // Delete plant
+    public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";
+
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 

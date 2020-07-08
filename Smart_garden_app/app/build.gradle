@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     compile 'pl.pawelkleczkowski.customgauge:CustomGauge:1.0.4'
 
     implementation('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {

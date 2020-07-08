@@ -18,6 +18,7 @@ public class UserLoginManagement {
     private static final String KEY_USER_ID = "user_ID";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_ENCRYPTED_PASSWORD = "password";
     private UserLoginManagement(Context context) {
         ctx = context;
     }
@@ -29,12 +30,13 @@ public class UserLoginManagement {
         return instance;
     }
 
-    public void userLogin(int user_id, String username, String email){
+    public void userLogin(int user_id, String username, String encrypted_pass, String email){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt(KEY_USER_ID, user_id);
         editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_ENCRYPTED_PASSWORD, encrypted_pass);
         editor.putString(KEY_USER_EMAIL, email);
         editor.apply();
 
@@ -92,6 +94,11 @@ public class UserLoginManagement {
     public String getUserEmail(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USER_EMAIL, null);
+    }
+
+    public String getUserEncryptedPassword(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_ENCRYPTED_PASSWORD, null);
     }
 
     public DeviceInformation[] getDevice_list(){

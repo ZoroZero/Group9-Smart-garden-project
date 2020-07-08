@@ -44,7 +44,7 @@ public class Garden_Database_Control {
                                 Toast.makeText(context, "Login successful",
                                         Toast.LENGTH_LONG).show();
                                 UserLoginManagement.getInstance(context).userLogin(jsonObject.getInt("user_ID"),
-                                        jsonObject.getString("username"), jsonObject.getString("email"));
+                                        jsonObject.getString("username"), jsonObject.getString("password"), jsonObject.getString("email"));
                             } else {
                                 Toast.makeText(context, jsonObject.getString("message"),
                                         Toast.LENGTH_LONG).show();
@@ -483,4 +483,43 @@ public class Garden_Database_Control {
         };
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
+
+    // Change device threshold
+    public static void removePlant(final String plant_name, final String buy_date, final String buy_location,
+                                   final Context context){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        final String user_id = UserLoginManagement.getInstance(context).getUserId() + "";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.REMOVE_PLANT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", user_id);
+                params.put("plant_name", plant_name);
+                params.put("buy_date", buy_date);
+                params.put("buy_location", buy_location);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
 }
