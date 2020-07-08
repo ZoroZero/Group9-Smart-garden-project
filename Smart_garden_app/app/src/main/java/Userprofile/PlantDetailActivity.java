@@ -1,23 +1,24 @@
 package Userprofile;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.R;
@@ -40,6 +41,11 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
     private TextView device_lastReading1TV;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
+
+    // Loading animation
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+    FrameLayout progressBarHolder;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -66,14 +72,16 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         readingBar = findViewById(R.id.PlantDetail_DeviceLastReading);
         readingBar1 = findViewById(R.id.PlantDetail_DeviceLastReading1);
         ConstraintLayout readingLayout = findViewById(R.id.PlantDetail_reading);
-
+        progressBarHolder = findViewById(R.id.progressBarHolder);
         Button removePlant_Btn = findViewById(R.id.PlantDetail_RemovePlant_Btn);
+
         // Set text
         plant_nameTV.setText(getIntent().getStringExtra("plant_detail.plant_name"));
         buy_dateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
         buy_locationTV.setText(getIntent().getStringExtra("plant_detail.buy_location"));
         amountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
 
+        // Get linked device
         DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
                 UserLoginManagement.getInstance(this).getSensor());
 
@@ -92,45 +100,14 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
 
 
         // Get reading
-        Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"), this, this);
+        Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
+                this, this);
 
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get prompts.xml view
-                LayoutInflater li = LayoutInflater.from(PlantDetailActivity.this);
-                View promptsView = li.inflate(R.layout.yes_no_user_opinion_layout, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlantDetailActivity.this);
-
-                // set prompts.xml to alert dialog builder
-                alertDialogBuilder.setView(promptsView);
-
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        askForPassword(PlantDetailActivity.this);
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
+               askForPermission(PlantDetailActivity.this);
             }
         });
     }
@@ -172,6 +149,40 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         }
     }
 
+    private void askForPermission(final Context context){
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.yes_no_user_opinion_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        // set prompts.xml to alert dialog builder
+        alertDialogBuilder.setView(promptsView);
+
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // get user input and set it to result
+                                // edit text
+                                askForPassword(context);
+                            }
+                        })
+                .setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
 
     private void askForPassword(final Context context){
         // get layout
@@ -202,8 +213,19 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                                             getIntent().getStringExtra("plant_detail.buy_date"),
                                             getIntent().getStringExtra("plant_detail.buy_location"),
                                             PlantDetailActivity.this);
-                                    startActivity(new Intent(context, HomeActivity.class));
-                                    finish();
+                                    // Start loading animation
+
+                                    startLoading();
+                                    new CountDownTimer(3000, 1000) {
+                                        public void onTick(long millisUntilFinished) {
+                                        }
+                                        public void onFinish() {
+                                            stopLoading();
+                                            startActivity(new Intent(context, HomeActivity.class));
+                                            finish();
+                                        }
+                                    }.start();
+
                                 }
                             }
                         })
@@ -220,4 +242,19 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         // show it
         alertDialog.show();
     }
+
+    private void startLoading(){
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading(){
+        outAnimation = new AlphaAnimation(1f, 0f);
+        outAnimation.setDuration(200);
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
+    }
+
 }

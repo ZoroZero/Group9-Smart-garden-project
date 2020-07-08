@@ -45,8 +45,6 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
     private String device_id;
     private String device_name;
 
-    private boolean deviceExist = false;
-
     // Loading animation
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
