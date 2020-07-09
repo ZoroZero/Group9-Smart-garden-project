@@ -80,7 +80,8 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
                 final String linked_device_name = linkedDeviceName.getText().toString();
                 final String threshold = tempThreshold + ":" + humidThreshold;
                 //Check if empty
-                if (linked_device_id.equals("") || linked_device_name.equals("")) {
+                if (linked_device_id.equals("") || linked_device_name.equals("")
+                        || tempThreshold.equals("") || humidThreshold.equals("")) {
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
                 }

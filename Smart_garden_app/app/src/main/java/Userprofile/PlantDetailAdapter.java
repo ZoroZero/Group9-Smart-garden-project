@@ -75,12 +75,18 @@ public class PlantDetailAdapter  extends BaseAdapter {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long difference = Math.abs(today.getTime() - plantedDay.getTime());
-        long differenceDates = difference / (24 * 60 * 60 * 1000);
+        assert plantedDay != null;
+        long difference = today.getTime() - plantedDay.getTime();
+        long differenceDates = Math.abs(difference) / (24 * 60 * 60 * 1000);
         String dayDifference = Long.toString(differenceDates);
         // Set texts
         nameTextView.setText(name);
-        buy_dateTextView.setText("Days planted: " + dayDifference);
+        if(difference < 0){
+            buy_dateTextView.setText("Days till plant: " + dayDifference);
+        }
+        else {
+            buy_dateTextView.setText("Days planted: " + dayDifference);
+        }
         amountTextView.setText("Amount: " + amount);
         linkedSensorIDTextView.setText("Sensor: " + linked_sensor_id);
         return v;

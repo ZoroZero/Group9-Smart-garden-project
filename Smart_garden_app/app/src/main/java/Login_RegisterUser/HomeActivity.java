@@ -1,8 +1,5 @@
 package Login_RegisterUser;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
@@ -11,35 +8,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
+import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
-import Userprofile.PlantListView;
 import Userprofile.DeviceListOverViewActivity;
-import Helper.Helper;
+import Userprofile.PlantListView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
 
+    TextView averageTemp_TV;
+    TextView averageHumid_TV;
+    TextView averageLight_TV;
+    TextView number_devices_TV;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +64,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Button logoutBtn = findViewById(R.id.Home_Logout_Btn);
         TextView helloUser = findViewById(R.id.Home_HelloUser_TV);
 
+        averageTemp_TV = findViewById(R.id.Home_DeviceLastReading_TV);
+        averageHumid_TV = findViewById(R.id.Home_DeviceLastReading1_TV);
+        averageLight_TV = findViewById(R.id.Home_DeviceLastReading2_TV);
+        number_devices_TV = findViewById(R.id.Home_DeviceLastReading3_TV);
         // Set hello user
-        helloUser.setText("Hello " + UserLoginManagement.getInstance(this).getUsername().toUpperCase());
+        helloUser.setText(UserLoginManagement.getInstance(this).getUsername().toUpperCase() + "'s garden");
         //Set on click
         viewDeviceListBtn.setOnClickListener(this);
         viewPlantListBtn.setOnClickListener(this);
@@ -97,6 +100,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                    }
 //                } );
 
+        // Init notification channel
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel= new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_Name, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(Constants.CHANNEL_DESC);
@@ -104,6 +108,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             assert manager != null;
             manager.createNotificationChannel(channel);
         }
+
+        final Handler handler=new Handler();
+        handler.post(new Runnable(){
+            @Override
+            public void run() {
+                // Get device info
+                Garden_Database_Control.FetchDevicesInfo(getApplicationContext(), HomeActivity.this);
+                handler.postDelayed(this,500); // set time here to refresh textView
+            }
+        });
     }
 
     @Override
@@ -131,6 +145,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
         try {
@@ -145,6 +160,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 final String[] get_threshold = new String[jsonArray.length()];
                 final String[] get_status = new String[jsonArray.length()];
                 final String[] get_status_date = new String[jsonArray.length()];
+                float sum_temp = 0;
+                float sum_humid = 0;
+                float sum_light = 0;
+                int count_temp_humid = 0;
+                int count_light = 0;
+                int count_output = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
@@ -159,15 +180,49 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         get_status_date[i] = "No record";
                     }
 
-                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID)) {
                         get_device_type[i] = Constants.OUTPUT_TYPE;
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                        if(!get_status[i].equals("Off")){
+                            count_output += 1;
+                        }
+                    }
+                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID)) {
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                        if(!get_status[i].equals("No record")){
+                            count_light += 1;
+                            sum_light += Integer.parseInt(get_status[i]);
+                        }
+                    }
+                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID)) {
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
+                        if(!get_status[i].equals("No record")){
+                            count_temp_humid += 1;
+                            Log.i("Status", get_status[i]);
+                            sum_temp += Integer.parseInt(get_status[i].split(":")[0]);
+                            sum_humid += Integer.parseInt(get_status[i].split(":")[1]);
+                        }
+                    }
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
                         get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
+
+                if(count_temp_humid == 0) {
+                    averageTemp_TV.setText("No reading");
+                    averageHumid_TV.setText("No reading");
+                }
+                else{
+                    averageTemp_TV.setText(sum_temp/count_temp_humid + "\u2103");
+                    averageHumid_TV.setText(sum_humid/count_temp_humid + "%");
+                }
+
+                if(count_light == 0) {
+                    averageLight_TV.setText("No reading");
+                }
+                else{
+                    averageLight_TV.setText(sum_light/count_light + "%");
+                }
+
+                number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
 
                 //Start background service to record device measure
                 RecordMeasurementService mYourService = new RecordMeasurementService();
@@ -175,13 +230,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if (!isMyServiceRunning(mYourService.getClass())) {
                     startService(mServiceIntent);
                 }
-
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
 
     private boolean isMyServiceRunning(Class serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

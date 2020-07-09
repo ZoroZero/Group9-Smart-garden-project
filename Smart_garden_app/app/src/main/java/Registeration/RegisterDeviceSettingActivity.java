@@ -81,7 +81,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 final String device_name = getIntent().getStringExtra("device_name");
                 linked_device_id = linkedDeviceId.getText().toString();
                 linked_device_name = linkedDeviceName.getText().toString();
-                if (linked_device_id.equals("") || linked_device_name.equals("")) {
+                if (linked_device_id.equals("") || linked_device_name.equals("") || threshold.equals("")) {
                     Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
                     return;
                 }
