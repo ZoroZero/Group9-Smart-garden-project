@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -59,6 +61,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
 
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
@@ -97,11 +100,86 @@ public class MainActivity extends AppCompatActivity {
         graphTemperature = findViewById(R.id.graphTemperature);
 
 
-        getTempMeasurementFromDatabase("ID119");
-        getLightMeasurementFromDatabase("ID113");
+        makeTempDeviceSpinner("TH");
+        makeLightDeviceSpinner("S");
+
+        //getTempMeasurementFromDatabase("ID119");
+        //getLightMeasurementFromDatabase("ID113");
     }
 
 
+
+    private void makeTempDeviceSpinner(String type)
+    {
+        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        Thread thread = new Thread(getDeviceByType);
+        thread.start();
+        Vector<String> results = getDeviceByType.results;
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //get the spinner from the xml.
+        final Spinner dropdown = findViewById(R.id.spinner1);
+        //create a list of items for the spinner.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
+
+        dropdown.setAdapter(adapter);
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                String choosing = dropdown.getSelectedItem().toString();
+                getTempMeasurementFromDatabase(choosing);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
+        });
+
+    }
+
+    private void makeLightDeviceSpinner(String type)
+    {
+        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        Thread thread = new Thread(getDeviceByType);
+        thread.start();
+        Vector<String> results = getDeviceByType.results;
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //get the spinner from the xml.
+        final Spinner dropdown = findViewById(R.id.spinner2);
+        //create a list of items for the spinner.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
+
+        dropdown.setAdapter(adapter);
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                String choosing = dropdown.getSelectedItem().toString();
+                getLightMeasurementFromDatabase(choosing);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
+        });
+
+    }
 
     private void getTempMeasurementFromDatabase(String temp_device_id){
         GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
