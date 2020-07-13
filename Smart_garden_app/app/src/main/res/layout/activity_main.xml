@@ -62,6 +62,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
+
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="150dp"
@@ -70,6 +71,29 @@
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center"/>
 
+            <RadioGroup android:id = "@+id/radio_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation= "horizontal"
+                android:gravity="center">
+                <RadioButton android:id="@+id/radio_temp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Value"
+                    android:checked="true"/>
+                <RadioButton android:id="@+id/radio_temp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day" />
+                <RadioButton android:id="@+id/radio_temp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Month" />
+                <RadioButton android:id="@+id/radio_temp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Year" />
+            </RadioGroup>
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphTemperature"
@@ -96,6 +120,30 @@
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center"/>
+
+            <RadioGroup android:id = "@+id/radio_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation= "horizontal"
+                android:gravity="center">
+                <RadioButton android:id="@+id/radio_light1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Value"
+                    android:checked="true"/>
+                <RadioButton android:id="@+id/radio_light2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day" />
+                <RadioButton android:id="@+id/radio_light3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Month" />
+                <RadioButton android:id="@+id/radio_light4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Year" />
+            </RadioGroup>
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphLightLevel"

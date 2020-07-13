@@ -24,6 +24,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.itextpdf.text.BadElementException;
@@ -103,10 +105,108 @@ public class MainActivity extends AppCompatActivity {
         makeTempDeviceSpinner("TH");
         makeLightDeviceSpinner("S");
 
-        //getTempMeasurementFromDatabase("ID119");
-        //getLightMeasurementFromDatabase("ID113");
+        //getValueToday("ID119");
+        //getThisMonthValue("ID222");
+//        Vector<Double>  test = new Vector<>();
+//        test.add(36.5);
+//        test.add(37.7);
+//        test.add(39.0);
+//        sendDatatoAI(test);
     }
 
+    private void getTempMeasurementFromDatabase(String temp_device_id){
+        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
+        Thread thread = new Thread(getDataFromURL);
+        thread.start();
+        Vector<Double> results = getDataFromURL.results;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        drawGraphTemperature(results);
+    }
+
+    private void getValueToday(String deviceID, String types){
+        GetValueToday getValueToday = new GetValueToday(deviceID);
+        Thread thread = new Thread(getValueToday);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Vector<Double> results = getValueToday.results;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(types == "TH")
+        {
+            drawGraphTemperature(results);
+        }
+        else
+        {
+            drawLightTemperature(results);
+        }
+    }
+    private void getThisMonthValue(String deviceID, String types){
+        GetThisMonthValue getThisMonthValue = new GetThisMonthValue(deviceID);
+        Thread thread = new Thread(getThisMonthValue);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Vector<Double> results = getThisMonthValue.results;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(types == "TH")
+        {
+            drawGraphTemperature(results);
+        }
+        else
+        {
+            drawLightTemperature(results);
+        }
+    }
+
+    private void getthisYearValue(String deviceID, String types){
+        GetValueThisYear getValueThisYear = new GetValueThisYear(deviceID);
+        Thread thread = new Thread(getValueThisYear);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Vector<Double> results = getValueThisYear.results;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        drawGraphTemperature(results);
+
+        if(types == "TH")
+        {
+            drawGraphTemperature(results);
+        }
+        else
+        {
+            drawLightTemperature(results);
+        }
+    }
 
 
     private void makeTempDeviceSpinner(String type)
@@ -132,9 +232,34 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
-                String choosing = dropdown.getSelectedItem().toString();
-                getTempMeasurementFromDatabase(choosing);
-
+                final RadioGroup radioGroup = findViewById(R.id.radio_temp);
+                RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
+                if(rad.isChecked()){
+                    String choosing = dropdown.getSelectedItem().toString();
+                    getTempMeasurementFromDatabase(choosing);}
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch(checkedId){
+                            case R.id.radio_temp1:
+                                String choosing = dropdown.getSelectedItem().toString();
+                                getTempMeasurementFromDatabase(choosing);
+                                break;
+                            case R.id.radio_temp2:
+                                String second_choosing = dropdown.getSelectedItem().toString();
+                                getValueToday(second_choosing,"TH");
+                                break;
+                            case R.id.radio_temp3:
+                                String third_choosing = dropdown.getSelectedItem().toString();
+                                getThisMonthValue(third_choosing,"TH");
+                                break;
+                            case R.id.radio_temp4:
+                                String fourth_choosing = dropdown.getSelectedItem().toString();
+                                getthisYearValue(fourth_choosing,"TH");
+                                break;
+                        }
+                    }
+                });
             }
 
             @Override
@@ -143,8 +268,23 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+
+
     }
 
+    private void sendDatatoAI(Vector<Double> test){
+        SendDataToAI sendDataToAI = new SendDataToAI(test);
+        Thread thread = new Thread(sendDataToAI);
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
     private void makeLightDeviceSpinner(String type)
     {
         GetDeviceByType getDeviceByType = new GetDeviceByType(type);
@@ -168,8 +308,34 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
-                String choosing = dropdown.getSelectedItem().toString();
-                getLightMeasurementFromDatabase(choosing);
+                final RadioGroup radioGroup = findViewById(R.id.radio_light);
+                RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
+                if(rad.isChecked()){
+                    String choosing = dropdown.getSelectedItem().toString();
+                    getLightMeasurementFromDatabase(choosing);}
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch(checkedId){
+                            case R.id.radio_light1:
+                                String choosing = dropdown.getSelectedItem().toString();
+                                getLightMeasurementFromDatabase(choosing);
+                                break;
+                            case R.id.radio_light2:
+                                String second_choosing = dropdown.getSelectedItem().toString();
+                                getValueToday(second_choosing,"S");
+                                break;
+                            case R.id.radio_light3:
+                                String third_choosing = dropdown.getSelectedItem().toString();
+                                getThisMonthValue(third_choosing,"S");
+                                break;
+                            case R.id.radio_light4:
+                                String fourth_choosing = dropdown.getSelectedItem().toString();
+                                getthisYearValue(fourth_choosing,"S");
+                                break;
+                        }
+                    }
+                });
 
             }
 
@@ -181,8 +347,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getTempMeasurementFromDatabase(String temp_device_id){
-        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
+
+    private void getLightMeasurementFromDatabase(String light_device_id){
+        GetDataFromURL getDataFromURL = new GetDataFromURL(light_device_id);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
         Vector<Double> results = getDataFromURL.results;
@@ -193,6 +360,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        drawLightTemperature(results);
+    }
+
+
+    private void drawGraphTemperature(Vector<Double> results)
+    {
         DataPoint[] dataPoints = new DataPoint[results.size()]; // declare an array of DataPoint objects with the same size as your list
         for (int i = 0; i < results.size(); i++) {
             // add new DataPoint object to the array for each of your list entries
@@ -209,18 +382,9 @@ public class MainActivity extends AppCompatActivity {
         graphTemperature.getViewport().setXAxisBoundsManual(true);
         showDataOnGraph(seriesTemp, graphTemperature);
     }
-    private void getLightMeasurementFromDatabase(String light_device_id){
-        GetDataFromURL getDataFromURL = new GetDataFromURL(light_device_id);
-        Thread thread = new Thread(getDataFromURL);
-        thread.start();
-        Vector<Double> results = getDataFromURL.results;
 
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    private void drawLightTemperature(Vector<Double> results)
+    {
         DataPoint[] dataPoints = new DataPoint[results.size()]; // declare an array of DataPoint objects with the same size as your list
         for (int i = 0; i < results.size(); i++) {
             // add new DataPoint object to the array for each of your list entries
@@ -237,8 +401,6 @@ public class MainActivity extends AppCompatActivity {
         graphLightLevel.getViewport().setXAxisBoundsManual(true);
         showDataOnGraph(seriesTemp, graphLightLevel);
     }
-
-
     private void showDataOnGraph(LineGraphSeries<DataPoint> series, GraphView graph){
         if(graph.getSeries().size() > 0){
             graph.getSeries().remove(0);
