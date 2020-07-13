@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,36 +24,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:background="#ffffff">
+                android:background="@drawable/round_header">
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="Add new plant"
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/Page_line"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="1dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="#c0c0c0"
+                    android:background="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -62,30 +59,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="24dp"
                     android:text="Plant name"
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-                <EditText
-                    android:id="@+id/registerPlantNameEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout25"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:ems="10"
-                    android:hint="Enter plant name"
-                    android:inputType="textPersonName"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/plantNameTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/plantNameTextView">
+
+                    <EditText
+                        android:id="@+id/registerPlantNameEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:ems="10"
+                        android:hint="Enter plant name"
+                        android:inputType="textPersonName"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/plantBuyDateTextVIew"
@@ -93,31 +104,45 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
-                    android:text="Buy date"
-                    android:textColor="#C1D045"
+                    android:text="Planted date"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPlantNameEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout25" />
 
-                <EditText
-                    android:id="@+id/registerPlantBuyDateEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout26"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:clickable="true"
-                    android:editable="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="Enter buy date"
-                    android:inputType="date"
-                    android:textSize="14sp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/plantBuyDateTextVIew" />
+                    app:layout_constraintTop_toBottomOf="@+id/plantBuyDateTextVIew">
+
+                    <EditText
+                        android:id="@+id/registerPlantBuyDateEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="Enter planted date"
+                        android:inputType="date"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/buyLocationTextView"
@@ -125,29 +150,44 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
-                    android:text="Buy location:"
-                    android:textColor="#C1D045"
+                    android:text="Buy location"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPlantBuyDateEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout26" />
 
-                <EditText
-                    android:id="@+id/registerPlantBuyLocationEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout27"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:ems="10"
-                    android:hint="Enter buy location"
-                    android:inputType="textPersonName"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="14sp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buyLocationTextView" />
+                    app:layout_constraintTop_toBottomOf="@+id/buyLocationTextView">
+
+                    <EditText
+                        android:id="@+id/registerPlantBuyLocationEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:ems="10"
+                        android:hint="Enter buy location"
+                        android:inputType="textPersonName"
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/buyAmountTextViewext"
@@ -155,28 +195,43 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
-                    android:text="Buy amount:"
-                    android:textColor="#C1D045"
+                    android:text="Buy amount"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPlantBuyLocationEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout27" />
 
-                <EditText
-                    android:id="@+id/registerPlantAmountEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout28"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:ems="10"
-                    android:hint="Enter buy amount"
-                    android:inputType="number"
-                    android:textSize="14sp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buyAmountTextViewext" />
+                    app:layout_constraintTop_toBottomOf="@+id/buyAmountTextViewext">
+
+                    <EditText
+                        android:id="@+id/registerPlantAmountEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:ems="10"
+                        android:hint="Enter buy amount"
+                        android:inputType="number"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/Linked_sensor_idTextView"
@@ -185,19 +240,22 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
                     android:text="Sensor measure"
-                    android:textColor="#C1D045"
+                    android:textColor="#9AB59A"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPlantAmountEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout28" />
 
                 <Button
                     android:id="@+id/registerPlant_SubmitBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="#C1D045"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/round_green_shadow_btn"
                     android:text="Submit"
                     android:textColor="#C238EB"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
@@ -210,6 +268,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="15dp"
+                    android:background="@drawable/round_header"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Linked_sensor_idTextView" />

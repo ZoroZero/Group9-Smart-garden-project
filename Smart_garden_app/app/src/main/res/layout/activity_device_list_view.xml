@@ -45,21 +45,51 @@
 
             <ImageView
                 android:id="@+id/DeviceList_Icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="0.5"
-                android:src="@drawable/ic_register_plant_50dp" />
-
-            <TextView
-                android:id="@+id/DeviceList_AllDevice_TV"
-                android:layout_width="200dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:text="All devices:"
-                android:textColor="#9AB59A"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_weight="0.3"
+                android:src="@drawable/ic_register_plant_50dp"
+                app:srcCompat="@drawable/sensor_icon_50dp" />
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.01"
+                android:background="?android:attr/listDivider" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:id="@+id/DeviceListDetail_DeviceType_TV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:text="Sensors:"
+                    android:textAlignment="viewStart"
+                    android:textColor="#9AB59A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/DeviceListDetail_DeviceCount_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="4dp"
+                    android:text="TextView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/DeviceListDetail_DeviceType_TV" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -67,7 +97,7 @@
     <View
         android:id="@+id/profilePage_line"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="3dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="15dp"
@@ -82,7 +112,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -18,6 +18,7 @@ public class UserLoginManagement {
     private static final String KEY_USER_ID = "user_ID";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_ENCRYPTED_PASSWORD = "password";
     private UserLoginManagement(Context context) {
         ctx = context;
     }
@@ -29,12 +30,13 @@ public class UserLoginManagement {
         return instance;
     }
 
-    public void userLogin(int user_id, String username, String email){
+    public void userLogin(int user_id, String username, String encrypted_pass, String email){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt(KEY_USER_ID, user_id);
         editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_ENCRYPTED_PASSWORD, encrypted_pass);
         editor.putString(KEY_USER_EMAIL, email);
         editor.apply();
 
@@ -60,13 +62,15 @@ public class UserLoginManagement {
     // Store user device information
     public void storeUserDevices(String[] device_id_list, String[] device_name_list,
                                  String[] linked_device_id_list, String[] linked_device_name_list,
-                                 String[] device_type_list){
+                                 String[] device_type_list, String[] threshold_list,
+                                String[] status_list, String[] status_date_list){
         sensor = new Vector<>();
         output = new Vector<>();
         user_device_information = new DeviceInformation[device_id_list.length];
         for(int i =0; i < device_id_list.length; i++){
             user_device_information[i] = new DeviceInformation(device_id_list[i], device_name_list[i],
-                    linked_device_id_list[i], linked_device_name_list[i], device_type_list[i]);
+                    linked_device_id_list[i], linked_device_name_list[i],
+                    device_type_list[i], threshold_list[i], status_list[i], status_date_list[i]);
             if(!device_type_list[i].equals("Output")){
                 sensor.addElement(user_device_information[i]);
             }
@@ -90,6 +94,11 @@ public class UserLoginManagement {
     public String getUserEmail(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USER_EMAIL, null);
+    }
+
+    public String getUserEncryptedPassword(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_ENCRYPTED_PASSWORD, null);
     }
 
     public DeviceInformation[] getDevice_list(){

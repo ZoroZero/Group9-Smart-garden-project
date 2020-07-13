@@ -38,9 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginButton.setOnClickListener(this);
         goToRegister.setOnClickListener(this);
-
     }
-
 
     public void login() {
         final String username = usernameText.getText().toString().trim();

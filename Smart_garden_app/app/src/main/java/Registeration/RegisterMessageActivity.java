@@ -59,25 +59,37 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                 JSONArray jsonArray = jsonObject.getJSONArray("list");
                 final String[] get_device_id = new String[jsonArray.length()];
                 final String[] get_device_name = new String[jsonArray.length()];
-                final String[] linked_device_id = new String[jsonArray.length()];
-                final String[] linked_device_name = new String[jsonArray.length()];
-                final String[] device_type = new String[jsonArray.length()];
+                final String[] get_linked_device_id = new String[jsonArray.length()];
+                final String[] get_linked_device_name = new String[jsonArray.length()];
+                final String[] get_device_type = new String[jsonArray.length()];
+                final String[] get_threshold = new String[jsonArray.length()];
+                final String[] get_status = new String[jsonArray.length()];
+                final String[] get_status_date = new String[jsonArray.length()];
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     get_device_id[i] = obj.getString("device_id");
                     get_device_name[i] = obj.getString("device_name");
-                    linked_device_id[i] = obj.getString("linked_device_id");
-                    linked_device_name[i] = obj.getString("linked_device_name");
-                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
-                        device_type[i] = "Output";
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
-                        device_type[i] = "Light Sensor";
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
-                        device_type[i] = "TempHumi Sensor";
-                }
-                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
+                    get_linked_device_id[i] = obj.getString("linked_device_id");
+                    get_linked_device_name[i] = obj.getString("linked_device_name");
+                    get_threshold[i] = obj.getString("threshold");
+                    get_status[i] = obj.getString("status");
+                    get_status_date[i] = obj.getString("date");
+                    if(obj.getString("status").equals("null")){
+                        get_status[i] = "No record";
+                        get_status_date[i] = "No record";
+                    }
 
-                //Start background service to record device measure
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
+                        get_device_type[i] = Constants.OUTPUT_TYPE;
+                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
+                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
+                }
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
+
+                // Start background service to record device measure
                 RecordMeasurementService mYourService = new RecordMeasurementService();
                 Intent mServiceIntent = new Intent(this, mYourService.getClass());
                 if (!isMyServiceRunning(mYourService.getClass())) {

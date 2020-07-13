@@ -37,6 +37,9 @@ public class Constants {
     // Change device threshold
     public static final String CHANGE_THRESHOLD = ROOT_URL + "/changeDeviceThreshold.php";
 
+    // Delete plant
+    public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";
+
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 
@@ -46,9 +49,15 @@ public class Constants {
 
     public static String[] DEVICE_TYPE = {"sensor", "output"};
 
+    public static final String LIGHT_SENSOR_TYPE = "Light sensor";
+
+    public static final String TEMPHUMI_SENSOR_TYPE = "Temperature humidity sensor";
+
+    public static final String OUTPUT_TYPE = "Output";
+
 
     // Default value for register device
-    public static int DEFAULT_LIGHT = 200;
+    public static int DEFAULT_LIGHT = 20;
 
     public static int DEFAULT_TEMP = 30;
 

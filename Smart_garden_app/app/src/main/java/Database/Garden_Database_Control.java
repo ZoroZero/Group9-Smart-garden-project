@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import AppNotification.NotificationHelper;
+import DeviceController.Device_Control;
 import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
@@ -42,7 +44,7 @@ public class Garden_Database_Control {
                                 Toast.makeText(context, "Login successful",
                                         Toast.LENGTH_LONG).show();
                                 UserLoginManagement.getInstance(context).userLogin(jsonObject.getInt("user_ID"),
-                                        jsonObject.getString("username"), jsonObject.getString("email"));
+                                        jsonObject.getString("username"), jsonObject.getString("password"), jsonObject.getString("email"));
                             } else {
                                 Toast.makeText(context, jsonObject.getString("message"),
                                         Toast.LENGTH_LONG).show();
@@ -270,54 +272,10 @@ public class Garden_Database_Control {
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    //Record measurement
-    public static void recordMeasurement(final DeviceInformation device, final Context context){
-        String database_ip = Helper.getConfigValue(context, "database_server");
-        //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "http://" + database_ip + Constants.RECORD_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.contains("{")) {
-                            int start = response.indexOf('{');
-                            int end = response.indexOf('}');
-                            try {
-                                JSONObject jsonObject = new JSONObject(response.substring(start, end+1));
-                                Log.d("JSON", String.valueOf(jsonObject));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("topic", device.getDevice_name() + "/" + device.getDevice_id());
-                params.put("type", device.getDevice_type().replace(" Sensor", ""));
-                params.put("device_id", device.getDevice_id());
-                params.put("user_id", UserLoginManagement.getInstance(context).getUserId()+"");
-                return params;
-            }
-        };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                5000,
-                1,
-                2));
-        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
 
     //Record measurement
     public static void recordMeasurement_v2(final Vector<DeviceInformation> devices, final Vector<Integer> positions,
-                                            final Context context, final VolleyCallBack callBack){
+                                            final Context context){
         String database_ip = Helper.getConfigValue(context, "database_server");
         //final String user_id = SharedPrefManager.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -327,7 +285,35 @@ public class Garden_Database_Control {
                     @Override
                     public void onResponse(String response) {
                         //Log.i("response", response);
-                        callBack.onSuccessResponse(response);
+                        Vector<DeviceInformation> sensors = UserLoginManagement.getInstance(context).getSensor();
+                        int index = response.indexOf("<br");
+                        String change_response = response.substring(0, index);
+                        if (change_response.equals(""))
+                            return;
+                        String[] responses = change_response.split("\n");
+                        for (String res : responses) {
+                            Log.i("Message", res);
+                            try {
+                                JSONObject jsonObject = new JSONObject(res);
+                                String message = jsonObject.getString("message");
+                                if (message.equals("Turn on")) {
+                                    int position = jsonObject.getInt("position");
+                                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
+                                            sensors.get(position).getLinked_device_name(), context);
+
+                                    // Send notification
+                                    NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
+                                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
+                                            context);
+                                } else if (message.equals("Turn off")) {
+                                    int position = jsonObject.getInt("position");
+                                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),
+                                            sensors.get(position).getLinked_device_name(), context);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -497,4 +483,43 @@ public class Garden_Database_Control {
         };
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
+
+    // Change device threshold
+    public static void removePlant(final String plant_name, final String buy_date, final String buy_location,
+                                   final Context context){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        final String user_id = UserLoginManagement.getInstance(context).getUserId() + "";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.REMOVE_PLANT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(context, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", user_id);
+                params.put("plant_name", plant_name);
+                params.put("buy_date", buy_date);
+                params.put("buy_location", buy_location);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
 }

@@ -22,22 +22,15 @@ import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import Database.Garden_Database_Control;
-import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.LoginActivity;
 import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
-import Helper.Helper;
 
-public class DeviceListOverViewActivity extends AppCompatActivity implements VolleyCallBack {
-    private GridView deviceListView;
-    private TextView deviceCountTV;
+public class DeviceListOverViewActivity extends AppCompatActivity {
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +39,27 @@ public class DeviceListOverViewActivity extends AppCompatActivity implements Vol
 
         IOT_Server_Access.connect(getApplicationContext());
         // Components
-        deviceListView = findViewById(R.id.DeviceList_DeviceList_View);
-        deviceCountTV = findViewById(R.id.DeviceOverView_DeviceCount_TV);
-        // Display devices info
-        Garden_Database_Control.FetchDevicesInfo(this, this);
+        GridView deviceListView = findViewById(R.id.DeviceList_DeviceList_View);
+        TextView deviceCountTV = findViewById(R.id.DeviceOverView_DeviceCount_TV);
+//       // Display devices info
+//       Garden_Database_Control.FetchDevicesInfo(this, this);
+
+        int[] deviceCount = {UserLoginManagement.getInstance(getApplicationContext()).getSensor().size(),
+                UserLoginManagement.getInstance(getApplicationContext()).getOutput().size()};
+        DeviceTypeItemAdapter itemAdapter = new DeviceTypeItemAdapter(getApplicationContext(), Constants.DEVICE_TYPE, deviceCount);
+        deviceListView.setAdapter(itemAdapter);
+
+        // Set device change tab when click
+        deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent showDeviceListDetail =  new Intent(getApplicationContext(), DeviceListViewActivity.class);
+                showDeviceListDetail.putExtra("device_list.type",
+                        Constants.DEVICE_TYPE[position]);
+                startActivity(showDeviceListDetail);
+            }
+        });
+        deviceCountTV.setText(UserLoginManagement.getInstance(getApplicationContext()).getDevice_list().length + " devices");
 
         // Set back button
         ActionBar actionBar = getSupportActionBar();
@@ -135,58 +145,57 @@ public class DeviceListOverViewActivity extends AppCompatActivity implements Vol
         return sb;
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onSuccessResponse(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            if (!jsonObject.getBoolean("error")) {
-                JSONArray jsonArray = jsonObject.getJSONArray("list");
-                final String[] get_device_id = new String[jsonArray.length()];
-                final String[] get_device_name = new String[jsonArray.length()];
-                String[] device_topic = new String[jsonArray.length()];
-                final String[] linked_device_id = new String[jsonArray.length()];
-                final String[] linked_device_name = new String[jsonArray.length()];
-                String[] linked_device_topic = new String[jsonArray.length()];
-                final String[] device_type = new String[jsonArray.length()];
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    get_device_id[i] = obj.getString("device_id");
-                    get_device_name[i] = obj.getString("device_name");
-                    device_topic[i] = get_device_name[i] +"/" + get_device_id[i];
-                    linked_device_id[i] = obj.getString("linked_device_id");
-                    linked_device_name[i] = obj.getString("linked_device_name");
-                    linked_device_topic[i] = linked_device_name[i] + "/" + linked_device_id[i];
-                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
-                        device_type[i] = "Output";
-                    else if(get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
-                        device_type[i] = "Light Sensor";
-                    else if(get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
-                        device_type[i] = "TempHumi Sensor";
-                }
-
-                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, linked_device_id, linked_device_name, device_type);
-                int[] deviceCount = {UserLoginManagement.getInstance(getApplicationContext()).getSensor().size(),
-                        UserLoginManagement.getInstance(getApplicationContext()).getOutput().size()};
-                DeviceTypeItemAdapter itemAdapter = new DeviceTypeItemAdapter(getApplicationContext(), Constants.DEVICE_TYPE, deviceCount);
-                deviceListView.setAdapter(itemAdapter);
-
-                // Set device change tab when click
-                deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent showDeviceListDetail =  new Intent(getApplicationContext(), DeviceListViewActivity.class);
-                        showDeviceListDetail.putExtra("device_list.type",
-                                Constants.DEVICE_TYPE[position]);
-                        startActivity(showDeviceListDetail);
-                    }
-                });
-
-                deviceCountTV.setText(get_device_id.length + " devices");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @SuppressLint("SetTextI18n")
+//    @Override
+//    public void onSuccessResponse(String result) {
+//        try {
+//            JSONObject jsonObject = new JSONObject(result);
+//            if (!jsonObject.getBoolean("error")) {
+//                JSONArray jsonArray = jsonObject.getJSONArray("list");
+//                final String[] get_device_id = new String[jsonArray.length()];
+//                final String[] get_device_name = new String[jsonArray.length()];
+//                final String[] get_linked_device_id = new String[jsonArray.length()];
+//                final String[] get_linked_device_name = new String[jsonArray.length()];
+//                final String[] get_device_type = new String[jsonArray.length()];
+//                final String[] get_threshold = new String[jsonArray.length()];
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject obj = jsonArray.getJSONObject(i);
+//                    get_device_id[i] = obj.getString("device_id");
+//                    get_device_name[i] = obj.getString("device_name");
+//                    get_linked_device_id[i] = obj.getString("linked_device_id");
+//                    get_linked_device_name[i] = obj.getString("linked_device_name");
+//                    get_threshold[i] = obj.getString("threshold");
+//                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
+//                        get_device_type[i] = "Output";
+//                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+//                        get_device_type[i] = "Light Sensor";
+//                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+//                        get_device_type[i] = "TempHumi Sensor";
+//
+//                }
+//                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+//                        get_linked_device_name, get_device_type, get_threshold);
+//                int[] deviceCount = {UserLoginManagement.getInstance(getApplicationContext()).getSensor().size(),
+//                        UserLoginManagement.getInstance(getApplicationContext()).getOutput().size()};
+//                DeviceTypeItemAdapter itemAdapter = new DeviceTypeItemAdapter(getApplicationContext(), Constants.DEVICE_TYPE, deviceCount);
+//                deviceListView.setAdapter(itemAdapter);
+//
+//                // Set device change tab when click
+//                deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        Intent showDeviceListDetail =  new Intent(getApplicationContext(), DeviceListViewActivity.class);
+//                        showDeviceListDetail.putExtra("device_list.type",
+//                                Constants.DEVICE_TYPE[position]);
+//                        startActivity(showDeviceListDetail);
+//                    }
+//                });
+//
+//                deviceCountTV.setText(get_device_id.length + " devices");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

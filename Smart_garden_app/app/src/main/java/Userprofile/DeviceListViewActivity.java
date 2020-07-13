@@ -1,13 +1,11 @@
 package Userprofile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -15,8 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgarden.Constants;
 import com.example.smartgarden.MainActivity;
@@ -25,8 +29,10 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.Vector;
 
+import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
@@ -37,25 +43,37 @@ import Login_RegisterUser.UserLoginManagement;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
 import Helper.*;
-public class DeviceListViewActivity extends AppCompatActivity {
+public class DeviceListViewActivity extends AppCompatActivity implements VolleyCallBack {
 
     private Vector<DeviceInformation> deviceInformationVector;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list_view);
 
+        // Components
+        final ListView deviceListView = findViewById(R.id.DeviceList_ListView);
+        ImageView icon = findViewById(R.id.DeviceList_Icon);
+        TextView deviceListTypeTv = findViewById(R.id.DeviceListDetail_DeviceType_TV);
+        TextView deviceListCountTV = findViewById(R.id.DeviceListDetail_DeviceCount_TV);
+
         // Get device list
-        if(getIntent().getStringExtra("device_list.type").equals("sensor")){
+        if(Objects.equals(getIntent().getStringExtra("device_list.type"), "sensor")){
+            deviceListTypeTv.setText("Sensor: ");
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getSensor();
+            icon.setImageResource(R.drawable.sensor_icon_50dp);
         }
         else{
+            deviceListTypeTv.setText("Output: ");
             deviceInformationVector = UserLoginManagement.getInstance(getApplicationContext()).getOutput();
+            icon.setImageResource(R.drawable.light_iot_icon_50);
         }
 
+        deviceListCountTV.setText(deviceInformationVector.size() + " devices");
         IOT_Server_Access.connect(getApplicationContext());
-        ListView deviceListView = findViewById(R.id.DeviceList_ListView);
 
         // Set back button
         ActionBar actionBar = getSupportActionBar();
@@ -63,14 +81,16 @@ public class DeviceListViewActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        DeviceDetailAdapter deviceDetails = new DeviceDetailAdapter(getApplicationContext(), deviceInformationVector);
+        final DeviceDetailAdapter deviceDetails = new DeviceDetailAdapter(getApplicationContext(),
+                Objects.requireNonNull(getIntent().getStringExtra("device_list.type")));
+
         deviceListView.setAdapter(deviceDetails);
 
         deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent showDeviceListDetail;
-                if(getIntent().getStringExtra("device_list.type").equals("sensor")){
+                if(Objects.equals(getIntent().getStringExtra("device_list.type"), "sensor")){
                     showDeviceListDetail =  new Intent(getApplicationContext(), DeviceDetailActivity.class);
                 }
                 else{
@@ -83,10 +103,28 @@ public class DeviceListViewActivity extends AppCompatActivity {
                         deviceInformationVector.elementAt(position).getDevice_name());
                 showDeviceListDetail.putExtra("device_detail.device_type",
                         deviceInformationVector.elementAt(position).getDevice_type());
+                showDeviceListDetail.putExtra("device_detail.device_threshold",
+                        deviceInformationVector.elementAt(position).getThreshold());
                 startActivity(showDeviceListDetail);
             }
         });
+        final Handler handler=new Handler();
+        handler.post(new Runnable(){
+            @Override
+            public void run() {
+                // Get reading
+                Garden_Database_Control.FetchDevicesInfo(getApplicationContext(), DeviceListViewActivity.this);
+                // notify adapter
+                deviceDetails.changeData(getApplicationContext(),
+                        Objects.requireNonNull(getIntent().getStringExtra("device_list.type")));
+
+                deviceListView.setAdapter(deviceDetails);
+                handler.postDelayed(this,500); // set time here to refresh textView
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,4 +203,46 @@ public class DeviceListViewActivity extends AppCompatActivity {
         return sb;
     }
 
+    @Override
+    public void onSuccessResponse(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (!jsonObject.getBoolean("error")) {
+                JSONArray jsonArray = jsonObject.getJSONArray("list");
+                final String[] get_device_id = new String[jsonArray.length()];
+                final String[] get_device_name = new String[jsonArray.length()];
+                final String[] get_linked_device_id = new String[jsonArray.length()];
+                final String[] get_linked_device_name = new String[jsonArray.length()];
+                final String[] get_device_type = new String[jsonArray.length()];
+                final String[] get_threshold = new String[jsonArray.length()];
+                final String[] get_status = new String[jsonArray.length()];
+                final String[] get_status_date = new String[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    get_device_id[i] = obj.getString("device_id");
+                    get_device_name[i] = obj.getString("device_name");
+                    get_linked_device_id[i] = obj.getString("linked_device_id");
+                    get_linked_device_name[i] = obj.getString("linked_device_name");
+                    get_threshold[i] = obj.getString("threshold");
+                    get_status[i] = obj.getString("status");
+                    get_status_date[i] = obj.getString("date");
+                    if(obj.getString("status").equals("null")){
+                        get_status[i] = "No record";
+                        get_status_date[i] = "No record";
+                    }
+
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
+                        get_device_type[i] = Constants.OUTPUT_TYPE;
+                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
+                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
+                }
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

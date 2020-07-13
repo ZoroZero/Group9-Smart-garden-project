@@ -33,7 +33,7 @@ import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
-public class RecordMeasurementService extends Service implements VolleyCallBack{
+public class RecordMeasurementService extends Service{
     public int counter=0;
     private DeviceInformation[] device_list;
     private Vector<DeviceInformation> sensors;
@@ -114,7 +114,7 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
                     for(int i = 0; i< sensors.size(); i++){
                             sensors_position.addElement(i);
                     }
-                    Garden_Database_Control.recordMeasurement_v2(sensors, sensors_position, getApplicationContext(), RecordMeasurementService.this);
+                    Garden_Database_Control.recordMeasurement_v2(sensors, sensors_position, getApplicationContext());
                 }
             }
         };
@@ -147,38 +147,35 @@ public class RecordMeasurementService extends Service implements VolleyCallBack{
         } catch (IOException e) { return false; }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onSuccessResponse(String response) {
-        int index = response.indexOf("<br");
-        String change_response = response.substring(0, index);
-        if (change_response.equals(""))
-            return;
-        String[] responses = change_response.split("\n");
-        for (String res : responses) {
-            Log.i("Message", res);
-            try {
-                JSONObject jsonObject = new JSONObject(res);
-                String message = jsonObject.getString("message");
-                if (message.equals("Turn on")) {
-                    int position = jsonObject.getInt("position");
-                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
-                            sensors.get(position).getLinked_device_name(), getApplicationContext());
-
-                    // Send notification
-                    NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
-                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
-                            getApplicationContext());
-//                    NotificationHelper.displayNotification("Warning",
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    @Override
+//    public void onSuccessResponse(String response) {
+//        int index = response.indexOf("<br");
+//        String change_response = response.substring(0, index);
+//        if (change_response.equals(""))
+//            return;
+//        String[] responses = change_response.split("\n");
+//        for (String res : responses) {
+//            Log.i("Message", res);
+//            try {
+//                JSONObject jsonObject = new JSONObject(res);
+//                String message = jsonObject.getString("message");
+//                if (message.equals("Turn on")) {
+//                    int position = jsonObject.getInt("position");
+//                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
+//                            sensors.get(position).getLinked_device_name(), getApplicationContext());
+//
+//                    // Send notification
+//                    NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
 //                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
 //                            getApplicationContext());
-                } else if (message.equals("Turn off")) {
-                    int position = jsonObject.getInt("position");
-                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//                } else if (message.equals("Turn off")) {
+//                    int position = jsonObject.getInt("position");
+//                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),sensors.get(position).getLinked_device_name(), getApplicationContext());
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

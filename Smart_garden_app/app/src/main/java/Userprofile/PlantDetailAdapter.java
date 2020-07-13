@@ -2,6 +2,7 @@ package Userprofile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,33 @@ import android.widget.TextView;
 
 import com.example.smartgarden.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+
 public class PlantDetailAdapter  extends BaseAdapter {
     private LayoutInflater mInfoInflater;
     private String[] plant_names;
     private String[] plant_buy_dates;
     private String[] plant_amounts;
+    private String[] linked_sensor_ids;
+    private SimpleDateFormat dateFormat;
+    private Date today;
 
-    public PlantDetailAdapter(Context context, String[] plant_names, String[] plant_buy_dates, String[] plant_amounts){
+    @SuppressLint("SimpleDateFormat")
+    public PlantDetailAdapter(Context context, String[] plant_names, String[] plant_buy_dates,
+                              String[] plant_amounts, String[] linked_sensor_ids){
         this.plant_names = plant_names;
         this.plant_buy_dates = plant_buy_dates;
         this.plant_amounts = plant_amounts;
+        this.linked_sensor_ids = linked_sensor_ids;
         mInfoInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        today = calendar.getTime();
+        Log.i("Date", today.toString());
     }
 
     @Override
@@ -46,14 +63,32 @@ public class PlantDetailAdapter  extends BaseAdapter {
         TextView nameTextView = v.findViewById(R.id.PlantDetail_PlantName_TV);
         TextView buy_dateTextView = v.findViewById(R.id.PlantDetail_BuyDate_TV);
         TextView amountTextView = v.findViewById(R.id.PlantDetail_Amount_TV);
+        TextView linkedSensorIDTextView = v.findViewById(R.id.PlantDetail_LinkedSensorID_TV);
         // Get name from array
         String name = plant_names[position];
         String date = plant_buy_dates[position];
         String amount = plant_amounts[position];
+        String linked_sensor_id = linked_sensor_ids[position];
+        Date plantedDay = null;
+        try {
+            plantedDay = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assert plantedDay != null;
+        long difference = today.getTime() - plantedDay.getTime();
+        long differenceDates = Math.abs(difference) / (24 * 60 * 60 * 1000);
+        String dayDifference = Long.toString(differenceDates);
         // Set texts
-        nameTextView.setText("Plant name: " + name);
-        buy_dateTextView.setText("Buy date: " + date);
+        nameTextView.setText(name);
+        if(difference < 0){
+            buy_dateTextView.setText("Days till plant: " + dayDifference);
+        }
+        else {
+            buy_dateTextView.setText("Days planted: " + dayDifference);
+        }
         amountTextView.setText("Amount: " + amount);
+        linkedSensorIDTextView.setText("Sensor: " + linked_sensor_id);
         return v;
     }
 }
