@@ -8,4 +8,7 @@
     <color name="humidityColor">#AC95FD</color>
     <color name="temperatureColor">#AE642A</color>
     <color name="lightColor">#D09145</color>
+    <color name="seek_bar_progress">#68FF4D</color>
+    <color name="seek_bar_secondary_progress">#3399CC</color>
+    <color name="seek_bar_background">#ababab</color>
 </resources>

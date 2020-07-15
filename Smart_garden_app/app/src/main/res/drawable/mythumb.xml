@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:width="40dp" android:height="40dp">
-        <shape android:shape="rectangle">
-            <solid android:color="#963e3e" />
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <size
+        android:height="@dimen/seek_bar_thumb_size"
+        android:width="@dimen/seek_bar_thumb_size"
+        />
+    <solid android:color="@color/seek_bar_progress"/>
+</shape>
