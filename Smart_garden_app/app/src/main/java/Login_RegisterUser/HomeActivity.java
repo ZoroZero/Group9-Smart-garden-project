@@ -197,7 +197,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                         if(!get_status[i].equals("No record")){
                             count_temp_humid += 1;
-                            Log.i("Status", get_status[i]);
+//                            Log.i("Status", get_status[i]);
                             sum_temp += Integer.parseInt(get_status[i].split(":")[0]);
                             sum_humid += Integer.parseInt(get_status[i].split(":")[1]);
                         }
@@ -241,11 +241,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         assert manager != null;
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
+//                Log.i ("Service status", "Running");
                 return true;
             }
         }
-        Log.i ("Service status", "Not running");
+//        Log.i ("Service status", "Not running");
         return false;
     }
 }

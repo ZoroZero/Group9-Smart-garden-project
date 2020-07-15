@@ -284,6 +284,9 @@ public class Garden_Database_Control {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onResponse(String response) {
+                        if(response.equals("Failed")){
+                            return;
+                        }
                         //Log.i("response", response);
                         Vector<DeviceInformation> sensors = UserLoginManagement.getInstance(context).getSensor();
                         int index = response.indexOf("<br");
