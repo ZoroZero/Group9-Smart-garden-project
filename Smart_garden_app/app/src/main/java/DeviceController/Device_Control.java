@@ -36,4 +36,12 @@ public class Device_Control {
         Garden_Database_Control.updateOutputStatus(device_id, "Off", context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static void turnDeviceLightIntensity(String device_id, String device_name, Context context, String intensity){
+        String control_message = "[{ \"device_id\": \"" + device_id  +
+                "\", \"values\" : [\"1\", \"" + intensity + "\"] } ]";
+        IOT_Server_Access.Publish(device_name + "/" + device_id,
+                control_message, context);
+        Garden_Database_Control.updateOutputStatus(device_id, "On-" + intensity, context);
+    }
 }
