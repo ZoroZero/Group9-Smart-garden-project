@@ -158,7 +158,7 @@ public class Garden_Database_Control {
 
     // Add new plant
     public static void addNewPlant(final String plant_name, final String buy_date, final String buy_location,
-                                   final String amount, final String linked_sensor_id,
+                                   final String amount, final String linked_device_id, final String linked_device_name,
                                    final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
@@ -188,7 +188,8 @@ public class Garden_Database_Control {
                 params.put("buy_date", buy_date);
                 params.put("buy_location", buy_location);
                 params.put("amount", amount);
-                params.put("linked_sensor_id", linked_sensor_id);
+                params.put("linked_device_id", linked_device_id);
+                params.put("linked_device_name", linked_device_name);
                 return params;
             }
         };
@@ -299,20 +300,22 @@ public class Garden_Database_Control {
                             try {
                                 JSONObject jsonObject = new JSONObject(res);
                                 String message = jsonObject.getString("message");
-                                if (message.equals("Turn on")) {
+                                if (message.equals("Need change")) {
                                     int position = jsonObject.getInt("position");
-                                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
-                                            sensors.get(position).getLinked_device_name(), context);
+                                    int new_Intensity = jsonObject.getInt("new_intensity");
+                                    Device_Control.turnDeviceLightIntensity(sensors.get(position).getLinked_device_id(),
+                                            sensors.get(position).getLinked_device_name(), context, new_Intensity + "");
 
                                     // Send notification
                                     NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
                                             "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
                                             context);
-                                } else if (message.equals("Turn off")) {
-                                    int position = jsonObject.getInt("position");
-                                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),
-                                            sensors.get(position).getLinked_device_name(), context);
                                 }
+//                                else if (message.equals("Turn off")) {
+//                                    int position = jsonObject.getInt("position");
+//                                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),
+//                                            sensors.get(position).getLinked_device_name(), context);
+//                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

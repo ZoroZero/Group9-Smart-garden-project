@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -44,13 +45,23 @@ public class Helper {
         return false;
     }
 
-    public static DeviceInformation findDeviceWithDeviceId(String deviceId, Vector<DeviceInformation> devices){
+    public static DeviceInformation findDeviceWithDeviceId(String deviceId, String deviceName, Vector<DeviceInformation> devices){
         for(DeviceInformation deviceInformation: devices){
-            if(deviceInformation.getDevice_id().equals(deviceId)){
+            if(deviceInformation.getDevice_id().equals(deviceId) && deviceInformation.getDevice_name().equals(deviceName)){
                 return deviceInformation;
             }
         }
         return null;
+    }
+
+    public static Vector<DeviceInformation> findAllDeviceWithID(String deviceId, Vector<DeviceInformation> devices){
+        Vector<DeviceInformation> res = new Vector<DeviceInformation>();
+        for(DeviceInformation deviceInformation: devices){
+            if(deviceInformation.getDevice_id().equals(deviceId)){
+                res.addElement(deviceInformation);
+            }
+        }
+        return res;
     }
 
     public static String md5(String string) {

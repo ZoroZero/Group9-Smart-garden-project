@@ -34,10 +34,12 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
         assert device_type != null;
         if(device_type.equals(Constants.OUTPUT_TYPE)){
             deviceInformation = Helper.Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_setting.device_id"),
+                    getIntent().getStringExtra("device_setting.device_name"),
                     UserLoginManagement.getInstance(this).getOutput());
         }
         else{
             deviceInformation = Helper.Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_setting.device_id"),
+                    getIntent().getStringExtra("device_setting.device_name"),
                     UserLoginManagement.getInstance(this).getSensor());
         }
         TextView deviceId = findViewById(R.id.changeSetting_deviceId_TV);

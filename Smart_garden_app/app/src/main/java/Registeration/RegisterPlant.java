@@ -35,7 +35,8 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
     private EditText plant_nameET;
     private EditText buy_locationET;
     private EditText amountET;
-    private String linked_sensor_id = "";
+    private String linked_device_id = "";
+    private String linked_device_name = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,21 +47,42 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         buy_locationET = findViewById(R.id.registerPlantBuyLocationEditText);
         amountET = findViewById(R.id.registerPlantAmountEditText);
         Spinner linked_sensor_idSpinner = findViewById(R.id.registerPlantSensorID);
+        final Spinner linked_sensor_nameSpinner = findViewById(R.id.registerPlantSensorName);
         Button submitBtn = findViewById(R.id.registerPlant_SubmitBtn);
 
         // Set up spinner
-        Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
+        final Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
         final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size()];
         for(int i = 0; i < sensor_id.length; i++){
             sensor_id[i] = sensor.get(i).getDevice_id();
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
         linked_sensor_idSpinner.setAdapter(arrayAdapter);
 
         linked_sensor_idSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                linked_sensor_id = sensor_id[position];
+                linked_device_id = sensor_id[position];
+                Vector<DeviceInformation> sensorWithID = Helper.Helper.findAllDeviceWithID(linked_device_id, sensor);
+                final String[] sensor_name = new String[sensorWithID.size()];
+
+                for(int i = 0; i < sensorWithID.size(); i++){
+                    sensor_name[i] = sensorWithID.get(i).getDevice_name();
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
+                        R.layout.support_simple_spinner_dropdown_item, sensor_name);
+                linked_sensor_nameSpinner.setAdapter(arrayAdapter);
+                linked_sensor_nameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        linked_device_name = sensor_name[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
             }
 
             @Override
@@ -68,6 +90,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
 
             }
         });
+
 
         buy_date_input.setOnClickListener(new View.OnClickListener() {
 
@@ -98,11 +121,12 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
                 final String buy_location = buy_locationET.getText().toString();
                 final String amount = amountET.getText().toString();
 //                final String linked_sensor_id = linked_sensor_idSpinner.getText().toString();
-                if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("") || linked_sensor_id.equals("")){
+                if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("")
+                        || linked_device_id.equals("") || linked_device_name.equals("")){
                     Toast.makeText(getApplicationContext(), "Empty field detected", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount, linked_sensor_id,
+                Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount, linked_device_id, linked_device_name,
                         getApplicationContext(), RegisterPlant.this);
             }
         });

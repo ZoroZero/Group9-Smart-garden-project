@@ -186,14 +186,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             count_output += 1;
                         }
                     }
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID)) {
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID)) {
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
                         if(!get_status[i].equals("No record")){
                             count_light += 1;
                             sum_light += Integer.parseInt(get_status[i]);
                         }
                     }
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID)) {
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID)) {
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                         if(!get_status[i].equals("No record")){
                             count_temp_humid += 1;
