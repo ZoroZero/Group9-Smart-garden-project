@@ -30,7 +30,9 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
     private TextView device_lastReadingTV;
     private TextView device_lastReadingTimeTV;
+    private TextView device_readingTypeTV;
     private TextView device_lastReading1TV;
+    private TextView device_readingType1TV;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
 
@@ -46,10 +48,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         TextView device_ThresholdTV = findViewById(R.id.deviceDetail_DeviceThreshold_TV);
         TextView device_typeTV = findViewById(R.id.deviceDetail_DeviceType_TV);
         device_lastReadingTV = findViewById(R.id.deviceDetail_DeviceLastReading_TV);
-        TextView device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
+        device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
         device_lastReadingTimeTV = findViewById(R.id.deviceDetail_DeviceLastReadingTime_TV);
         device_lastReading1TV = findViewById(R.id.deviceDetail_DeviceLastReading1_TV);
-        TextView device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
+        device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
         readingBar = findViewById(R.id.deviceDetail_DeviceLastReading);
         readingBar1 = findViewById(R.id.deviceDetail_DeviceLastReading1);
         ConstraintLayout reading1 = findViewById(R.id.reading);
@@ -64,13 +66,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).equals(Constants.LIGHT_SENSOR_TYPE)){
             reading1.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
-            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else{
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
-            readingBar.setEndValue(Constants.MAX_HUMIDITY);
-            readingBar1.setEndValue(Constants.MAX_TEMPERATURE);
         }
 
         // Set return button
@@ -130,7 +129,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     }
                     else{
                         String measurement = reading.getString("measurement");
-                        device_lastReading1TV.setText(measurement + " lux");
+                        device_lastReading1TV.setText(measurement + "%");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }

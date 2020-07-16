@@ -99,13 +99,13 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
                 JSONObject device_info = jsonObject.getJSONObject(0);
                 // Check light sensor id
-                if(device_type.contains("Light") && !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.LIGHT_SENSOR_ID)){
+                if(device_type.contains("Light") && !device_info.getString("device_id").contains("Light")){
                     Toast.makeText(getApplicationContext(), "Invalid light sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 //Check Temp humid sensor id
-                if(device_type.contains("Temperature humidity") && !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.TEMPHUMI_SENSOR_ID)){
+                if(device_type.contains("Temperature humidity") && !device_info.getString("device_id").contains("TempHumi")){
                     Toast.makeText(getApplicationContext(), "Invalid temperature humidity sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }

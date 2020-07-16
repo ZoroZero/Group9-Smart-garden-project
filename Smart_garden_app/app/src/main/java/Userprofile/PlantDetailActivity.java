@@ -82,28 +82,25 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         amountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
 
         // Get linked device
-        DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_device_id"),
-                getIntent().getStringExtra("plant_detail.linked_device_name"),
+        DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
                 UserLoginManagement.getInstance(this).getSensor());
 
         assert sensorInfo != null;
         if(sensorInfo.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)){
             readingLayout.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
-            readingBar1.setEndValue(Constants.MAX_LIGHT);
             readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
         }
         else if(sensorInfo.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
-            readingBar.setEndValue(Constants.MAX_HUMIDITY);
-            readingBar1.setEndValue(Constants.MAX_TEMPERATURE);
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
         }
 
+
         // Get reading
-        Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_device_id"),
+        Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
                 this, this);
 
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +134,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                     }
                     else{
                         String measurement = reading.getString("measurement");
-                        device_lastReading1TV.setText(measurement + " lux");
+                        device_lastReading1TV.setText(measurement + "%");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }

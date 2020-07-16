@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.smartgarden.Constants;
@@ -84,11 +86,9 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
         // Get Devices information
         deviceInformation = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_detail.device_id"),
-                getIntent().getStringExtra("device_detail.device_name"),
                 UserLoginManagement.getInstance(getApplicationContext()).getOutput());
         assert deviceInformation != null;
         linkedSensorInformation = Helper.findDeviceWithDeviceId(deviceInformation.getLinked_device_id(),
-                deviceInformation.getLinked_device_name(),
                 UserLoginManagement.getInstance(getApplicationContext()).getSensor());
 
         //Set device reading view
@@ -97,13 +97,10 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             readingLayout.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
-            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
-            readingBar.setEndValue(Constants.MAX_HUMIDITY);
-            readingBar1.setEndValue(Constants.MAX_TEMPERATURE);
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
         }
@@ -194,9 +191,9 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
                     if (Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         get_device_type[i] = Constants.OUTPUT_TYPE;
-                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID))
+                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID))
+                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
 
@@ -204,14 +201,12 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
                         get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
                 deviceInformation = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_detail.device_id"),
-                        getIntent().getStringExtra("device_detail.device_name"),
                         UserLoginManagement.getInstance(getApplicationContext()).getOutput());
 
                 // Set status
                 assert deviceInformation != null;
                 // Set sensor reading
                 linkedSensorInformation = Helper.findDeviceWithDeviceId(deviceInformation.getLinked_device_id(),
-                        deviceInformation.getLinked_device_name(),
                         UserLoginManagement.getInstance(getApplicationContext()).getSensor());
                 assert linkedSensorInformation != null;
                 if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
@@ -233,7 +228,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     }
                     else {
                         String measurement = linkedSensorInformation.getStatus();
-                        device_lastReading1TV.setText(measurement + " lux");
+                        device_lastReading1TV.setText(measurement + "%");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }
