@@ -18,6 +18,7 @@ public class GetDataFromURL implements Runnable {
     private OkHttpClient client = new OkHttpClient();
     private String url = "http://169.254.20.224/duyapi/v1/getDeviceMeasurement.php";
     private String device_id;
+    protected Vector<String> date = new Vector<>();
     protected Vector<Double> results = new Vector<>();
     public GetDataFromURL(String device_id){
         this.device_id = device_id;
@@ -58,6 +59,8 @@ public class GetDataFromURL implements Runnable {
                 {
                     double temp = jsonArray.getJSONObject(i).getDouble("measurement");
                     this.results.add(temp);
+                    String this_date = jsonArray.getJSONObject(i).getString("date");
+                    this.date.add(this_date);
                 }
             }
 

@@ -64,6 +64,7 @@ import android.widget.EditText;
 import android.widget.Button;
 
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
+
                 final RadioGroup radioGroup = findViewById(R.id.radio_temp);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
                 if(rad.isChecked()){
@@ -260,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing);
             }
 
             @Override
@@ -271,18 +276,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     }
 
-    private void sendDatatoAI(Vector<Double> test){
-        SendDataToAI sendDataToAI = new SendDataToAI(test);
-        Thread thread = new Thread(sendDataToAI);
+    private void sendDatatoAI(String temp_device_id){
+        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
+        Thread thread = new Thread(getDataFromURL);
         thread.start();
-
+        Vector<Double> results = getDataFromURL.results;
+        Vector<String> dates = getDataFromURL.date;
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        SendDataToAI sendDataToAI = new SendDataToAI(results,dates);
+        Thread second_thread = new Thread(sendDataToAI);
+        second_thread.start();
+
+        try {
+            second_thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        double AI_result = sendDataToAI.AI_result;
+        TextView mytextview;
+        mytextview = findViewById(R.id.temp_view);
+        mytextview.setText("Recommendation value " + String.valueOf(AI_result));
 
     }
     private void makeLightDeviceSpinner(String type)
