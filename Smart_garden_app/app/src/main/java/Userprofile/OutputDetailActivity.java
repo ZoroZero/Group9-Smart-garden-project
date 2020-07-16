@@ -8,17 +8,16 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -35,16 +34,18 @@ import Login_RegisterUser.UserLoginManagement;
 public class OutputDetailActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
 
     private TextView device_statusTV;
-    private String deviceStatus;
-    private SwitchCompat lightControl;
+    private String deviceStatus = "";
     private TextView device_lastReadingTV;
     private TextView device_lastReading1TV;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
     private DeviceInformation deviceInformation;
     private DeviceInformation linkedSensorInformation;
+    private SeekBar lightPowerSB;
+    private TextView lightPowerTV;
     ImageButton wake_Btn;
     ImageButton sleep_Btn;
+    private int intensity = 0;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +68,18 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         readingBar1 = findViewById(R.id.OutputDetail_DeviceLastReading1);
         ConstraintLayout readingLayout = findViewById(R.id.OutputDetail_reading);
 
-        lightControl = findViewById(R.id.outputDevice_DeviceLight_Switch);
-        lightControl.setTextOn("255"); // displayed text of the Switch whenever it is in checked or on state
-        lightControl.setTextOff("0");
+
         wake_Btn = findViewById(R.id.outputDeviceDetail_Wake_Btn);
         sleep_Btn = findViewById(R.id.outputDeviceDetail_Sleep_Btn);
         Button return_Btn = findViewById(R.id.item_returnButton);
+
+        lightPowerSB = findViewById(R.id.outputDeviceDetail_LightPower_SeekBar);
+        lightPowerTV = findViewById(R.id.outputDeviceDetail_LightPower_TV);
+
         //Set text
         device_idTV.setText(getIntent().getStringExtra("device_detail.device_id"));
         device_nameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
-
         getDeviceInfo();
 
         // Get Devices information
@@ -93,54 +95,56 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             readingLayout.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
+            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
+            readingBar.setEndValue(Constants.MAX_HUMID);
+            readingBar1.setEndValue(Constants.MAX_TEMP);
         }
 
-        // Set onclick event
-        lightControl.setSwitchMinWidth(150);
-        lightControl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // Set seek bar
+        lightPowerSB.setMax(100);
+        if(!deviceInformation.getStatus().equals("Off")){
+            String lightIntensity = deviceInformation.getStatus().split("-")[1];
+            lightPowerSB.setProgress(Math.min(100, Integer.parseInt(lightIntensity)*100/255));
+            lightPowerTV.setText("Light intensity: " + Integer.parseInt(lightIntensity)/255*100);
+        }
+        else{
+            lightPowerTV.setText("Light intensity: " + 0);
+            lightPowerSB.setProgress(0);
+            lightPowerSB.setClickable(false);
+        }
+
+        lightPowerSB.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lightPowerTV.setText("Light intensity: " + progress);
+                intensity = progress*255/100;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    switch (deviceStatus) {
-                        case "Off":
-                            Log.i("Message", "Can not turn on right now");
-                            break;
-                        case "On-0":
-                            Device_Control.turnDeviceOn(getIntent().getStringExtra("device_detail.device_id"),
-                                    getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                            deviceStatus = "On-255";
-                            device_statusTV.setText(deviceStatus);
-                            break;
-                        case "On-255":
-                            Log.i("Message", "Device is already on now");
-                            break;
-                    }
-                } else {
-                    // The toggle is disabled
-                    switch (deviceStatus) {
-                        case "Off":
-                        case "On-255":
-                            Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
-                                    getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                            deviceStatus = "On-0";
-                            device_statusTV.setText(deviceStatus);
-                            break;
-                        case "On-0":
-                            Log.i("Message", "Device is already off");
-                            break;
-                    }
-                }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.i("Pressed", "pressed");
+                Device_Control.turnDeviceLightIntensity(deviceInformation.getDevice_id(), deviceInformation.getDevice_name(),
+                        getApplicationContext(), intensity +"");
             }
         });
+
+
         wake_Btn.setOnClickListener(this);
         sleep_Btn.setOnClickListener(this);
         return_Btn.setOnClickListener(this);
+
 
         final Handler handler=new Handler();
         handler.post(new Runnable(){
@@ -148,7 +152,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 // Get reading
                 getDeviceInfo();
-                handler.postDelayed(this,500); // set time here to refresh textView
+                handler.postDelayed(this,2000); // set time here to refresh textView
             }
         });
     }
@@ -189,40 +193,21 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
                     if (Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         get_device_type[i] = Constants.OUTPUT_TYPE;
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID))
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID))
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
+
                 // Update user devices
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
                         get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
                 deviceInformation = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_detail.device_id"),
                         UserLoginManagement.getInstance(getApplicationContext()).getOutput());
-                //Log.i("JSON object", String.valueOf(reading));
-                assert deviceInformation != null;
-                deviceStatus = deviceInformation.getStatus();
-                device_statusTV.setText(deviceStatus);
-                switch (deviceStatus) {
-                    case "Off":
-                        lightControl.setClickable(false);
-                        sleep_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
-                        wake_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
-                        break;
-                    case "On-0":
-                        if(lightControl.isChecked())
-                            lightControl.setChecked(false);
-                        wake_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
-                        sleep_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
-                        break;
-                    case "On-255":
-                        if(!lightControl.isChecked())
-                            lightControl.setChecked(true);
-                        wake_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
-                        sleep_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
-                        break;
-                }
 
+                // Set status
+                assert deviceInformation != null;
+                // Set sensor reading
                 linkedSensorInformation = Helper.findDeviceWithDeviceId(deviceInformation.getLinked_device_id(),
                         UserLoginManagement.getInstance(getApplicationContext()).getSensor());
                 assert linkedSensorInformation != null;
@@ -245,9 +230,43 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     }
                     else {
                         String measurement = linkedSensorInformation.getStatus();
-                        device_lastReading1TV.setText(measurement + "%");
+                        device_lastReading1TV.setText(measurement + " lux");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
+                }
+
+
+                if(deviceStatus.equals(deviceInformation.getStatus())){
+                    return;
+                }
+                deviceStatus = deviceInformation.getStatus();
+
+                if(deviceStatus.equals("Off")) {
+                    device_statusTV.setText(deviceStatus);
+                }
+                else{
+                    device_statusTV.setText("On");
+                }
+
+                // Set seek bar
+                if(!deviceInformation.getStatus().equals("Off")){
+                    String lightIntensity = deviceInformation.getStatus().split("-")[1];
+                    lightPowerSB.setProgress(Integer.parseInt(lightIntensity)*100/255);
+                    lightPowerTV.setText("Light intensity: " + Integer.parseInt(lightIntensity)*100/255);
+                }
+                else{
+                    lightPowerTV.setText("Light intensity: " + 0);
+                    lightPowerSB.setProgress(0);
+                    lightPowerSB.setClickable(false);
+                }
+
+                // Set buttons
+                if ("Off".equals(deviceStatus)) {
+                    sleep_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
+                    wake_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
+                } else {
+                    wake_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
+                    sleep_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
                 }
 
             }
@@ -257,43 +276,43 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
     }
 
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.outputDeviceDetail_Sleep_Btn:
-                switch (deviceStatus) {
-                    case "On-0":
-                    case "On-255":
-                        Device_Control.putDeviceToOff(getIntent().getStringExtra("device_detail.device_id"),
-                                getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                        deviceStatus = "Off";
-                        device_statusTV.setText(deviceStatus);
-                        lightControl.setClickable(false);
-                        sleep_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
-                        wake_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
-                        break;
-                    case "Off":
-                        Log.i("Message", "Device is already at sleep now");
-                        break;
+                if ("Off".equals(deviceStatus)) {
+                    Log.i("Message", "Device is already at sleep now");
+                }
+                else {
+                    Device_Control.putDeviceToOff(getIntent().getStringExtra("device_detail.device_id"),
+                            getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
+                    deviceStatus = "Off";
+
+                    device_statusTV.setText(deviceStatus);
+                    // Set clickable
+                    lightPowerSB.setEnabled(false);
+                    // Set button style
+                    sleep_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
+                    wake_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
                 }
                 break;
             case R.id.outputDeviceDetail_Wake_Btn:
-                switch (deviceStatus) {
-                    case "On-0":
-                    case "On-255":
-                        Log.i("Message", "Device is already activate now");
-                        break;
-                    case "Off":
-                        Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
-                                getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
-                        deviceStatus = "On-0";
-                        device_statusTV.setText(deviceStatus);
-                        lightControl.setChecked(false);
-                        lightControl.setClickable(true);
-                        wake_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
-                        sleep_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
-                        break;
+                if ("Off".equals(deviceStatus)) {
+                    Device_Control.turnDeviceOff(getIntent().getStringExtra("device_detail.device_id"),
+                            getIntent().getStringExtra("device_detail.device_name"), getApplicationContext());
+                    deviceStatus = "On-0";
+
+                    device_statusTV.setText("On");
+                    // set clickable
+                    lightPowerSB.setEnabled(true);
+                    // Set button style
+                    wake_Btn.setBackgroundResource(R.drawable.round_disable_shadow_btn);
+                    sleep_Btn.setBackgroundResource(R.drawable.round_green_shadow_btn);
+                }
+                else {
+                    Log.i("Message", "Device is already activate now");
                 }
                 break;
             case R.id.item_returnButton:

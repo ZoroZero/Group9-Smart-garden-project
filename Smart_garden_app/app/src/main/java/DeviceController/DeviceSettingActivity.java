@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONException;

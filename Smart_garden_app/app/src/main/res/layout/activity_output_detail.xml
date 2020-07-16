@@ -180,39 +180,56 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/outputDevice_DeviceLight_Switch"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout31"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:scaleX="1"
-                    android:scaleY="1"
-                    android:showText="true"
-                    android:switchMinWidth="200dp"
-                    android:textColor="#708238"
-                    android:textOff="0"
-                    android:textOn="255"
-                    android:thumb="@drawable/mythumb"
+                    android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/DetailReading"
-                    app:thumbTint="@drawable/switch_thumb"
-                    app:track="@drawable/mytrack"
-                    app:trackTint="@drawable/switch_track" />
+                    app:layout_constraintTop_toBottomOf="@+id/DetailReading">
+
+                    <TextView
+                        android:id="@+id/outputDeviceDetail_LightPower_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="TextView"
+                        android:textColor="@color/lightColor"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/outputDeviceDetail_LightPower_SeekBar"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:max="100"
+                        android:progressDrawable="@drawable/mytrack"
+                        android:thumb="@drawable/mythumb"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/outputDeviceDetail_LightPower_TV" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/linearLayout3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/outputDevice_DeviceLight_Switch">
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout31">
 
                     <ImageButton
                         android:id="@+id/outputDeviceDetail_Sleep_Btn"
@@ -355,7 +372,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Change setting"
-                    android:textColor="#C238EB"
+                    android:textColor="#708238"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.497"
@@ -371,7 +388,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/round_green_shadow_btn"
                     android:text="Return"
-                    android:textColor="#C238EB"
+                    android:textColor="#708238"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

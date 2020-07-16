@@ -155,7 +155,7 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                     plant_buy_date[i] = obj.getString("Buy_date");
                     plant_buy_location[i] = obj.getString("Buy_location");
                     plant_amount[i] = obj.getInt("Amount") +"";
-                    linked_sensor_id[i] = obj.getString("linked_sensor_id");
+                    linked_sensor_id[i] = obj.getString("linked_device_id");
                     total_plant += obj.getInt("Amount");
                 }
                 PlantDetailAdapter itemAdapter = new PlantDetailAdapter(getApplicationContext(), plant_name,

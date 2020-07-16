@@ -7,11 +7,10 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import Helper.DeviceInformation;
-import Login_RegisterUser.UserLoginManagement;
 import Userprofile.DeviceDetailActivity;
 
 public class NotificationHelper {

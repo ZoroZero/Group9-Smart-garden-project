@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -89,7 +89,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(checkUserHasDevice(linked_device_id, linked_device_name)){
+                if(checkUserHasDevice(linked_device_id)){
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -150,13 +150,13 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
     }
 
     // Check if device has existed on user
-    public boolean checkUserHasDevice(String device_id, String device_name){
+    public boolean checkUserHasDevice(String device_id){
         DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
         if(user_device_information == null){
             return false;
         }
         for (DeviceInformation deviceInformation : user_device_information) {
-            if (device_id.equals(deviceInformation.getDevice_id()) && device_name.equals(deviceInformation.getDevice_name())) {
+            if (device_id.equals(deviceInformation.getDevice_id())) {
                 return true;
             }
         }

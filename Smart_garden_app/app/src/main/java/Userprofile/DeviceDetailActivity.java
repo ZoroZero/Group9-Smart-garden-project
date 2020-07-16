@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -66,10 +66,13 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).equals(Constants.LIGHT_SENSOR_TYPE)){
             reading1.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
+            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else{
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
+            readingBar.setEndValue(Constants.MAX_HUMID);
+            readingBar1.setEndValue(Constants.MAX_TEMP);
         }
 
         // Set return button
@@ -129,7 +132,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     }
                     else{
                         String measurement = reading.getString("measurement");
-                        device_lastReading1TV.setText(measurement + "%");
+                        device_lastReading1TV.setText(measurement + " lux");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }

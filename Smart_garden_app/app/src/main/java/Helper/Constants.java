@@ -1,4 +1,4 @@
-package com.example.smartgarden;
+package Helper;
 
 public class Constants {
     private static final String ROOT_URL = "//Android/v1";
@@ -23,7 +23,7 @@ public class Constants {
     public static String FETCH_PLANT_URL = ROOT_URL + "/fetchPlantInfo.php";
 
     // Automatically record measurement
-    public static String RECORD_URL = MQTT_URL + "/subscribeMQTT.php";
+    public static String RECORD_URL = MQTT_URL + "/subscribeMQTT1.php";
 
     // Update output status record
     public static String UPDATE_OUTPUT_STATUS_URL = ROOT_URL + "/updateOutputStatus.php";
@@ -43,9 +43,9 @@ public class Constants {
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 
-    public static String LIGHT_SENSOR_ID = "Light";
+    public static String[] LIGHT_SENSOR_ID = {"Light"};
 
-    public static String TEMPHUMI_SENSOR_ID = "TempHumi";
+    public static String[] TEMPHUMI_SENSOR_ID = {"TempHumi"};
 
     public static String[] DEVICE_TYPE = {"sensor", "output"};
 
@@ -63,6 +63,11 @@ public class Constants {
 
     public static int DEFAULT_HUMID = 80;
 
+    public static int MAX_LIGHT = 500;
+
+    public static int MAX_TEMP = 50;
+
+    public static int MAX_HUMID = 100;
 
     // Notification
     public static String CHANNEL_ID = "smart_garden";

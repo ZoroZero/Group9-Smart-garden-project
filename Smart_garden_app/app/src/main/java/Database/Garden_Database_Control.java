@@ -13,7 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,7 +188,7 @@ public class Garden_Database_Control {
                 params.put("buy_date", buy_date);
                 params.put("buy_location", buy_location);
                 params.put("amount", amount);
-                params.put("linked_sensor_id", linked_sensor_id);
+                params.put("linked_device_id", linked_sensor_id);
                 return params;
             }
         };
@@ -206,13 +206,8 @@ public class Garden_Database_Control {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if(!jsonObject.getBoolean("error")) {
-                                callBack.onSuccessResponse(response);
-                            }else{
-                                Toast.makeText(context, jsonObject.getString("message"),
-                                        Toast.LENGTH_LONG).show();
-                            }
+                            callBack.onSuccessResponse(response);
+
                         }catch(Exception e){
                             e.printStackTrace();
                         }
@@ -284,6 +279,9 @@ public class Garden_Database_Control {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onResponse(String response) {
+                        if(response.equals("Failed")){
+                            return;
+                        }
                         //Log.i("response", response);
                         Vector<DeviceInformation> sensors = UserLoginManagement.getInstance(context).getSensor();
                         int index = response.indexOf("<br");
@@ -296,19 +294,16 @@ public class Garden_Database_Control {
                             try {
                                 JSONObject jsonObject = new JSONObject(res);
                                 String message = jsonObject.getString("message");
-                                if (message.equals("Turn on")) {
+                                if (message.equals("Need change")) {
                                     int position = jsonObject.getInt("position");
-                                    Device_Control.turnDeviceOn(sensors.get(position).getLinked_device_id(),
-                                            sensors.get(position).getLinked_device_name(), context);
+                                    int new_Intensity = jsonObject.getInt("new_intensity");
+                                    Device_Control.turnDeviceLightIntensity(sensors.get(position).getLinked_device_id(),
+                                            sensors.get(position).getLinked_device_name(), context, new_Intensity + "");
 
                                     // Send notification
-                                    NotificationHelper.displayDeviceNotification(sensors.get(position) ,"Warning",
+                                    NotificationHelper.displayDeviceNotification(sensors.get(position), "Warning",
                                             "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
                                             context);
-                                } else if (message.equals("Turn off")) {
-                                    int position = jsonObject.getInt("position");
-                                    Device_Control.turnDeviceOff(sensors.get(position).getLinked_device_id(),
-                                            sensors.get(position).getLinked_device_name(), context);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -352,6 +347,7 @@ public class Garden_Database_Control {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.i("Status", status);
                         Log.i("Update response", response);
                     }
                 },
