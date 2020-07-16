@@ -9,14 +9,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
@@ -115,7 +114,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 // Get device info
                 Garden_Database_Control.FetchDevicesInfo(getApplicationContext(), HomeActivity.this);
-                handler.postDelayed(this,500); // set time here to refresh textView
+                handler.postDelayed(this,3000); // set time here to refresh textView
             }
         });
     }
@@ -179,21 +178,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         get_status[i] = "No record";
                         get_status_date[i] = "No record";
                     }
-
+                    // Get device type and summarize
                     if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID)) {
                         get_device_type[i] = Constants.OUTPUT_TYPE;
                         if(!get_status[i].equals("Off")){
                             count_output += 1;
                         }
                     }
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID)) {
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID)) {
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
                         if(!get_status[i].equals("No record")){
                             count_light += 1;
                             sum_light += Integer.parseInt(get_status[i]);
                         }
                     }
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID)) {
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID)) {
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                         if(!get_status[i].equals("No record")){
                             count_temp_humid += 1;
@@ -205,23 +204,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
                         get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
-
-                if(count_temp_humid == 0) {
+                // Summarize reading for user
+                if (count_temp_humid == 0) {
                     averageTemp_TV.setText("No reading");
                     averageHumid_TV.setText("No reading");
                 }
-                else{
-                    averageTemp_TV.setText(sum_temp/count_temp_humid + "\u2103");
-                    averageHumid_TV.setText(sum_humid/count_temp_humid + "%");
+                else {
+                    averageTemp_TV.setText(sum_temp / count_temp_humid + "\u2103");
+                    averageHumid_TV.setText(sum_humid / count_temp_humid + "%");
                 }
 
-                if(count_light == 0) {
+                if (count_light == 0) {
                     averageLight_TV.setText("No reading");
                 }
-                else{
-                    averageLight_TV.setText(sum_light/count_light + "%");
+                else {
+                    averageLight_TV.setText(sum_light / count_light + "%");
                 }
-
                 number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
 
                 //Start background service to record device measure
@@ -230,6 +228,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if (!isMyServiceRunning(mYourService.getClass())) {
                     startService(mServiceIntent);
                 }
+
+            }
+            else{
+                averageTemp_TV.setText("No reading");
+                averageHumid_TV.setText("No reading");
+                averageLight_TV.setText("No reading");
+                number_devices_TV.setText(0 +"");
             }
         }catch (Exception e){
             e.printStackTrace();

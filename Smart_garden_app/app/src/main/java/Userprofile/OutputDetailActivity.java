@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -16,10 +15,9 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -97,12 +95,15 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             readingLayout.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
+            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
+            readingBar.setEndValue(Constants.MAX_HUMID);
+            readingBar1.setEndValue(Constants.MAX_TEMP);
         }
 
         // Set seek bar
@@ -133,6 +134,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.i("Pressed", "pressed");
                 Device_Control.turnDeviceLightIntensity(deviceInformation.getDevice_id(), deviceInformation.getDevice_name(),
                         getApplicationContext(), intensity +"");
             }
@@ -150,7 +152,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 // Get reading
                 getDeviceInfo();
-                handler.postDelayed(this,500); // set time here to refresh textView
+                handler.postDelayed(this,2000); // set time here to refresh textView
             }
         });
     }
@@ -191,9 +193,9 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
 
                     if (Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         get_device_type[i] = Constants.OUTPUT_TYPE;
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID))
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID))
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
 
@@ -228,7 +230,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     }
                     else {
                         String measurement = linkedSensorInformation.getStatus();
-                        device_lastReading1TV.setText(measurement + "%");
+                        device_lastReading1TV.setText(measurement + " lux");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }

@@ -16,7 +16,7 @@ import java.util.Vector;
 import Helper.DeviceInformation;
 import Login_RegisterUser.UserLoginManagement;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 
 public class DeviceDetailAdapter extends BaseAdapter{
     private LayoutInflater mInfoInflater;
@@ -82,7 +82,7 @@ public class DeviceDetailAdapter extends BaseAdapter{
                     statusTV.setText("No record");
                     return v;
                 }
-                statusTV.setText(devices.elementAt(position).getStatus() + "%");
+                statusTV.setText(devices.elementAt(position).getStatus() + " lux");
                 return v;
             case Constants.TEMPHUMI_SENSOR_TYPE:
                 device_icon.setImageResource(R.drawable.ic_temphumi_sensor_icon);

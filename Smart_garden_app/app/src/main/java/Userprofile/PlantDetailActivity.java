@@ -14,13 +14,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -31,7 +30,6 @@ import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
-import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 
@@ -90,12 +88,15 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
             readingLayout.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
+            readingBar1.setEndValue(Constants.MAX_LIGHT);
         }
         else if(sensorInfo.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
             readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
             readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
+            readingBar.setEndValue(Constants.MAX_HUMID);
+            readingBar1.setEndValue(Constants.MAX_TEMP);
         }
 
 
@@ -134,7 +135,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                     }
                     else{
                         String measurement = reading.getString("measurement");
-                        device_lastReading1TV.setText(measurement + "%");
+                        device_lastReading1TV.setText(measurement + " lux");
                         readingBar1.setValue(Integer.parseInt(measurement));
                     }
                 }

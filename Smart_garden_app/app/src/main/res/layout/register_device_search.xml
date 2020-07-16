@@ -167,7 +167,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/Registerdevice_TV3">
 
                     <RadioButton
-                        android:id="@+id/radio_sensor"
+                        android:id="@+id/radio_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="onRadioButtonClicked"
@@ -177,7 +177,7 @@
                         android:textStyle="bold" />
 
                     <RadioButton
-                        android:id="@+id/radio_output"
+                        android:id="@+id/radio_temphumi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="onRadioButtonClicked"
@@ -196,6 +196,7 @@
                     android:background="@drawable/round_green_shadow_btn"
                     android:text="Submit"
                     android:textColor="#708238"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

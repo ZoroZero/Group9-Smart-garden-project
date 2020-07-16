@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 

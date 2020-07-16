@@ -16,10 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.R;
-
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -74,7 +72,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
                     return;
                 }
-                else if(checkUserHasDevice(device_id, device_name)){
+                else if(checkUserHasDevice(device_id)){
                     Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -99,21 +97,23 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
                 JSONObject device_info = jsonObject.getJSONObject(0);
                 // Check light sensor id
-                if(device_type.contains("Light") && !device_info.getString("device_id").contains("Light")){
+                if(device_type.equals(Constants.LIGHT_SENSOR_TYPE) &&
+                        !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.LIGHT_SENSOR_ID)){
                     Toast.makeText(getApplicationContext(), "Invalid light sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 //Check Temp humid sensor id
-                if(device_type.contains("Temperature humidity") && !device_info.getString("device_id").contains("TempHumi")){
+                if(device_type.equals(Constants.TEMPHUMI_SENSOR_TYPE)
+                        && !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.TEMPHUMI_SENSOR_ID)){
                     Toast.makeText(getApplicationContext(), "Invalid temperature humidity sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }
                 Intent deviceSetting = null;
-                if(device_type.equals("Light sensor")) {
+                if(device_type.equals(Constants.LIGHT_SENSOR_TYPE)) {
                     deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
                 }
-                else if(device_type.equals("Temperature humidity sensor")){
+                else if(device_type.equals(Constants.TEMPHUMI_SENSOR_TYPE)){
                     deviceSetting = new Intent(getApplicationContext(), RegisterTemperatureHumiditySettingActivity.class);
                 }
                 assert deviceSetting != null;
@@ -199,25 +199,25 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
         switch(view.getId()) {
-            case R.id.radio_sensor:
+            case R.id.radio_light:
                 if (checked)
-                    device_type = "Light sensor";
+                    device_type = Constants.LIGHT_SENSOR_TYPE;
                 break;
-            case R.id.radio_output:
+            case R.id.radio_temphumi:
                 if (checked)
-                    device_type = "Temperature humidity sensor";
+                    device_type = Constants.TEMPHUMI_SENSOR_TYPE;
                 break;
         }
     }
 
     // Check if device has existed on user
-    public boolean checkUserHasDevice(String device_id, String device_name){
+    public boolean checkUserHasDevice(String device_id){
         DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
         if(user_device_information == null){
             return false;
         }
         for (DeviceInformation deviceInformation : user_device_information) {
-            if (device_id.equals(deviceInformation.getDevice_id()) && device_name.equals(deviceInformation.getDevice_name())) {
+            if (device_id.equals(deviceInformation.getDevice_id())) {
                 return true;
             }
         }

@@ -22,7 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgarden.Constants;
+import Helper.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import java.util.Objects;
 import java.util.Vector;
 
-import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
@@ -233,9 +232,9 @@ public class DeviceListViewActivity extends AppCompatActivity implements VolleyC
 
                     if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID))
                         get_device_type[i] = Constants.OUTPUT_TYPE;
-                    else if (get_device_id[i].contains(Constants.LIGHT_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID))
                         get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                    else if (get_device_id[i].contains(Constants.TEMPHUMI_SENSOR_ID))
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID))
                         get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
                 }
                 UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
