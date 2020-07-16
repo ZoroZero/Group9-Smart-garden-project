@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -35,11 +37,17 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
     // Component
     private EditText thresholdTempET;
     private EditText thresholdHumidET;
-    private EditText linkedDeviceId;
-    private EditText linkedDeviceName;
-
+    private EditText linkedDeviceIdET;
+    private EditText linkedDeviceNameET;
+    private String linked_device_id;
+    private String linked_device_name;
+    private Button submitBtn;
+    private Button useDefaultBtn;
     FrameLayout progressBarHolder;
 
+    // Loading animation
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +62,11 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         TextView deviceTypeTV = findViewById(R.id.deviceTypeTextView);
         thresholdTempET = findViewById(R.id.register_TempHumi_thresholdTemp_EditText);
         thresholdHumidET = findViewById(R.id.register_TempHumi_thresholdHumi_EditText);
-        Button submitBtn = findViewById(R.id.submitSettingButton);
-        linkedDeviceId = findViewById(R.id.registerDevice_Linked_device_id_ET);
-        linkedDeviceName = findViewById(R.id.registerDevice_Linked_device_name_ET);
-        progressBarHolder = findViewById(R.id.register_setting_progressBarHolder);
-
-        Button useDefaultBtn = findViewById(R.id.register_TempHumi_useDefaultButton);
+        submitBtn = findViewById(R.id.submitSettingButton);
+        linkedDeviceIdET = findViewById(R.id.registerDevice_Linked_device_id_ET);
+        linkedDeviceNameET = findViewById(R.id.registerDevice_Linked_device_name_ET);
+        progressBarHolder = findViewById(R.id.register_TempHumi_setting_progressBarHolder);
+        useDefaultBtn = findViewById(R.id.register_TempHumi_useDefaultButton);
         // Set device_type
         String device_type = getIntent().getStringExtra("device_type");
         assert device_type != null;
@@ -75,8 +82,8 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
                 final String humidThreshold = thresholdHumidET.getText().toString();
                 final String device_id = getIntent().getStringExtra("device_id");
                 final String device_name = getIntent().getStringExtra("device_name");
-                final String linked_device_id = linkedDeviceId.getText().toString();
-                final String linked_device_name = linkedDeviceName.getText().toString();
+                linked_device_id = linkedDeviceIdET.getText().toString();
+                linked_device_name = linkedDeviceNameET.getText().toString();
                 final String threshold = tempThreshold + ":" + humidThreshold;
                 //Check if empty
                 if (linked_device_id.equals("") || linked_device_name.equals("")
@@ -94,7 +101,7 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
                 Garden_Database_Control.registerDevice(device_id, device_name,
                         linked_device_id, linked_device_name, threshold, getApplicationContext(),
                         RegisterTemperatureHumiditySettingActivity.this);
-                Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+                //Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
             }
         });
 
@@ -110,15 +117,17 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSuccessResponse(String result) {
+        startLoading();
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(result);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
+        final Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
         assert jsonObject != null;
         try {
             showResult.putExtra("register_type", "Register new device");
@@ -126,7 +135,33 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        startActivity(showResult);
-        finish();
+
+        Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+        new CountDownTimer(3000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                stopLoading();
+                startActivity(showResult);
+                finish();
+            }
+        }.start();
+    }
+
+
+    private void startLoading(){
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+        submitBtn.setClickable(false);
+        useDefaultBtn.setClickable(false);
+    }
+
+    private void stopLoading(){
+        outAnimation = new AlphaAnimation(1f, 0f);
+        outAnimation.setDuration(200);
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
     }
 }

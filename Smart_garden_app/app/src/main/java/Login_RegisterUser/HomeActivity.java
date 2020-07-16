@@ -218,7 +218,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     averageLight_TV.setText("No reading");
                 }
                 else {
-                    averageLight_TV.setText(sum_light / count_light + "%");
+                    averageLight_TV.setText(sum_light / count_light + " lux");
                 }
                 number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
 

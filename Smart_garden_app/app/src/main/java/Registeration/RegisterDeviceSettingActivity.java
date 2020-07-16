@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,6 +32,7 @@ import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
+import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 
 public class RegisterDeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
@@ -43,7 +46,11 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
     private EditText linkedDeviceName;
     private String linked_device_id;
     private String linked_device_name;
-
+    private Button submitBtn;
+    private Button useDefaultBtn;
+    // Loading animation
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
     FrameLayout progressBarHolder;
 
     @Override
@@ -59,12 +66,11 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
         // Component
         TextView deviceTypeTV = findViewById(R.id.deviceTypeTextView);
         thresholdET = findViewById(R.id.thresholdInputEditText);
-        Button submitBtn = findViewById(R.id.submitSettingButton);
+        submitBtn = findViewById(R.id.submitSettingButton);
         linkedDeviceId = findViewById(R.id.registerDevice_Linked_device_id_ET);
         linkedDeviceName = findViewById(R.id.registerDevice_Linked_device_name_ET);
         progressBarHolder = findViewById(R.id.register_setting_progressBarHolder);
-
-        Button useDefaultBtn = findViewById(R.id.useDefaultButton);
+        useDefaultBtn = findViewById(R.id.useDefaultButton);
 
         // Set device_type
         String device_type = getIntent().getStringExtra("device_type");
@@ -96,7 +102,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
 
                 Garden_Database_Control.registerDevice(device_id, device_name,
                         linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
-                Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+                //Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
             }
         });
 
@@ -130,23 +136,45 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSuccessResponse(String result) {
+        startLoading();
+        final Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(result);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
-        Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
-        assert jsonObject != null;
-        try {
             showResult.putExtra("register_type", "Register new device");
             showResult.putExtra("register_message", jsonObject.getString("message"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        startActivity(showResult);
-        finish();
+        Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
+        new CountDownTimer(3000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                stopLoading();
+                startActivity(showResult);
+                finish();
+            }
+        }.start();
+
+        //startActivity(showResult);
+        //finish();
+    }
+
+    private void startLoading(){
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+        submitBtn.setClickable(false);
+        useDefaultBtn.setClickable(false);
+    }
+
+    private void stopLoading(){
+        outAnimation = new AlphaAnimation(1f, 0f);
+        outAnimation.setDuration(200);
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
     }
 
     // Check if device has existed on user
