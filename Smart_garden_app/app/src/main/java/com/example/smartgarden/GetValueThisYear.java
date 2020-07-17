@@ -23,9 +23,11 @@ public class GetValueThisYear implements Runnable {
     private OkHttpClient client = new OkHttpClient();
     private String url = "http://169.254.20.224/duyapi/v1/getValueThisYear.php";
     private String device_id;
+    private String type;
     protected Vector<Double> results = new Vector<>();
-    public GetValueThisYear(String device_id){
+    public GetValueThisYear(String device_id, String type){
         this.device_id = device_id;
+        this.type = type;
     }
 
     @Override
@@ -33,6 +35,7 @@ public class GetValueThisYear implements Runnable {
         try {
             RequestBody formBody = new FormEncodingBuilder()
                     .add("device_id",device_id)
+                    .add("type",type)
                     .build();
             Request request = new Request.Builder()
                     .url(url)

@@ -25,9 +25,11 @@ public class GetThisMonthValue implements Runnable {
     private OkHttpClient client = new OkHttpClient();
     private String url = "http://169.254.20.224/duyapi/v1/getValueThisMonth.php";
     private String device_id;
+    private String type;
     protected Vector<Double> results = new Vector<>();
-    public GetThisMonthValue(String device_id){
+    public GetThisMonthValue(String device_id, String type){
         this.device_id = device_id;
+        this.type = type;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class GetThisMonthValue implements Runnable {
         try {
             RequestBody formBody = new FormEncodingBuilder()
                     .add("device_id",device_id)
+                    .add("type",type)
                     .build();
             Request request = new Request.Builder()
                     .url(url)

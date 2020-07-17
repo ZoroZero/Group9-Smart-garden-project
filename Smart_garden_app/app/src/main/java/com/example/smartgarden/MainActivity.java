@@ -3,6 +3,7 @@ package com.example.smartgarden;
 
 
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,9 +17,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,6 +54,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.Manifest;
@@ -82,14 +87,9 @@ import javax.security.auth.login.LoginException;
 public class MainActivity extends AppCompatActivity {
 
     GraphView graphTemperature,graphLightLevel;
-    MQTTHelper mqttHelper;
-    boolean flag = true;
-    double preTemperature = 0;
-    double preLightLevel = 0;
-    int numOfTemp = 0;
-    int numOfLight = 0;
-    double []temp = {0,0,0,0,0};
-    double []light = {0,0,0,0,0};
+   private final static String TEMP =  "TH";
+   private final static String HUMIDITY = "H";
+   private final static String SOLID = "S";
 
 
 
@@ -103,17 +103,15 @@ public class MainActivity extends AppCompatActivity {
         graphTemperature = findViewById(R.id.graphTemperature);
 
 
-        makeTempDeviceSpinner("TH");
-        makeLightDeviceSpinner("S");
+        makeTempDeviceSpinner(TEMP);
+        makeLightDeviceSpinner(SOLID);
+        makeHumidDeviceSpinner(HUMIDITY);
 
-        //getValueToday("ID119");
-        //getThisMonthValue("ID222");
-//        Vector<Double>  test = new Vector<>();
-//        test.add(36.5);
-//        test.add(37.7);
-//        test.add(39.0);
-//        sendDatatoAI(test);
     }
+
+
+
+
 
     private void getTempMeasurementFromDatabase(String temp_device_id){
         GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
@@ -129,8 +127,21 @@ public class MainActivity extends AppCompatActivity {
         drawGraphTemperature(results);
     }
 
+    private void getTempMeasurementFromDatabaseWithType(String temp_device_id, String type){
+        GetDataFromURLWithType getDataFromURLwithtype = new GetDataFromURLWithType(temp_device_id,type);
+        Thread thread = new Thread(getDataFromURLwithtype);
+        thread.start();
+        Vector<Double> results = getDataFromURLwithtype.results;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        drawGraphTemperature(results);
+    }
     private void getValueToday(String deviceID, String types){
-        GetValueToday getValueToday = new GetValueToday(deviceID);
+        GetValueToday getValueToday = new GetValueToday(deviceID,types);
         Thread thread = new Thread(getValueToday);
         thread.start();
         try {
@@ -145,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(types == "TH")
+        if(types.equals(TEMP))
         {
             drawGraphTemperature(results);
         }
@@ -155,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void getThisMonthValue(String deviceID, String types){
-        GetThisMonthValue getThisMonthValue = new GetThisMonthValue(deviceID);
+        GetThisMonthValue getThisMonthValue = new GetThisMonthValue(deviceID,types);
         Thread thread = new Thread(getThisMonthValue);
         thread.start();
         try {
@@ -171,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(types == "TH")
+        if(types.equals(TEMP))
         {
             drawGraphTemperature(results);
         }
@@ -182,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getthisYearValue(String deviceID, String types){
-        GetValueThisYear getValueThisYear = new GetValueThisYear(deviceID);
+        GetValueThisYear getValueThisYear = new GetValueThisYear(deviceID,types);
         Thread thread = new Thread(getValueThisYear);
         thread.start();
         try {
@@ -199,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
         drawGraphTemperature(results);
 
-        if(types == "TH")
+        if(types.equals(TEMP))
         {
             drawGraphTemperature(results);
         }
@@ -210,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void makeTempDeviceSpinner(String type)
+    private void makeTempDeviceSpinner(final String type)
     {
         GetDeviceByType getDeviceByType = new GetDeviceByType(type);
         Thread thread = new Thread(getDeviceByType);
@@ -236,28 +247,32 @@ public class MainActivity extends AppCompatActivity {
 
                 final RadioGroup radioGroup = findViewById(R.id.radio_temp);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
+//                if(rad.isChecked()){
+//                    String choosing = dropdown.getSelectedItem().toString();
+//                    getTempMeasurementFromDatabase(choosing);}
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
-                    getTempMeasurementFromDatabase(choosing);}
+                    getTempMeasurementFromDatabaseWithType(choosing,type);}
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch(checkedId){
                             case R.id.radio_temp1:
                                 String choosing = dropdown.getSelectedItem().toString();
-                                getTempMeasurementFromDatabase(choosing);
+//                                getTempMeasurementFromDatabase(choosing);
+                                getTempMeasurementFromDatabaseWithType(choosing,type);
                                 break;
                             case R.id.radio_temp2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
-                                getValueToday(second_choosing,"TH");
+                                getValueToday(second_choosing,type);
                                 break;
                             case R.id.radio_temp3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
-                                getThisMonthValue(third_choosing,"TH");
+                                getThisMonthValue(third_choosing,type);
                                 break;
                             case R.id.radio_temp4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
-                                getthisYearValue(fourth_choosing,"TH");
+                                getthisYearValue(fourth_choosing,type);
                                 break;
                         }
                     }
@@ -273,23 +288,91 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-
-
-
     }
 
-    private void sendDatatoAI(String temp_device_id){
-        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
-        Thread thread = new Thread(getDataFromURL);
+    private void makeHumidDeviceSpinner(final String type)
+    {
+        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        Thread thread = new Thread(getDeviceByType);
         thread.start();
-        Vector<Double> results = getDataFromURL.results;
-        Vector<String> dates = getDataFromURL.date;
+        Vector<String> results = getDeviceByType.results;
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //get the spinner from the xml.
+        final Spinner dropdown = findViewById(R.id.spinner2);
+        //create a list of items for the spinner.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
+
+        dropdown.setAdapter(adapter);
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+
+                final RadioGroup radioGroup = findViewById(R.id.radio_humidity);
+                RadioButton rad = (RadioButton) findViewById(R.id.radio_humid1);
+//                if(rad.isChecked()){
+//                    String choosing = dropdown.getSelectedItem().toString();
+//                    getTempMeasurementFromDatabase(choosing);}
+                if(rad.isChecked()){
+                    String choosing = dropdown.getSelectedItem().toString();
+                    getTempMeasurementFromDatabaseWithType(choosing,type);}
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch(checkedId){
+                            case R.id.radio_humid1:
+                                String choosing = dropdown.getSelectedItem().toString();
+//                                getTempMeasurementFromDatabase(choosing);
+                                getTempMeasurementFromDatabaseWithType(choosing,type);
+                                break;
+                            case R.id.radio_humid2:
+                                String second_choosing = dropdown.getSelectedItem().toString();
+                                getValueToday(second_choosing,type);
+                                break;
+                            case R.id.radio_humid3:
+                                String third_choosing = dropdown.getSelectedItem().toString();
+                                getThisMonthValue(third_choosing,type);
+                                break;
+                            case R.id.radio_humid4:
+                                String fourth_choosing = dropdown.getSelectedItem().toString();
+                                getthisYearValue(fourth_choosing,type);
+                                break;
+                        }
+                    }
+                });
+
+//                String AI_choosing = dropdown.getSelectedItem().toString();
+//                sendDatatoAI(AI_choosing);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
+        });
+
+    }
+    private void sendDatatoAI(String temp_device_id){
+        GetDataFromURLWithType getDataFromURLWithType = new GetDataFromURLWithType(temp_device_id,TEMP);
+        Thread thread = new Thread(getDataFromURLWithType);
+        thread.start();
+        Vector<Double> results = getDataFromURLWithType.results;
+        Vector<String> dates = getDataFromURLWithType.date;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("result", String.valueOf(results));
+        Log.e("DATE", String.valueOf(dates));
 
         SendDataToAI sendDataToAI = new SendDataToAI(results,dates);
         Thread second_thread = new Thread(sendDataToAI);
@@ -318,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //get the spinner from the xml.
-        final Spinner dropdown = findViewById(R.id.spinner2);
+        final Spinner dropdown = findViewById(R.id.spinner3);
         //create a list of items for the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
 
@@ -384,7 +467,20 @@ public class MainActivity extends AppCompatActivity {
         drawLightTemperature(results);
     }
 
+    private void getHumidMeasurementFromDatabase(String humid_device_id){
+        GetDataFromURLWithType getDataFromURLwithtype = new GetDataFromURLWithType(humid_device_id,HUMIDITY);
+        Thread thread = new Thread(getDataFromURLwithtype);
+        thread.start();
+        Vector<Double> results = getDataFromURLwithtype.results;
 
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        drawLightTemperature(results);
+    }
     private void drawGraphTemperature(Vector<Double> results)
     {
         DataPoint[] dataPoints = new DataPoint[results.size()]; // declare an array of DataPoint objects with the same size as your list
@@ -401,6 +497,9 @@ public class MainActivity extends AppCompatActivity {
         graphTemperature.getGridLabelRenderer().setNumHorizontalLabels(results.size());
         graphTemperature.getViewport().setYAxisBoundsManual(true);
         graphTemperature.getViewport().setXAxisBoundsManual(true);
+        seriesTemp.setColor(Color.rgb(226,91,34));
+        seriesTemp.setAnimated(true);
+        seriesTemp.setDataPointsRadius(2);
         showDataOnGraph(seriesTemp, graphTemperature);
     }
 
