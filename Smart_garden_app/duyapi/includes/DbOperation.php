@@ -213,6 +213,16 @@
         }
 
 
+        function getValueInCustomDate($device_id,$type,$day,$month,$year){
+            $stmt =$this->con->prepare(" SELECT input_device_id,  measurement, date
+            FROM input_devices
+            WHERE input_device_id = ? AND TYPE = ? AND DAY(date) = ? AND MONTH(date) = ? AND YEAR(date) = ?
+            ORDER BY date DESC;");
+            $stmt->bind_param("ssiii", $device_id,$type,$day,$month,$year);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        }
+
         function getValueToday($device_id,$type){
 
             $stmt =$this->con->prepare(" SELECT input_device_id,  measurement, date

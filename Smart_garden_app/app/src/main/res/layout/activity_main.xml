@@ -65,8 +65,8 @@
 
             <Spinner
                 android:id="@+id/spinner1"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center"/>
@@ -79,23 +79,37 @@
                 <RadioButton android:id="@+id/radio_temp1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Value"
+                    android:text="Overview"
                     android:checked="true"/>
 
                 <RadioButton
                     android:id="@+id/radio_temp2"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
-                    android:text="Day" />
+                    android:text="Hourly" />
                 <RadioButton android:id="@+id/radio_temp3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Month" />
+                    android:text="Daily" />
                 <RadioButton android:id="@+id/radio_temp4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Year" />
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_temp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
             </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_temp_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphTemperature"
@@ -107,8 +121,12 @@
                 android:id="@+id/temp_view"
                 android:text= "Waiting for AI training"
                 android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -125,8 +143,8 @@
 
             <Spinner
                 android:id="@+id/spinner2"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center"/>
@@ -139,21 +157,37 @@
                 <RadioButton android:id="@+id/radio_humid1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Value"
+                    android:text="Overview"
                     android:checked="true"/>
-                <RadioButton android:id="@+id/radio_humid2"
+
+                <RadioButton
+                    android:id="@+id/radio_humid2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Day" />
+                    android:layout_height="19dp"
+                    android:text="Hourly" />
                 <RadioButton android:id="@+id/radio_humid3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Month" />
+                    android:text="Daily" />
                 <RadioButton android:id="@+id/radio_humid4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Year" />
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_humid5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
             </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_humid_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphHumidLevel"
@@ -182,8 +216,8 @@
 
             <Spinner
                 android:id="@+id/spinner3"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center"/>
@@ -196,21 +230,36 @@
                 <RadioButton android:id="@+id/radio_light1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Value"
+                    android:text="Overview"
                     android:checked="true"/>
-                <RadioButton android:id="@+id/radio_light2"
+                <RadioButton
+                    android:id="@+id/radio_light2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Day" />
+                    android:layout_height="19dp"
+                    android:text="Hourly" />
                 <RadioButton android:id="@+id/radio_light3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Month" />
+                    android:text="Daily" />
                 <RadioButton android:id="@+id/radio_light4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Year" />
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_light5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
             </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_light_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graphLightLevel"

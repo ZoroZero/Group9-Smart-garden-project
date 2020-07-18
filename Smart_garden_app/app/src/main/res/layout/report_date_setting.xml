@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id = "@+id/custom_context"
     android:background="#ffffff"
+    android:orientation="vertical">
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageButton
@@ -13,9 +15,7 @@
         android:textSize="20sp"
         android:src="@drawable/button_exit"
         android:background="#ffffff"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_dateform"/>
+        />
 
     <EditText
         android:id="@+id/date_writing"
@@ -23,11 +23,7 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:textColor="#000000"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/text_dateform"
@@ -35,9 +31,7 @@
         android:layout_height="50dp"
         android:text="Enter the date in dd-mm-yyyy"
         android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/date_writing"/>
+        />
 
     <Button
         android:id="@+id/date_entering"
@@ -45,8 +39,6 @@
         android:layout_height="50dp"
         android:text="enter"
         android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_writing"/>
+        />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
