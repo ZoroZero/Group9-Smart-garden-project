@@ -17,9 +17,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import Helper.Constants;
+
 public class GetValueThisMonth implements Runnable{
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getValueThisMonth.php";
+    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_VALUE_BY_MONTH;
     private String device_id;
     private String type;
     private String query_type  = "";

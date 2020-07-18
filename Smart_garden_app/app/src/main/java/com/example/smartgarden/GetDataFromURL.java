@@ -14,15 +14,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Vector;
 
+import Helper.Constants;
+
 public class GetDataFromURL implements Runnable {
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getDeviceMeasurement.php";
+    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_MEASUREMENT;
     private String device_id;
     private String type;
-    private final String TEMP_HUMIDITY = MainActivity.TEMP_HUMIDITY;
-    private final String TEMP = MainActivity.TEMP;
-    private final String HUMIDITY = MainActivity.HUMIDITY;
-    private final String LIGHT = MainActivity.LIGHT;
     protected Vector<String> date = new Vector<>();
     protected Vector<Double> results = new Vector<>();
     public GetDataFromURL(String device_id, String type){
@@ -41,7 +39,7 @@ public class GetDataFromURL implements Runnable {
                     .post(formBody)
                     .build();
 
-            Response responses = null;
+            Response responses;
 
             int responsesCode = 0;
 
@@ -65,6 +63,7 @@ public class GetDataFromURL implements Runnable {
                 {
                     String temp = jsonArray.getJSONObject(i).getString("measurement");
 
+                    String LIGHT = MainActivity.LIGHT;
                     if (this.type.equals(LIGHT))
                     {
                         double measure = Double.parseDouble(temp);
@@ -75,6 +74,7 @@ public class GetDataFromURL implements Runnable {
                         String[] temp_humi = temp.split(":");
                         double temperature = Double.parseDouble(temp_humi[0]);
                         double humidity = Double.parseDouble(temp_humi[1]);
+                        String TEMP = MainActivity.TEMP;
                         if(this.type.equals(TEMP))
                             this.results.add(temperature);
                         else

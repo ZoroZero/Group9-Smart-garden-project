@@ -4,6 +4,10 @@ public class Constants {
     private static final String ROOT_URL = "//Android/v1";
 
     private static final String MQTT_URL = "//Android/MQTT";
+
+    public static final String DATABASE_IP = "192.168.0.103";
+
+    public static final String DATABASE_PORT = ":3306";
     // Register url
     public static final String REGISTER_URL = ROOT_URL + "/registerUser.php";
 
@@ -39,6 +43,21 @@ public class Constants {
 
     // Delete plant
     public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";
+
+    // Get device by type
+    public static final String GET_DEVICE_BY_TYPE = ROOT_URL + "/getInputDevicesWithType.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_MONTH = ROOT_URL + "/getValueThisMonth.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_YEAR = ROOT_URL + "/getValueThisYear.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_DAY = ROOT_URL + "/getValueToday.php";
+
+    // Send data to AI
+    public static final String SEND_DATA_TO_AI = "/api/post_some_data";
 
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};

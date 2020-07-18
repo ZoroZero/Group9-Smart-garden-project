@@ -15,9 +15,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Vector;
 
+import Helper.Constants;
+
 public class GetDeviceByType implements Runnable {
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getInputDevicesWithType.php";
+    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_DEVICE_BY_TYPE;
     private String type;
     private String user_id;
     protected Vector<String> results = new Vector<>();

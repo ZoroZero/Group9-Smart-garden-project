@@ -15,9 +15,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import Helper.Constants;
+
 public class SendDataToAI  implements Runnable{
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224:5000/api/post_some_data";
+    private String url = "http://" + Constants.DATABASE_IP + Constants.DATABASE_PORT + Constants.SEND_DATA_TO_AI;
     protected Vector<Double> results = new Vector<>();
     protected Vector<String> dates = new Vector<>();
     protected Double AI_result ;

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -39,21 +38,20 @@ import android.view.View;
 
 import android.widget.Spinner;
 import android.widget.TextView;
-
-
-
 import java.util.Vector;
 
+import Helper.Constants;
+import Login_RegisterUser.UserLoginManagement;
 
 
 public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY =  "TH";
+    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
     protected final static String TEMP = "T";
     protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = "L";
+    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     protected final static String YEAR_MODE = "YEAR";
 
     //User ID from teammate part
-    protected String user_id = "10";
+    protected String user_id = UserLoginManagement.getInstance(this).getUserId() + "";
 
 
     @SuppressLint("WrongThread")
@@ -205,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
-
                 final RadioGroup radioGroup = findViewById(R.id.radio_humidity);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_humid1);
 
@@ -439,9 +436,9 @@ public class MainActivity extends AppCompatActivity {
     private void drawDataOnGraph(Vector<Double> results, Vector<String> date, String graphtype, String mode) throws ParseException {
 
         GraphView gv;
-        if(graphtype == TEMP)
+        if(graphtype.equals(TEMP))
             gv = graphTemperature;
-        else if(graphtype == HUMIDITY)
+        else if(graphtype.equals(HUMIDITY))
             gv = graphHumidity;
         else
             gv = graphLightLevel;
@@ -451,21 +448,21 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < results.size(); i++) {
             // add new DataPoint object to the array for each of your list entries
-            if(mode == "VALUE") {
+            if(mode.equals("VALUE")) {
                 String temp_date = date.get(i);
-                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date firstDate = first_date_format.parse(temp_date);
                 Calendar first_cal = Calendar.getInstance();
+                assert firstDate != null;
                 first_cal.setTime(firstDate);
                 long second = first_cal.getTimeInMillis();
                 mappoint.put(i, second);
-                dataPoints[i] = new DataPoint(i, results.get(i));
             }
             else
             {
                 daily_mappoint.put(i, date.get(i));
-                dataPoints[i] = new DataPoint(i, results.get(i));
             }
+            dataPoints[i] = new DataPoint(i, results.get(i));
         }
         LineGraphSeries<DataPoint> seriesTemp = new LineGraphSeries<DataPoint>(dataPoints);
 
@@ -473,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
         configGraph(gv,results.size(),seriesTemp);
         showDataOnGraph(seriesTemp, gv);
         if (mode.equals(VALUE_MODE)) {
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             gv.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -588,13 +585,14 @@ public class MainActivity extends AppCompatActivity {
         recommendThreshold(AI_result,type);
 
     }
+    @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
-            textTemperature.setText("Recommendation temperature threshold " + String.valueOf(AI_result));
+            textTemperature.setText("Recommendation temperature threshold " + AI_result);
         else if(type.equals(HUMIDITY))
-            textHumidity.setText("Recommendation humidity threshold " + String.valueOf(AI_result));
+            textHumidity.setText("Recommendation humidity threshold " + AI_result);
         else
-            textLightLevel.setText("Recommendation light density threshold " + String.valueOf(AI_result));
+            textLightLevel.setText("Recommendation light density threshold " + AI_result);
 
 
     }
