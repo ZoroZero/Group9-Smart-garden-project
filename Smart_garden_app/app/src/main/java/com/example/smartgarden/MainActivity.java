@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 ;
@@ -47,7 +48,7 @@ import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
-
+    TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
     protected final static String TEMP_HUMIDITY =  "TH";
     protected final static String TEMP = "T";
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         graphHumidity = findViewById(R.id.graphHumidLevel);
         graphLightLevel = findViewById(R.id.graphLightLevel);
 
+        textTemperature = findViewById(R.id.temp_view);
+        textHumidity = findViewById(R.id.humid_view);
+        textLightLevel = findViewById(R.id.light_view);
 
         makeTempDeviceSpinner(TEMP_HUMIDITY);
         makeHumidDeviceSpinner(TEMP_HUMIDITY);
@@ -165,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-//                String AI_choosing = dropdown.getSelectedItem().toString();
-//                sendDatatoAI(AI_choosing);
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,TEMP);
             }
 
             @Override
@@ -254,8 +258,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-//                String AI_choosing = dropdown.getSelectedItem().toString();
-//                sendDatatoAI(AI_choosing);
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,HUMIDITY);
             }
 
             @Override
@@ -340,6 +344,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,LIGHT);
 
             }
 
@@ -553,13 +559,20 @@ public class MainActivity extends AppCompatActivity {
         GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id,type);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
-        Vector<Double> results = getDataFromURL.results;
-        Vector<String> dates = getDataFromURL.date;
+
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        Log.e("AI_test",temp_device_id);
+        Vector<Double> results = getDataFromURL.results;
+        Vector<String> dates = getDataFromURL.date;
+        Log.e("AI_test_2", String.valueOf(results));
+        Log.e("AI_test_3", String.valueOf(dates));
+
+
 
 
         SendDataToAI sendDataToAI = new SendDataToAI(results,dates);
@@ -572,9 +585,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         double AI_result = sendDataToAI.AI_result;
-        TextView mytextview;
-        mytextview = findViewById(R.id.temp_view);
-        mytextview.setText("Recommendation value " + String.valueOf(AI_result));
+        recommendThreshold(AI_result,type);
+
+    }
+    private void recommendThreshold(double AI_result, String type) {
+        if(type.equals(TEMP))
+            textTemperature.setText("Recommendation temperature threshold " + String.valueOf(AI_result));
+        else if(type.equals(HUMIDITY))
+            textHumidity.setText("Recommendation humidity threshold " + String.valueOf(AI_result));
+        else
+            textLightLevel.setText("Recommendation light density threshold " + String.valueOf(AI_result));
+
 
     }
 
