@@ -18,10 +18,12 @@ public class GetDataFromURL implements Runnable {
     private OkHttpClient client = new OkHttpClient();
     private String url = "http://169.254.20.224/duyapi/v1/getDeviceMeasurement.php";
     private String device_id;
+    private String type;
     protected Vector<String> date = new Vector<>();
     protected Vector<Double> results = new Vector<>();
-    public GetDataFromURL(String device_id){
+    public GetDataFromURL(String device_id, String type){
         this.device_id = device_id;
+        this.type = type;
     }
 
     @Override
@@ -57,11 +59,27 @@ public class GetDataFromURL implements Runnable {
                 int length = jsonArray.length();
                 for(int i = 0 ; i < length ; i ++)
                 {
-                    double temp = jsonArray.getJSONObject(i).getDouble("measurement");
-                    this.results.add(temp);
+                    String temp = jsonArray.getJSONObject(i).getString("measurement");
+
+                    if (this.type == "L")
+                    {
+                        double measure = Double.parseDouble(temp);
+                        this.results.add(measure);
+                    }
+                    else
+                    {
+                        String[] temp_humi = temp.split(":");
+                        double temperature = Double.parseDouble(temp_humi[0]);
+                        double humidity = Double.parseDouble(temp_humi[1]);
+                        if(this.type == "T")
+                            this.results.add(temperature);
+                        else
+                            this.results.add(humidity);
+                    }
                     String this_date = jsonArray.getJSONObject(i).getString("date");
                     this.date.add(this_date);
                 }
+                Log.e("fix", String.valueOf(this.results));
             }
 
         } catch (IOException | JSONException e) {

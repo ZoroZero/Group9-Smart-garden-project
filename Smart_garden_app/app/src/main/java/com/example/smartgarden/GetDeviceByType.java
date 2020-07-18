@@ -17,10 +17,12 @@ import java.util.Vector;
 
 public class GetDeviceByType implements Runnable {
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getDeviceByType.php";
+    private String url = "http://169.254.20.224/duyapi/v1/getInputDevicesWithType.php";
     private String type;
+    private String user_id;
     protected Vector<String> results = new Vector<>();
-    public GetDeviceByType(String type){
+    public GetDeviceByType(String user_id, String type){
+        this.user_id = user_id;
         this.type = type;
     }
 
@@ -28,6 +30,7 @@ public class GetDeviceByType implements Runnable {
     public void run() {
         try {
             RequestBody formBody = new FormEncodingBuilder()
+                    .add("user_id", user_id)
                     .add("type",type)
                     .build();
             Request request = new Request.Builder()
@@ -38,6 +41,9 @@ public class GetDeviceByType implements Runnable {
             Response responses = null;
 
             int responsesCode = 0;
+
+            Log.e("test1", String.valueOf(user_id));
+            Log.e("test_2",type);
 
             responses = client.newCall(request).execute();
 
@@ -58,6 +64,7 @@ public class GetDeviceByType implements Runnable {
                     this.results.add(temp);
                 }
             }
+            Log.e("test_list", String.valueOf(this.results));
 
         } catch (IOException | JSONException e) {
             Log.e("errors",e.toString());

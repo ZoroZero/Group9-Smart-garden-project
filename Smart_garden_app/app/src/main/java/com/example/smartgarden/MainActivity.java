@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import android.widget.RelativeLayout;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.codec.Base64;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -54,7 +56,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -85,11 +95,12 @@ import javax.security.auth.login.LoginException;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    GraphView graphTemperature,graphLightLevel;
-   private final static String TEMP =  "TH";
-   private final static String HUMIDITY = "H";
-   private final static String SOLID = "S";
+    GraphView graphTemperature,graphHumidity,graphLightLevel;
+    private final static String TEMP_HUMIDITY =  "TH";
+    private final static String TEMP = "T";
+    private final static String HUMIDITY = "H";
+    private final static String LIGHT = "L";
+    protected String user_id = "10";
 
 
 
@@ -99,13 +110,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        graphLightLevel = findViewById(R.id.graphLightLevel);
+
         graphTemperature = findViewById(R.id.graphTemperature);
+        graphHumidity = findViewById(R.id.graphHumidLevel);
+        graphLightLevel = findViewById(R.id.graphLightLevel);
 
 
-        makeTempDeviceSpinner(TEMP);
-        makeLightDeviceSpinner(SOLID);
-        makeHumidDeviceSpinner(HUMIDITY);
+        makeTempDeviceSpinner(TEMP_HUMIDITY);
+        makeHumidDeviceSpinner(TEMP_HUMIDITY);
+        makeLightDeviceSpinner(LIGHT);
+
+
 
     }
 
@@ -113,34 +128,39 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void getTempMeasurementFromDatabase(String temp_device_id){
-        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id);
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getTempMeasurementFromDatabase(String temp_device_id, String type) throws ParseException {
+        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id,type);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
         Vector<Double> results = getDataFromURL.results;
-
+        Vector<String> dates = getDataFromURL.date;
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawGraphTemperature(results);
+        drawGraphTemperature(results,dates,"VALUE");
     }
 
-    private void getTempMeasurementFromDatabaseWithType(String temp_device_id, String type){
-        GetDataFromURLWithType getDataFromURLwithtype = new GetDataFromURLWithType(temp_device_id,type);
-        Thread thread = new Thread(getDataFromURLwithtype);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getHumidMeasurementFromDatabase(String temp_device_id, String type) throws ParseException {
+        GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id,type);
+        Thread thread = new Thread(getDataFromURL);
         thread.start();
-        Vector<Double> results = getDataFromURLwithtype.results;
-
+        Vector<Double> results = getDataFromURL.results;
+        Vector<String> dates = getDataFromURL.date;
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawGraphTemperature(results);
+        drawHumidTemperature(results,dates,"VALUE");
     }
-    private void getValueToday(String deviceID, String types){
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getValueToday(String deviceID, String types) throws ParseException {
         GetValueToday getValueToday = new GetValueToday(deviceID,types);
         Thread thread = new Thread(getValueToday);
         thread.start();
@@ -150,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Vector<Double> results = getValueToday.results;
+        Vector<String>  hours = getValueToday.hours;
 
         try {
             thread.join();
@@ -158,14 +179,19 @@ public class MainActivity extends AppCompatActivity {
         }
         if(types.equals(TEMP))
         {
-            drawGraphTemperature(results);
+            drawGraphTemperature(results,hours,"DAY");
+        }
+        else if(types.equals(HUMIDITY))
+        {
+            drawHumidTemperature(results,hours,"DAY");
         }
         else
         {
-            drawLightTemperature(results);
+            drawLightTemperature(results,hours,"DAY");
         }
     }
-    private void getThisMonthValue(String deviceID, String types){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getThisMonthValue(String deviceID, String types) throws ParseException {
         GetThisMonthValue getThisMonthValue = new GetThisMonthValue(deviceID,types);
         Thread thread = new Thread(getThisMonthValue);
         thread.start();
@@ -175,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Vector<Double> results = getThisMonthValue.results;
-
+        Vector<String>  days = getThisMonthValue.days;
         try {
             thread.join();
         } catch (InterruptedException e) {
@@ -184,15 +210,20 @@ public class MainActivity extends AppCompatActivity {
 
         if(types.equals(TEMP))
         {
-            drawGraphTemperature(results);
+            drawGraphTemperature(results,days,"DAY");
+        }
+        else if(types.equals(HUMIDITY))
+        {
+            drawHumidTemperature(results,days,"DAY");
         }
         else
         {
-            drawLightTemperature(results);
+            drawLightTemperature(results,days,"DAY");
         }
     }
 
-    private void getthisYearValue(String deviceID, String types){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getthisYearValue(String deviceID, String types) throws ParseException {
         GetValueThisYear getValueThisYear = new GetValueThisYear(deviceID,types);
         Thread thread = new Thread(getValueThisYear);
         thread.start();
@@ -202,28 +233,31 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Vector<Double> results = getValueThisYear.results;
-
+        Vector<String>  months = getValueThisYear.months;
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawGraphTemperature(results);
 
         if(types.equals(TEMP))
         {
-            drawGraphTemperature(results);
+            drawGraphTemperature(results,months,"DAY");
+        }
+        else if(types.equals(HUMIDITY))
+        {
+            drawHumidTemperature(results,months,"DAY");
         }
         else
         {
-            drawLightTemperature(results);
+            drawLightTemperature(results,months,"DAY");
         }
     }
 
 
     private void makeTempDeviceSpinner(final String type)
     {
-        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        GetDeviceByType getDeviceByType = new GetDeviceByType(user_id,type);
         Thread thread = new Thread(getDeviceByType);
         thread.start();
         Vector<String> results = getDeviceByType.results;
@@ -240,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
@@ -247,39 +282,57 @@ public class MainActivity extends AppCompatActivity {
 
                 final RadioGroup radioGroup = findViewById(R.id.radio_temp);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
-//                if(rad.isChecked()){
-//                    String choosing = dropdown.getSelectedItem().toString();
-//                    getTempMeasurementFromDatabase(choosing);}
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
-                    getTempMeasurementFromDatabaseWithType(choosing,type);}
+                    try {
+                        getTempMeasurementFromDatabase(choosing,TEMP);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch(checkedId){
                             case R.id.radio_temp1:
                                 String choosing = dropdown.getSelectedItem().toString();
-//                                getTempMeasurementFromDatabase(choosing);
-                                getTempMeasurementFromDatabaseWithType(choosing,type);
+                                try {
+                                    getTempMeasurementFromDatabase(choosing,TEMP);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_temp2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
-                                getValueToday(second_choosing,type);
+                                try {
+                                    getValueToday(second_choosing,TEMP);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_temp3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
-                                getThisMonthValue(third_choosing,type);
+                                try {
+                                    getThisMonthValue(third_choosing,TEMP);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_temp4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
-                                getthisYearValue(fourth_choosing,type);
+                                try {
+                                    getthisYearValue(fourth_choosing,TEMP);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                     }
                 });
 
-                String AI_choosing = dropdown.getSelectedItem().toString();
-                sendDatatoAI(AI_choosing);
+//                String AI_choosing = dropdown.getSelectedItem().toString();
+//                sendDatatoAI(AI_choosing);
             }
 
             @Override
@@ -292,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeHumidDeviceSpinner(final String type)
     {
-        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        GetDeviceByType getDeviceByType = new GetDeviceByType(user_id,type);
         Thread thread = new Thread(getDeviceByType);
         thread.start();
         Vector<String> results = getDeviceByType.results;
@@ -309,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
@@ -316,32 +370,51 @@ public class MainActivity extends AppCompatActivity {
 
                 final RadioGroup radioGroup = findViewById(R.id.radio_humidity);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_humid1);
-//                if(rad.isChecked()){
-//                    String choosing = dropdown.getSelectedItem().toString();
-//                    getTempMeasurementFromDatabase(choosing);}
+
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
-                    getTempMeasurementFromDatabaseWithType(choosing,type);}
+                    try {
+                        getHumidMeasurementFromDatabase(choosing,HUMIDITY);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch(checkedId){
                             case R.id.radio_humid1:
                                 String choosing = dropdown.getSelectedItem().toString();
-//                                getTempMeasurementFromDatabase(choosing);
-                                getTempMeasurementFromDatabaseWithType(choosing,type);
+                                try {
+                                    getHumidMeasurementFromDatabase(choosing,HUMIDITY);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_humid2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
-                                getValueToday(second_choosing,type);
+                                try {
+                                    getValueToday(second_choosing,HUMIDITY);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_humid3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
-                                getThisMonthValue(third_choosing,type);
+                                try {
+                                    getThisMonthValue(third_choosing,HUMIDITY);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_humid4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
-                                getthisYearValue(fourth_choosing,type);
+                                try {
+                                    getthisYearValue(fourth_choosing,HUMIDITY);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                     }
@@ -371,8 +444,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.e("result", String.valueOf(results));
-        Log.e("DATE", String.valueOf(dates));
 
         SendDataToAI sendDataToAI = new SendDataToAI(results,dates);
         Thread second_thread = new Thread(sendDataToAI);
@@ -391,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void makeLightDeviceSpinner(String type)
     {
-        GetDeviceByType getDeviceByType = new GetDeviceByType(type);
+        GetDeviceByType getDeviceByType = new GetDeviceByType(user_id,type);
         Thread thread = new Thread(getDeviceByType);
         thread.start();
         Vector<String> results = getDeviceByType.results;
@@ -408,6 +479,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
@@ -416,26 +488,48 @@ public class MainActivity extends AppCompatActivity {
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
-                    getLightMeasurementFromDatabase(choosing);}
+                    try {
+                        getLightMeasurementFromDatabase(choosing);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch(checkedId){
                             case R.id.radio_light1:
                                 String choosing = dropdown.getSelectedItem().toString();
-                                getLightMeasurementFromDatabase(choosing);
+                                try {
+                                    getLightMeasurementFromDatabase(choosing);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_light2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
-                                getValueToday(second_choosing,"S");
+                                try {
+                                    getValueToday(second_choosing,"L");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_light3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
-                                getThisMonthValue(third_choosing,"S");
+                                try {
+                                    getThisMonthValue(third_choosing,"L");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.radio_light4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
-                                getthisYearValue(fourth_choosing,"S");
+                                try {
+                                    getthisYearValue(fourth_choosing,"L");
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         }
                     }
@@ -452,11 +546,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getLightMeasurementFromDatabase(String light_device_id){
-        GetDataFromURL getDataFromURL = new GetDataFromURL(light_device_id);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getLightMeasurementFromDatabase(String light_device_id) throws ParseException {
+        GetDataFromURL getDataFromURL = new GetDataFromURL(light_device_id, LIGHT);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
         Vector<Double> results = getDataFromURL.results;
+        Vector<String> dates = getDataFromURL.date;
 
         try {
             thread.join();
@@ -464,62 +560,234 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        drawLightTemperature(results);
+        drawLightTemperature(results,dates,"VALUE");
     }
 
-    private void getHumidMeasurementFromDatabase(String humid_device_id){
-        GetDataFromURLWithType getDataFromURLwithtype = new GetDataFromURLWithType(humid_device_id,HUMIDITY);
-        Thread thread = new Thread(getDataFromURLwithtype);
-        thread.start();
-        Vector<Double> results = getDataFromURLwithtype.results;
 
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void drawGraphTemperature(Vector<Double> results, Vector<String> date, String mode) throws ParseException {
 
-        drawLightTemperature(results);
-    }
-    private void drawGraphTemperature(Vector<Double> results)
-    {
-        DataPoint[] dataPoints = new DataPoint[results.size()]; // declare an array of DataPoint objects with the same size as your list
+        DataPoint[] dataPoints = new DataPoint[results.size()];
+        final HashMap<Integer, Long> mappoint = new HashMap<>();// declare an array of DataPoint objects with the same size as your list
+        final HashMap<Integer, String> daily_mappoint = new HashMap<>();
+
         for (int i = 0; i < results.size(); i++) {
             // add new DataPoint object to the array for each of your list entries
-            dataPoints[i] = new DataPoint(i, results.get(i)); // not sure but I think the second argument should be of type double
+            if(mode == "VALUE") {
+                String temp_date = date.get(i);
+                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date firstDate = first_date_format.parse(temp_date);
+                Calendar first_cal = Calendar.getInstance();
+                first_cal.setTime(firstDate);
+                long second = first_cal.getTimeInMillis();
+                mappoint.put(i, second);
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
+            else
+            {
+                daily_mappoint.put(i, date.get(i));
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
         }
         LineGraphSeries<DataPoint> seriesTemp = new LineGraphSeries<DataPoint>(dataPoints);
 
-        graphTemperature.getViewport().setMinY(0);
-        graphTemperature.getViewport().setMaxY(900);
-        graphTemperature.getViewport().setMinX(0);
-        graphTemperature.getViewport().setMaxX(results.size() - 1);
-        graphTemperature.getGridLabelRenderer().setNumHorizontalLabels(results.size());
-        graphTemperature.getViewport().setYAxisBoundsManual(true);
-        graphTemperature.getViewport().setXAxisBoundsManual(true);
         seriesTemp.setColor(Color.rgb(226,91,34));
-        seriesTemp.setAnimated(true);
-        seriesTemp.setDataPointsRadius(2);
+        seriesTemp.setDataPointsRadius(15);
+
+        configGraphTemperature(graphTemperature,results.size());
         showDataOnGraph(seriesTemp, graphTemperature);
+        if (mode == "VALUE") {
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            graphTemperature.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+
+                    if (isValueX) {
+                        Long x_value = mappoint.get((int) (value));
+                        return sdf.format(new Date((long) (x_value)));
+                    } else {
+                        return super.formatLabel(value, isValueX);
+                    }
+                }
+            });
+        }
+        else
+        {
+            graphTemperature.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        return super.formatLabel(Double.parseDouble(daily_mappoint.get((int)value)), isValueX);
+                    }
+                    else
+                        return super.formatLabel(value, isValueX);
+
+                }
+            });
+        }
     }
 
-    private void drawLightTemperature(Vector<Double> results)
-    {
-        DataPoint[] dataPoints = new DataPoint[results.size()]; // declare an array of DataPoint objects with the same size as your list
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void drawHumidTemperature(Vector<Double> results, Vector<String> date, String mode) throws ParseException {
+
+        DataPoint[] dataPoints = new DataPoint[results.size()];
+        final HashMap<Integer, Long> mappoint = new HashMap<>();// declare an array of DataPoint objects with the same size as your list
+        final HashMap<Integer, String> daily_mappoint = new HashMap<>();
+
         for (int i = 0; i < results.size(); i++) {
             // add new DataPoint object to the array for each of your list entries
-            dataPoints[i] = new DataPoint(i, results.get(i)); // not sure but I think the second argument should be of type double
+            if(mode == "VALUE") {
+                String temp_date = date.get(i);
+                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date firstDate = first_date_format.parse(temp_date);
+                Calendar first_cal = Calendar.getInstance();
+                first_cal.setTime(firstDate);
+                long second = first_cal.getTimeInMillis();
+                mappoint.put(i, second);
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
+            else
+            {
+                daily_mappoint.put(i, date.get(i));
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
         }
         LineGraphSeries<DataPoint> seriesTemp = new LineGraphSeries<DataPoint>(dataPoints);
 
-        graphLightLevel.getViewport().setMinY(0);
-        graphLightLevel.getViewport().setMaxY(900);
-        graphLightLevel.getViewport().setMinX(0);
-        graphLightLevel.getViewport().setMaxX(results.size() - 1);
-        graphLightLevel.getGridLabelRenderer().setNumHorizontalLabels(results.size());
-        graphLightLevel.getViewport().setYAxisBoundsManual(true);
-        graphLightLevel.getViewport().setXAxisBoundsManual(true);
+        seriesTemp.setColor(Color.rgb(226,91,34));
+        seriesTemp.setDataPointsRadius(15);
+
+        configGraphTemperature(graphHumidity,results.size());
+        showDataOnGraph(seriesTemp, graphHumidity);
+        if (mode == "VALUE") {
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            graphHumidity.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+
+                    if (isValueX) {
+                        Long x_value = mappoint.get((int) (value));
+                        return sdf.format(new Date((long) (x_value)));
+                    } else {
+                        return super.formatLabel(value, isValueX);
+                    }
+                }
+            });
+        }
+        else
+        {
+            graphHumidity.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        return super.formatLabel(Double.parseDouble(daily_mappoint.get((int)value)), isValueX);
+                    }
+                    else
+                        return super.formatLabel(value, isValueX);
+
+                }
+            });
+        }
+    }
+
+    private void configGraphTemperature(GraphView gv, int num){
+            int max_y ;
+            if(gv == graphTemperature)
+                max_y = 50;
+            else if(gv == graphHumidity)
+                max_y = 100;
+            else
+                max_y = 500;
+            Log.e("met", String.valueOf(num));
+            gv.getViewport().setMinY(0);
+            gv.getViewport().setMaxY(max_y);
+            gv.getGridLabelRenderer().setNumVerticalLabels(10);
+            gv.getViewport().setMinX(0);
+            gv.getViewport().setMaxX(num - 1);
+            gv.getGridLabelRenderer().setNumHorizontalLabels(num);
+            gv.getViewport().setYAxisBoundsManual(true);
+            gv.getViewport().setXAxisBoundsManual(true);
+            gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
+            if (num <= 3)
+            {
+                gv.getGridLabelRenderer().setTextSize(45f);
+            }
+            else if(num == 4)
+            {
+                gv.getGridLabelRenderer().setTextSize(30f);
+            }
+            else
+            {
+                gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+            }
+
+    }
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void drawLightTemperature(Vector<Double> results, Vector<String> date, String mode) throws ParseException {
+
+        DataPoint[] dataPoints = new DataPoint[results.size()];
+        final HashMap<Integer, Long> mappoint = new HashMap<>();// declare an array of DataPoint objects with the same size as your list
+        final HashMap<Integer, String> daily_mappoint = new HashMap<>();
+
+        for (int i = 0; i < results.size(); i++) {
+            // add new DataPoint object to the array for each of your list entries
+            if(mode == "VALUE") {
+                String temp_date = date.get(i);
+                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date firstDate = first_date_format.parse(temp_date);
+                Calendar first_cal = Calendar.getInstance();
+                first_cal.setTime(firstDate);
+                long second = first_cal.getTimeInMillis();
+                mappoint.put(i, second);
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
+            else
+            {
+                daily_mappoint.put(i, date.get(i));
+                dataPoints[i] = new DataPoint(i, results.get(i));
+            }
+        }
+        LineGraphSeries<DataPoint> seriesTemp = new LineGraphSeries<DataPoint>(dataPoints);
+
+        seriesTemp.setColor(Color.rgb(226,91,34));
+        seriesTemp.setDataPointsRadius(15);
+
+        configGraphTemperature(graphLightLevel,results.size());
         showDataOnGraph(seriesTemp, graphLightLevel);
+        if (mode == "VALUE") {
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            graphLightLevel.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+
+                    if (isValueX) {
+                        Long x_value = mappoint.get((int) (value));
+                        return sdf.format(new Date((long) (x_value)));
+                    } else {
+                        return super.formatLabel(value, isValueX);
+                    }
+                }
+            });
+        }
+        else
+        {
+            graphLightLevel.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        return super.formatLabel(Double.parseDouble(daily_mappoint.get((int)value)), isValueX);
+                    }
+                    else
+                        return super.formatLabel(value, isValueX);
+
+                }
+            });
+        }
     }
     private void showDataOnGraph(LineGraphSeries<DataPoint> series, GraphView graph){
         if(graph.getSeries().size() > 0){

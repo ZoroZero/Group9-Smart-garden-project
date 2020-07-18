@@ -17,7 +17,7 @@ import java.util.Vector;
 
 public class GetDataFromURLWithType implements Runnable {
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getDeviceMeasurementWithType.php";
+    private String url = "http://169.254.20.224/duyapi/v1/getDeviceMeasurement.php";
     private String device_id;
     private String type;
     protected Vector<String> date = new Vector<>();
@@ -32,7 +32,6 @@ public class GetDataFromURLWithType implements Runnable {
         try {
             RequestBody formBody = new FormEncodingBuilder()
                     .add("device_id",device_id)
-                    .add("type",type)
                     .build();
             Request request = new Request.Builder()
                     .url(url)
@@ -61,11 +60,27 @@ public class GetDataFromURLWithType implements Runnable {
                 int length = jsonArray.length();
                 for(int i = 0 ; i < length ; i ++)
                 {
-                    double temp = jsonArray.getJSONObject(i).getDouble("measurement");
-                    this.results.add(temp);
+                    String temp = jsonArray.getJSONObject(i).getString("measurement");
+
+                    if (this.type == "S")
+                    {
+                        double measure = Double.parseDouble(temp);
+                        this.results.add(measure);
+                    }
+                    else
+                    {
+                        String[] temp_humi = temp.split(":");
+                        double temperature = Double.parseDouble(temp_humi[0]);
+                        double humidity = Double.parseDouble(temp_humi[1]);
+                        if(this.type == "TH")
+                            this.results.add(temperature);
+                        else
+                            this.results.add(humidity);
+                    }
                     String this_date = jsonArray.getJSONObject(i).getString("date");
                     this.date.add(this_date);
                 }
+                Log.e("fix", String.valueOf(this.results));
             }
 
         } catch (IOException | JSONException e) {
