@@ -25,6 +25,10 @@ public class GetValueToday implements Runnable {
     private String device_id;
     private String type;
     private String query_type  = "";
+    private final String TEMP_HUMIDITY = MainActivity.TEMP_HUMIDITY;
+    private final String TEMP = MainActivity.TEMP;
+    private final String HUMIDITY = MainActivity.HUMIDITY;
+    private final String LIGHT = MainActivity.LIGHT;
     protected Vector<Double> results = new Vector<>();
     protected Vector<String> hours = new Vector<>();
     public GetValueToday(String device_id, String type){
@@ -34,10 +38,11 @@ public class GetValueToday implements Runnable {
 
     @Override
     public void run() {
+
         try {
-            if(this.type == "T" || this.type == "H")
+            if(this.type.equals(TEMP) || this.type.equals(HUMIDITY))
             {
-                query_type ="TH";
+                query_type = TEMP_HUMIDITY;
             }
             else
                 query_type = this.type;
@@ -73,7 +78,7 @@ public class GetValueToday implements Runnable {
                 int length = jsonArray.length();
                 String first_measurement = jsonArray.getJSONObject(0).getString("measurement");
                 double sum;
-                if (this.type == "L")
+                if (this.type.equals(LIGHT))
                 {
                     double measure = Double.parseDouble(first_measurement);
                     sum = measure;
@@ -83,7 +88,7 @@ public class GetValueToday implements Runnable {
                     String[] temp_humi = first_measurement.split(":");
                     double temperature = Double.parseDouble(temp_humi[0]);
                     double humidity = Double.parseDouble(temp_humi[1]);
-                    if(this.type == "T")
+                    if(this.type.equals(TEMP))
                         sum = temperature;
                     else
                         sum = humidity;
@@ -104,7 +109,7 @@ public class GetValueToday implements Runnable {
                     }
                     String temp = jsonArray.getJSONObject(i + 1).getString("measurement");
                     double temp_value;
-                    if (this.type == "L")
+                    if (this.type.equals(LIGHT))
                     {
                         double measure = Double.parseDouble(temp);
                         temp_value = measure;
@@ -114,7 +119,7 @@ public class GetValueToday implements Runnable {
                         String[] temp_humi = temp.split(":");
                         double temperature = Double.parseDouble(temp_humi[0]);
                         double humidity = Double.parseDouble(temp_humi[1]);
-                        if(this.type == "T")
+                        if(this.type.equals(TEMP))
                             temp_value = temperature;
                         else
                             temp_value = humidity;
