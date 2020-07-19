@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, request, jsonify
 
 import numpy as np
@@ -143,7 +145,7 @@ def get_result(t_data):
             last_key = regular.keys()[-1]
             from datetime import timedelta
             new_key = last_key+ timedelta(seconds = sampling_period)
-            regular[new_key] = nearest_value + np.random.uniform(-2,2)
+            regular[new_key] = nearest_value + np.random.uniform(-0.25,0.25)
             new_last_key = regular.keys()[-1]
 
 
