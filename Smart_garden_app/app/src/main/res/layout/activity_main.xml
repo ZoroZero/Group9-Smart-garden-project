@@ -7,7 +7,7 @@
     android:id="@+id/edit_text_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/background_gradient"
     android:orientation="vertical">
 
     <LinearLayout
@@ -28,9 +28,10 @@
             android:layout_width="1dp"
             android:layout_height="50dp"
             android:layout_weight="0.8"
+            android:background="@drawable/round_header"
             android:gravity="center_vertical|center_horizontal"
             android:text="Garden parameters"
-            android:textColor="#ffadff2f"
+            android:textColor="@color/colorPrimary"
             android:textSize="22dp"
             android:textStyle="bold" />
 
@@ -47,185 +48,288 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#e6adff2f"
-                android:text="Temperature"
-                android:textAlignment="center"
-                android:textColor="#ffffff"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/temperatureColor"
+                    android:text="Temperature"
+                    android:textAlignment="center"
+                    android:textColor="@color/common_google_signin_btn_text_dark_default"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+                <RadioGroup
+                    android:id="@+id/radio_temp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner1">
+
+                    <RadioButton
+                        android:id="@+id/radio_temp1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Value" />
+
+                    <RadioButton
+                        android:id="@+id/radio_temp2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:text="Day" />
+
+                    <RadioButton
+                        android:id="@+id/radio_temp3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Month" />
+
+                    <RadioButton
+                        android:id="@+id/radio_temp4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Year" />
+                </RadioGroup>
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphTemperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_temp" />
+
+                <TextView
+                    android:id="@+id/temp_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Waiting for AI training"
+                    android:textColor="@color/temperatureColor"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/graphTemperature" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                android:layout_gravity="center"/>
-
-            <RadioGroup android:id = "@+id/radio_temp"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation= "horizontal"
-                android:gravity="center">
-                <RadioButton android:id="@+id/radio_temp1"
-                    android:layout_width="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF">
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Value"
-                    android:checked="true"/>
+                    android:layout_margin="5dp"
+                    android:background="@color/humidityColor"
+                    android:text="Humidity measurement"
+                    android:textAlignment="center"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <RadioButton
-                    android:id="@+id/radio_temp2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="19dp"
-                    android:text="Day" />
-                <RadioButton android:id="@+id/radio_temp3"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Month" />
-                <RadioButton android:id="@+id/radio_temp4"
-                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toEndOf="@+id/textView13"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+                <RadioGroup
+                    android:id="@+id/radio_humidity"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Year" />
-            </RadioGroup>
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner2">
 
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graphTemperature"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_margin="5dp" />
+                    <RadioButton
+                        android:id="@+id/radio_humid1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Value" />
 
-            <TextView
-                android:id="@+id/temp_view"
-                android:text= "Waiting for AI training"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/radio_humid2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Day" />
 
+                    <RadioButton
+                        android:id="@+id/radio_humid3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Month" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#e6adff2f"
-                android:text="Humidity measurement"
-                android:textAlignment="center"
-                android:textColor="#ffffff"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                    <RadioButton
+                        android:id="@+id/radio_humid4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Year" />
+                </RadioGroup>
 
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphHumidLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_humidity" />
 
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                android:layout_gravity="center"/>
-
-            <RadioGroup android:id = "@+id/radio_humidity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation= "horizontal"
-                android:gravity="center">
-                <RadioButton android:id="@+id/radio_humid1"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/humid_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Value"
-                    android:checked="true"/>
-                <RadioButton android:id="@+id/radio_humid2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Day" />
-                <RadioButton android:id="@+id/radio_humid3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Month" />
-                <RadioButton android:id="@+id/radio_humid4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Year" />
-            </RadioGroup>
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Waiting for AI training"
+                    android:textColor="@color/humidityColor"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/graphHumidLevel" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graphHumidLevel"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_margin="5dp" />
-
-            <TextView
-                android:id="@+id/humid_view"
-                android:text= "Waiting for AI training"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#e6adff2f"
-                android:text="Light density"
-                android:textAlignment="center"
-                android:textColor="#ffffff"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF">
 
-
-            <Spinner
-                android:id="@+id/spinner3"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                android:layout_gravity="center"/>
-
-            <RadioGroup android:id = "@+id/radio_light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation= "horizontal"
-                android:gravity="center">
-                <RadioButton android:id="@+id/radio_light1"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Value"
-                    android:checked="true"/>
-                <RadioButton android:id="@+id/radio_light2"
-                    android:layout_width="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/lightColor"
+                    android:text="Light density"
+                    android:textAlignment="center"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Day" />
-                <RadioButton android:id="@+id/radio_light3"
-                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+                <RadioGroup
+                    android:id="@+id/radio_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Month" />
-                <RadioButton android:id="@+id/radio_light4"
-                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner3">
+
+                    <RadioButton
+                        android:id="@+id/radio_light1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Value" />
+
+                    <RadioButton
+                        android:id="@+id/radio_light2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Day" />
+
+                    <RadioButton
+                        android:id="@+id/radio_light3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Month" />
+
+                    <RadioButton
+                        android:id="@+id/radio_light4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Year" />
+                </RadioGroup>
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graphLightLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_light" />
+
+                <TextView
+                    android:id="@+id/light_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Year" />
-            </RadioGroup>
-
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graphLightLevel"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_margin="5dp" />
-            <TextView
-                android:id="@+id/light_view"
-                android:text= "Waiting for AI training"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Waiting for AI training"
+                    android:textColor="@color/lightColor"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/graphLightLevel" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>

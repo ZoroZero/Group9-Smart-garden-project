@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
 
                 final RadioGroup radioGroup = findViewById(R.id.radio_temp);
-                RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
+                RadioButton rad = findViewById(R.id.radio_temp1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
                     try {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 final RadioGroup radioGroup = findViewById(R.id.radio_humidity);
-                RadioButton rad = (RadioButton) findViewById(R.id.radio_humid1);
+                RadioButton rad = findViewById(R.id.radio_humid1);
 
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 final RadioGroup radioGroup = findViewById(R.id.radio_light);
-                RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
+                RadioButton rad = findViewById(R.id.radio_light1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
                     try {
@@ -527,11 +527,11 @@ public class MainActivity extends AppCompatActivity {
             gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
             if (num <= 3)
             {
-                gv.getGridLabelRenderer().setTextSize(45f);
+                gv.getGridLabelRenderer().setTextSize(30f);
             }
             else if(num == 4)
             {
-                gv.getGridLabelRenderer().setTextSize(30f);
+                gv.getGridLabelRenderer().setTextSize(24f);
             }
             else
             {

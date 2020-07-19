@@ -125,15 +125,14 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
                     if(type.equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
                         String[] measurements = reading.getString("measurement").split(":");
                         device_lastReadingTV.setText(measurements[1] + "%");
-                        readingBar.setValue(Integer.parseInt(measurements[1]));
-
+                        readingBar.setValue(Math.min(Integer.parseInt(measurements[1]), readingBar.getEndValue()));
                         device_lastReading1TV.setText(measurements[0] + "\u2103");
-                        readingBar1.setValue(Integer.parseInt(measurements[0]));
+                        readingBar1.setValue(Math.min(Integer.parseInt(measurements[0]), readingBar1.getEndValue()));
                     }
                     else{
                         String measurement = reading.getString("measurement");
                         device_lastReading1TV.setText(measurement + " lux");
-                        readingBar1.setValue(Integer.parseInt(measurement));
+                        readingBar1.setValue(Math.min(Integer.parseInt(measurement), readingBar1.getEndValue()));
                     }
                 }
                 else{

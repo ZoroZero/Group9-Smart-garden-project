@@ -219,9 +219,9 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     else {
                         String[] measurements = linkedSensorInformation.getStatus().split(":");
                         device_lastReadingTV.setText(measurements[1] + "%");
-                        readingBar.setValue(Integer.parseInt(measurements[1]));
+                        readingBar1.setValue(Math.min(Integer.parseInt(measurements[1]), readingBar.getEndValue()));
                         device_lastReading1TV.setText(measurements[0] + "\u2103");
-                        readingBar1.setValue(Integer.parseInt(measurements[0]));
+                        readingBar1.setValue(Math.min(Integer.parseInt(measurements[0]), readingBar1.getEndValue()));
                     }
                 }
                 else{
@@ -231,7 +231,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                     else {
                         String measurement = linkedSensorInformation.getStatus();
                         device_lastReading1TV.setText(measurement + " lux");
-                        readingBar1.setValue(Integer.parseInt(measurement));
+                        readingBar1.setValue(Math.min(Integer.parseInt(measurement), readingBar1.getEndValue()));
                     }
                 }
 
