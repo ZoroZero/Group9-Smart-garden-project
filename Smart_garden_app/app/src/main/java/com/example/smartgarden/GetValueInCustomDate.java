@@ -1,5 +1,7 @@
 package com.example.smartgarden;
 
+import android.util.Log;
+
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -17,9 +19,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import Helper.Constants;
+
 public class GetValueInCustomDate implements Runnable{
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://169.254.20.224/duyapi/v1/getValueInCustomDate.php";
+    private String url = "http://" + Constants.DATABASE_IP +  Constants.GET_VALUE_BY_CUSTOM_DATE;
     private String device_id;
     private String type;
     private int day;
@@ -75,7 +79,7 @@ public class GetValueInCustomDate implements Runnable{
             if ((responsesCode = responses.code()) == 200){
 
                 String jsonData = responses.body().string();
-
+                Log.i("Json data", jsonData);
                 JSONObject json = new JSONObject(jsonData);
 
 

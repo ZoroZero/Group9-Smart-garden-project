@@ -47,16 +47,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import Helper.Constants;
 
 
 public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY =  "TH";
+    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
     protected final static String TEMP = "T";
     protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = "L";
+    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -99,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void makeTempDeviceSpinner(final String type)
     {
         GetDeviceByType getDeviceByType = new GetDeviceByType(user_id,type);
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -195,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_temp_view);
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -269,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -323,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_humid_view);
@@ -374,13 +379,14 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 final RadioGroup radioGroup = findViewById(R.id.radio_light);
-                RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
+                RadioButton rad = findViewById(R.id.radio_light1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
                     try {
@@ -393,6 +399,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -582,9 +589,9 @@ public class MainActivity extends AppCompatActivity {
     private void drawDataOnGraph(Vector<Double> results, Vector<String> date, String graphtype, String mode) throws ParseException {
 
         GraphView gv;
-        if(graphtype == TEMP)
+        if(graphtype.equals(TEMP))
             gv = graphTemperature;
-        else if(graphtype == HUMIDITY)
+        else if(graphtype.equals(HUMIDITY))
             gv = graphHumidity;
         else
             gv = graphLightLevel;
@@ -596,9 +603,10 @@ public class MainActivity extends AppCompatActivity {
             // add new DataPoint object to the array for each of your list entries
             if(mode.equals(VALUE_MODE)) {
                 String temp_date = date.get(i);
-                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date firstDate = first_date_format.parse(temp_date);
                 Calendar first_cal = Calendar.getInstance();
+                assert firstDate != null;
                 first_cal.setTime(firstDate);
                 long second = first_cal.getTimeInMillis();
                 mappoint.put(i, second);
@@ -616,7 +624,7 @@ public class MainActivity extends AppCompatActivity {
         configGraph(gv,results.size(),seriesTemp);
         showDataOnGraph(seriesTemp, gv);
         if (mode.equals(VALUE_MODE)) {
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             gv.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -673,11 +681,11 @@ public class MainActivity extends AppCompatActivity {
             gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
             if (num <= 3)
             {
-                gv.getGridLabelRenderer().setTextSize(45f);
+                gv.getGridLabelRenderer().setTextSize(30f);
             }
             else if(num == 4)
             {
-                gv.getGridLabelRenderer().setTextSize(30f);
+                gv.getGridLabelRenderer().setTextSize(24f);
             }
             else
             {
@@ -729,6 +737,7 @@ public class MainActivity extends AppCompatActivity {
         recommendThreshold(AI_result,type);
 
     }
+    @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
             textTemperature.setText("Recommended temperature threshold " + String.valueOf(AI_result));

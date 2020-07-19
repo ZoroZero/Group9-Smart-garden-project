@@ -7,7 +7,7 @@ public class Constants {
 
     public static final String DATABASE_IP = "192.168.1.119";
 
-    public static final String DATABASE_PORT = ":3306";
+    public static final String DATABASE_PORT = ":5000";
     // Register url
     public static final String REGISTER_URL = ROOT_URL + "/registerUser.php";
 
@@ -56,8 +56,13 @@ public class Constants {
     // Get value by month
     public static final String GET_VALUE_BY_DAY = ROOT_URL + "/getValueToday.php";
 
+    // Get value by custom date
+    public static final String GET_VALUE_BY_CUSTOM_DATE = ROOT_URL + "/getValueInCustomDate.php";
+
     // Send data to AI
     public static final String SEND_DATA_TO_AI = "/api/post_some_data";
+
+
 
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
