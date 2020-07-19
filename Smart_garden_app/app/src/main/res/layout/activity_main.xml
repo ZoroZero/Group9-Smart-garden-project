@@ -199,8 +199,12 @@
                 android:id="@+id/humid_view"
                 android:text= "Waiting for AI training"
                 android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -269,9 +273,13 @@
             <TextView
                 android:id="@+id/light_view"
                 android:text= "Waiting for AI training"
+                android:fontFamily = "@font/roboto_medium"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
 
 
