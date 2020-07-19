@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    sendDatatoAI(choosing,TEMP);
                     TextView value_view = findViewById(R.id.mode_temp_view);
                     value_view.setText("Showing some nearest values: ");
                 }
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(choosing,TEMP);
                                 TextView value_view = findViewById(R.id.mode_temp_view);
                                 value_view.setText("Showing some nearest values: ");
                                 break;
@@ -167,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(second_choosing,TEMP);
                                 TextView hourly_view = findViewById(R.id.mode_temp_view);
                                 hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
@@ -179,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(third_choosing,TEMP);
                                 TextView daily_view = findViewById(R.id.mode_temp_view);
                                 daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
                                 break;
@@ -190,14 +186,12 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(fourth_choosing,TEMP);
                                 TextView monthly_view = findViewById(R.id.mode_temp_view);
                                 monthly_view.setText("Measurement by month in year : "  + year);
                                 break;
                             case R.id.radio_temp5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                sendDatatoAI(fifth_choosing,TEMP);
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -221,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,TEMP);
 
             }
 
@@ -269,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    sendDatatoAI(choosing,HUMIDITY);
                     TextView value_view = findViewById(R.id.mode_humid_view);
                     value_view.setText("Showing some nearest values: ");
                 }
@@ -290,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(choosing,HUMIDITY);
                                 TextView value_view = findViewById(R.id.mode_humid_view);
                                 value_view.setText("Showing some nearest values: ");
                                 break;
@@ -301,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(second_choosing,HUMIDITY);
                                 TextView hourly_view = findViewById(R.id.mode_humid_view);
                                 hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
@@ -312,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(third_choosing,HUMIDITY);
                                 TextView daily_view = findViewById(R.id.mode_humid_view);
                                 daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
                                 break;
@@ -323,14 +314,12 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(fourth_choosing,HUMIDITY);
                                 TextView monthly_view = findViewById(R.id.mode_humid_view);
                                 monthly_view.setText("Measurement by month in year : "  + year);
                                 break;
                             case R.id.radio_humid5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                sendDatatoAI(fifth_choosing,HUMIDITY);
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -353,6 +342,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,HUMIDITY);
 
             }
 
@@ -397,7 +388,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    sendDatatoAI(choosing,LIGHT);
                     TextView value_view = findViewById(R.id.mode_light_view);
                     value_view.setText("Showing some nearest values: ");
                 }
@@ -418,7 +408,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(choosing,LIGHT);
                                 TextView value_view = findViewById(R.id.mode_light_view);
                                 value_view.setText("Showing some nearest values: ");
                                 break;
@@ -429,7 +418,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(second_choosing,LIGHT);
                                 TextView hourly_view = findViewById(R.id.mode_light_view);
                                 hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
@@ -440,7 +428,6 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(third_choosing,LIGHT);
                                 TextView daily_view = findViewById(R.id.mode_light_view);
                                 daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
                                 break;
@@ -451,14 +438,12 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                sendDatatoAI(fourth_choosing,LIGHT);
                                 TextView monthly_view = findViewById(R.id.mode_light_view);
                                 monthly_view.setText("Measurement by month in year : "  + year);
                                 break;
                             case R.id.radio_light5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                sendDatatoAI(fifth_choosing,LIGHT);
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -481,7 +466,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-
+                String AI_choosing = dropdown.getSelectedItem().toString();
+                sendDatatoAI(AI_choosing,LIGHT);
 
             }
 
