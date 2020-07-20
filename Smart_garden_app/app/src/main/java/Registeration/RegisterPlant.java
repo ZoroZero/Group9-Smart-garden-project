@@ -119,7 +119,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
         assert jsonObject != null;
         try {
-            showResult.putExtra("register_type", "Add plant");
+            showResult.putExtra("register_type", "Add new plant");
             showResult.putExtra("register_message", jsonObject.getString("message"));
         } catch (JSONException e) {
             e.printStackTrace();

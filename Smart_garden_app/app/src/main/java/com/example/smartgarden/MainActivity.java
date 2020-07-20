@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //create a list of items for the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
         final int num_of_choices = adapter.getCount();
+
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -218,8 +219,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 String AI_choosing = dropdown.getSelectedItem().toString();
-                sendDatatoAI(AI_choosing,TEMP);
-
+//                sendDatatoAI(AI_choosing,TEMP);
+                if(num_of_choices == 1)
+                    setupAITimer(AI_choosing,TEMP);
+                else
+                    sendDatatoAI(AI_choosing,TEMP);
             }
 
             @Override
@@ -348,8 +352,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 String AI_choosing = dropdown.getSelectedItem().toString();
-                sendDatatoAI(AI_choosing,HUMIDITY);
-
+//                sendDatatoAI(AI_choosing,HUMIDITY);
+                if(num_of_choices == 1)
+                    setupAITimer(AI_choosing,HUMIDITY);
+                else
+                    sendDatatoAI(AI_choosing,HUMIDITY);
             }
 
             @Override
@@ -474,7 +481,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 String AI_choosing = dropdown.getSelectedItem().toString();
-                sendDatatoAI(AI_choosing,LIGHT);
+//                sendDatatoAI(AI_choosing,LIGHT);
+                if(num_of_choices == 1)
+                    setupAITimer(AI_choosing,LIGHT);
+                else
+                    sendDatatoAI(AI_choosing,LIGHT);
 
             }
 
@@ -740,14 +751,23 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
-            textTemperature.setText("Recommended temperature threshold " + String.valueOf(AI_result));
+            textTemperature.setText("Recommended temperature threshold " + AI_result);
         else if(type.equals(HUMIDITY))
-            textHumidity.setText("Recommended humidity threshold " + String.valueOf(AI_result));
+            textHumidity.setText("Recommended humidity threshold " + AI_result);
         else
-            textLightLevel.setText("Recommended light density threshold " + String.valueOf(AI_result));
-
-
+            textLightLevel.setText("Recommended light density threshold " + AI_result);
     }
 
+    private void setupAITimer(final String temp_device_id, final String type){
+        Timer mTimer = new Timer();
+        TimerTask mTask = new TimerTask() {
+            @Override
+            public void run() {
+                sendDatatoAI(temp_device_id,type);
+            }
+        };
+        mTimer.schedule(mTask, DELAY, PERIOD);
+
+    }
 
 }

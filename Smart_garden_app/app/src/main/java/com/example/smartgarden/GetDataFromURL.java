@@ -75,7 +75,7 @@ public class GetDataFromURL implements Runnable {
                         double temperature = Double.parseDouble(temp_humi[0]);
                         double humidity = Double.parseDouble(temp_humi[1]);
                         String TEMP = MainActivity.TEMP;
-                        if(this.type.equals(TEMP))
+                        if (this.type.equals(TEMP))
                             this.results.add(temperature);
                         else
                             this.results.add(humidity);

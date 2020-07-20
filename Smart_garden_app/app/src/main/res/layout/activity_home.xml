@@ -47,7 +47,7 @@
                         android:layout_marginTop="8dp"
                         android:text="TextView"
                         android:textAlignment="viewStart"
-                        android:textColor="#9AB59A"
+                        android:textColor="#829A82"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"

@@ -96,7 +96,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                     return;
                 }
                 if(checkUserHasDevice(linked_device_id)){
-                    Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
 

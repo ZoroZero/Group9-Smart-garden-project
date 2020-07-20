@@ -73,7 +73,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     return;
                 }
                 else if(checkUserHasDevice(device_id)){
-                    Toast.makeText(getApplicationContext(), "Device already registered", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
