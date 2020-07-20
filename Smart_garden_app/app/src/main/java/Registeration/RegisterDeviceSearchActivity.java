@@ -68,7 +68,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 device_id = device_IdET.getText().toString();
                 device_name = device_nameET.getText().toString();
-                if(device_id.equals("") || device_name.equals("") || device_type.equals("")){
+                if(device_id.equals("") || device_name.equals("")){
                     Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -96,19 +96,19 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                 JSONArray jsonObject = new JSONArray(new String(message.getPayload()));
 
                 JSONObject device_info = jsonObject.getJSONObject(0);
-                // Check light sensor id
-                if(device_type.equals(Constants.LIGHT_SENSOR_TYPE) &&
-                        !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.LIGHT_SENSOR_ID)){
-                    Toast.makeText(getApplicationContext(), "Invalid light sensor id", Toast.LENGTH_LONG).show();
+                // Check sensor id
+                if(Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.TEMPHUMI_SENSOR_ID)){
+                    device_type = Constants.TEMPHUMI_SENSOR_TYPE;
+                }
+                else if(Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.LIGHT_SENSOR_ID)){
+                    device_type = Constants.LIGHT_SENSOR_TYPE;
+                }
+
+                if(device_type.equals("")){
+                    Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                //Check Temp humid sensor id
-                if(device_type.equals(Constants.TEMPHUMI_SENSOR_TYPE)
-                        && !Helper.stringContainsItemFromList(device_info.getString("device_id"), Constants.TEMPHUMI_SENSOR_ID)){
-                    Toast.makeText(getApplicationContext(), "Invalid temperature humidity sensor id", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 Intent deviceSetting = null;
                 if(device_type.equals(Constants.LIGHT_SENSOR_TYPE)) {
                     deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
@@ -191,23 +191,6 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                 IOT_Server_Access.Unsubscribe(topic);
             }
         }.start();
-    }
-
-
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked
-        boolean checked = ((RadioButton) view).isChecked();
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.radio_light:
-                if (checked)
-                    device_type = Constants.LIGHT_SENSOR_TYPE;
-                break;
-            case R.id.radio_temphumi:
-                if (checked)
-                    device_type = Constants.TEMPHUMI_SENSOR_TYPE;
-                break;
-        }
     }
 
     // Check if device has existed on user

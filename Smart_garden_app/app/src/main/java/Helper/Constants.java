@@ -81,7 +81,7 @@ public class Constants {
 
 
     // Default value for register device
-    public static int DEFAULT_LIGHT = 20;
+    public static int DEFAULT_LIGHT = 200;
 
     public static int DEFAULT_TEMP = 30;
 
