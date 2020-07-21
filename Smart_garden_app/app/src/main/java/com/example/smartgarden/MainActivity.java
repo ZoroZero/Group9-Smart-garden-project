@@ -59,7 +59,7 @@ import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
 
-public class MainActivity extends AppCompatActivity implements VolleyCallBack {
+public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
@@ -92,13 +92,7 @@ public class MainActivity extends AppCompatActivity implements VolleyCallBack {
     protected final static float TITLE_SIZE = 70f;
 
     //User ID from teammate part
-    protected String user_id = "10";
-
-    //Overview text view
-    TextView averageTemp_TV;
-    TextView averageHumid_TV;
-    TextView averageLight_TV;
-    TextView number_devices_TV;
+    protected String user_id = UserLoginManagement.getInstance(this).getUserId() +"";
 
     @SuppressLint("WrongThread")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -118,15 +112,6 @@ public class MainActivity extends AppCompatActivity implements VolleyCallBack {
         makeTempDeviceSpinner(TEMP_HUMIDITY);
         makeHumidDeviceSpinner(TEMP_HUMIDITY);
         makeLightDeviceSpinner(LIGHT);
-
-
-        averageTemp_TV = findViewById(R.id.Report_DeviceLastReading_TV);
-        averageHumid_TV = findViewById(R.id.Report_DeviceLastReading1_TV);
-        averageLight_TV = findViewById(R.id.Report_DeviceLastReading2_TV);
-        number_devices_TV = findViewById(R.id.Report_DeviceLastReading3_TV);
-
-        // Get device info
-        Garden_Database_Control.FetchDevicesInfo(this, this);
 
     }
 
@@ -809,93 +794,4 @@ public class MainActivity extends AppCompatActivity implements VolleyCallBack {
             textLightLevel.setText("Recommended light density threshold " + AI_result);
     }
 
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onSuccessResponse(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            if (!jsonObject.getBoolean("error")) {
-                JSONArray jsonArray = jsonObject.getJSONArray("list");
-                final String[] get_device_id = new String[jsonArray.length()];
-                final String[] get_device_name = new String[jsonArray.length()];
-                final String[] get_linked_device_id = new String[jsonArray.length()];
-                final String[] get_linked_device_name = new String[jsonArray.length()];
-                final String[] get_device_type = new String[jsonArray.length()];
-                final String[] get_threshold = new String[jsonArray.length()];
-                final String[] get_status = new String[jsonArray.length()];
-                final String[] get_status_date = new String[jsonArray.length()];
-                float sum_temp = 0;
-                float sum_humid = 0;
-                float sum_light = 0;
-                int count_temp_humid = 0;
-                int count_light = 0;
-                int count_output = 0;
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    get_device_id[i] = obj.getString("device_id");
-                    get_device_name[i] = obj.getString("device_name");
-                    get_linked_device_id[i] = obj.getString("linked_device_id");
-                    get_linked_device_name[i] = obj.getString("linked_device_name");
-                    get_threshold[i] = obj.getString("threshold");
-                    get_status[i] = obj.getString("status");
-                    get_status_date[i] = obj.getString("date");
-                    if(obj.getString("status").equals("null")){
-                        get_status[i] = "No record";
-                        get_status_date[i] = "No record";
-                    }
-                    // Get device type and summarize
-                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID)) {
-                        get_device_type[i] = Constants.OUTPUT_TYPE;
-                        if(!get_status[i].equals("Off")){
-                            count_output += 1;
-                        }
-                    }
-                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID)) {
-                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
-                        if(!get_status[i].equals("No record")){
-                            count_light += 1;
-                            sum_light += Integer.parseInt(get_status[i]);
-                        }
-                    }
-                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID)) {
-                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
-                        if(!get_status[i].equals("No record")){
-                            count_temp_humid += 1;
-//                            Log.i("Status", get_status[i]);
-                            sum_temp += Integer.parseInt(get_status[i].split(":")[0]);
-                            sum_humid += Integer.parseInt(get_status[i].split(":")[1]);
-                        }
-                    }
-                }
-                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
-                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
-                // Summarize reading for user
-                if (count_temp_humid == 0) {
-                    averageTemp_TV.setText("No reading");
-                    averageHumid_TV.setText("No reading");
-                }
-                else {
-                    averageTemp_TV.setText(sum_temp / count_temp_humid + "\u2103");
-                    averageHumid_TV.setText(sum_humid / count_temp_humid + "%");
-                }
-
-                if (count_light == 0) {
-                    averageLight_TV.setText("No reading");
-                }
-                else {
-                    averageLight_TV.setText(sum_light / count_light + " lux");
-                }
-                number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
-
-            }
-            else{
-                averageTemp_TV.setText("No reading");
-                averageHumid_TV.setText("No reading");
-                averageLight_TV.setText("No reading");
-                number_devices_TV.setText(0 +"");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 }

@@ -21,7 +21,7 @@ import Helper.Constants;
 
 public class SendDataToAI  implements Runnable{
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://" + Constants.DATABASE_IP + Constants.DATABASE_PORT + Constants.SEND_DATA_TO_AI;
+    private String url = "http://" + Constants.DATABASE_IP + Constants.AI_PORT + Constants.SEND_DATA_TO_AI;
     protected Vector<Double> results = new Vector<>();
     protected Vector<String> dates = new Vector<>();
     protected Double AI_result ;

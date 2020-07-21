@@ -5,9 +5,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,12 @@ import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
 public class DeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
+
+    Button submitBtn;
+    // Loading animation
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+    FrameLayout progressBarHolder;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -54,7 +63,9 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
         final EditText threshold_Input1 = findViewById(R.id.changeSetting_thresholdInput1);
         final EditText threshold_Input2 = findViewById(R.id.changeSetting_thresholdInput2);
 
-        Button submitBtn = findViewById(R.id.changeSetting_submitBtn);
+        submitBtn = findViewById(R.id.changeSetting_submitBtn);
+        progressBarHolder = findViewById(R.id.changeDeviceSetting_progressBarHolder);
+
         // Set text
         assert deviceInformation != null;
         deviceId.setText(deviceInformation.getDevice_id());
@@ -82,12 +93,20 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
             public void onClick(View v) {
                 if(device_type.contains("Light")){
                     final String threshold = threshold_Input1.getText().toString();
+                    if(threshold.equals("")){
+                        Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
                             threshold, getApplicationContext(), DeviceSettingActivity.this);
                 }
                 else{
                     final String temp_threshold = threshold_Input1.getText().toString();
                     final String humid_threshold = threshold_Input2.getText().toString();
+                    if(temp_threshold.equals("") || humid_threshold.equals("")){
+                        Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     final String threshold = temp_threshold + ":" + humid_threshold;
                     Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
                             threshold, getApplicationContext(), DeviceSettingActivity.this);
@@ -99,12 +118,39 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
     @Override
     public void onSuccessResponse(String result) {
         try {
-            JSONObject jsonObject = new JSONObject(result);
-            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-            finish();
+            final JSONObject jsonObject = new JSONObject(result);
+            startLoading();
+            new CountDownTimer(3000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+                public void onFinish() {
+                    stopLoading();
+                    try {
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+                }
+            }.start();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    private void startLoading(){
+        submitBtn.setEnabled(false);
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading(){
+        outAnimation = new AlphaAnimation(1f, 0f);
+        outAnimation.setDuration(200);
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
+        submitBtn.setEnabled(true);
     }
 }
