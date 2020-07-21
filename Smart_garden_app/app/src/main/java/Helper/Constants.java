@@ -44,6 +44,9 @@ public class Constants {
     // Delete plant
     public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";
 
+    // Change plant setting
+    public static final String CHANGE_PLANT_SETTING = ROOT_URL + "/changePlantSetting.php";
+
     // Get device by type
     public static final String GET_DEVICE_BY_TYPE = ROOT_URL + "/getInputDevicesWithType.php";
 

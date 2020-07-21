@@ -364,6 +364,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/PlantDetail_ChangeSettingPlant_Btn" />
+
+                <Button
+                    android:id="@+id/PlantDetail_ChangeSettingPlant_Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/round_green_shadow_btn"
+                    android:text="Change setting"
+                    android:textColor="#708238"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/plantDetail_lastReading_Layout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

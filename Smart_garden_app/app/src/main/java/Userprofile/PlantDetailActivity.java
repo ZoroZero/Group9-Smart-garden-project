@@ -78,6 +78,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         ConstraintLayout readingLayout = findViewById(R.id.PlantDetail_reading);
         progressBarHolder = findViewById(R.id.progressBarHolder);
         Button removePlant_Btn = findViewById(R.id.PlantDetail_RemovePlant_Btn);
+        Button changePlantSetting_Btn = findViewById(R.id.PlantDetail_ChangeSettingPlant_Btn);
         LinearLayout linearReadingLayout = findViewById(R.id.plantDetail_deviceReading);
         ConstraintLayout lastDeviceReadingLayout = findViewById(R.id.plantDetail_lastReading_Layout);
         // Set text
@@ -117,8 +118,21 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get prompts.xml view
+                // Ask user permission
                askForPermission(PlantDetailActivity.this);
+            }
+        });
+
+        changePlantSetting_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent changeSetting = new Intent(getApplicationContext(), ChangePlantSettingActivity.class);
+                changeSetting.putExtra("plant_detail.plant_name", getIntent().getStringExtra("plant_detail.plant_name"));
+                changeSetting.putExtra("plant_detail.buy_date", getIntent().getStringExtra("plant_detail.buy_date"));
+                changeSetting.putExtra("plant_detail.buy_location", getIntent().getStringExtra("plant_detail.buy_location"));
+                changeSetting.putExtra("plant_detail.amount", getIntent().getStringExtra("plant_detail.amount"));
+                changeSetting.putExtra("plant_detail.linked_sensor_id", getIntent().getStringExtra("plant_detail.linked_sensor_id"));
+                startActivity(changeSetting);
             }
         });
     }
