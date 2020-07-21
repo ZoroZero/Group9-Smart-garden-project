@@ -1,5 +1,6 @@
 package com.example.smartgarden;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;

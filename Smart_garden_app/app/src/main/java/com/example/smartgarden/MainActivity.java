@@ -47,17 +47,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import Helper.Constants;
 
 
 public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
+    protected final static String TEMP_HUMIDITY =  "TH";
     protected final static String TEMP = "T";
     protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
+    protected final static String LIGHT = "L";
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -65,14 +64,22 @@ public class MainActivity extends AppCompatActivity {
     protected final static int MAX_LIGHT = 500;
 
     //Constant for mode
-    protected final static String VALUE_MODE = "VALUE";
-    protected final static String DAY_MODE = "DAY";
-    protected final static String MONTH_MODE = "MONTH";
-    protected final static String YEAR_MODE = "YEAR";
+    protected final static String VALUE_MODE = "Value";
+    protected final static String HOURLY_MODE = "Hourly";
+    protected final static String DAILY_MODE = "Daily";
+    protected final static String MONTHLY_MODE = "Monthly";
 
     //Schedule for AI timer
     protected final static int DELAY = 20;
     protected final static int PERIOD = 5000;
+
+    //Unit
+    protected final static String TEMP_UNIT = "\u2103";
+    protected final static String HUMIDITY_UNIT = "%";
+    protected final static String LIGHT_UNIT = "lux";
+
+    //Title size
+    protected final static float TITLE_SIZE = 70f;
 
     //User ID from teammate part
     protected String user_id = "10";
@@ -99,6 +106,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setupAITimer(final String temp_device_id, final String type){
+        Timer mTimer = new Timer();
+        TimerTask mTask = new TimerTask() {
+            @Override
+            public void run() {
+                sendDatatoAI(temp_device_id,type);
+            }
+        };
+        mTimer.schedule(mTask, DELAY, PERIOD);
+
+    }
+
+
 
     private void makeTempDeviceSpinner(final String type)
     {
@@ -116,11 +136,9 @@ public class MainActivity extends AppCompatActivity {
         //create a list of items for the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
         final int num_of_choices = adapter.getCount();
-
         dropdown.setAdapter(adapter);
-
+        adapter.setNotifyOnChange(true);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -137,11 +155,10 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     TextView value_view = findViewById(R.id.mode_temp_view);
-                    value_view.setText("Showing some nearest values: ");
+                    value_view.setText("Showing some nearest measurements (unit : " + TEMP_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
-                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -158,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView value_view = findViewById(R.id.mode_temp_view);
-                                value_view.setText("Showing some nearest values: ");
+                                value_view.setText("Showing some nearest measurements (unit : " + TEMP_UNIT +"):");
                                 break;
                             case R.id.radio_temp2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
@@ -168,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView hourly_view = findViewById(R.id.mode_temp_view);
-                                hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
+                                hourly_view.setText("Measurement by hour (unit : " + TEMP_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
 
                             case R.id.radio_temp3:
@@ -179,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView daily_view = findViewById(R.id.mode_temp_view);
-                                daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
+                                daily_view.setText("Measurement by day (unit : " + TEMP_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_temp4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
@@ -189,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView monthly_view = findViewById(R.id.mode_temp_view);
-                                monthly_view.setText("Measurement by month in year : "  + year);
+                                monthly_view.setText("Measurement by month (unit : " + TEMP_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_temp5:
                             {
@@ -197,11 +214,10 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_temp_view);
-                                        custom_view.setText("Measurement by hour in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
+                                        custom_view.setText("Measurement by hour (unit : " + TEMP_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
                                         try {
                                             getValueInCustomDate(fifth_choosing,TEMP,DdayOfMonth,(Dmonth+1),Dyear);
                                         } catch (ParseException e) {
@@ -219,11 +235,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 String AI_choosing = dropdown.getSelectedItem().toString();
-//                sendDatatoAI(AI_choosing,TEMP);
                 if(num_of_choices == 1)
                     setupAITimer(AI_choosing,TEMP);
                 else
                     sendDatatoAI(AI_choosing,TEMP);
+
             }
 
             @Override
@@ -254,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -272,11 +287,10 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     TextView value_view = findViewById(R.id.mode_humid_view);
-                    value_view.setText("Showing some nearest values: ");
+                    value_view.setText("Showing some nearest measurements (unit : " + HUMIDITY_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
-                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -293,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView value_view = findViewById(R.id.mode_humid_view);
-                                value_view.setText("Showing some nearest values: ");
+                                value_view.setText("Showing some nearest measurements (unit : " + HUMIDITY_UNIT +"):");
                                 break;
                             case R.id.radio_humid2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
@@ -303,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView hourly_view = findViewById(R.id.mode_humid_view);
-                                hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
+                                hourly_view.setText("Measurement by hour (unit : " + HUMIDITY_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_humid3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
@@ -313,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView daily_view = findViewById(R.id.mode_humid_view);
-                                daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
+                                daily_view.setText("Measurement by day (unit : " + HUMIDITY_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_humid4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
@@ -323,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView monthly_view = findViewById(R.id.mode_humid_view);
-                                monthly_view.setText("Measurement by month in year : "  + year);
+                                monthly_view.setText("Measurement by month (unit : " + HUMIDITY_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_humid5:
                             {
@@ -331,11 +345,10 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_humid_view);
-                                        custom_view.setText("Measurement by hour in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
+                                        custom_view.setText("Measurement by hour (unit : " + HUMIDITY_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
                                         try {
                                             getValueInCustomDate(fifth_choosing,HUMIDITY,DdayOfMonth,(Dmonth+1),Dyear);
                                         } catch (ParseException e) {
@@ -352,11 +365,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 String AI_choosing = dropdown.getSelectedItem().toString();
-//                sendDatatoAI(AI_choosing,HUMIDITY);
                 if(num_of_choices == 1)
                     setupAITimer(AI_choosing,HUMIDITY);
                 else
                     sendDatatoAI(AI_choosing,HUMIDITY);
+
             }
 
             @Override
@@ -386,14 +399,13 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 final RadioGroup radioGroup = findViewById(R.id.radio_light);
-                RadioButton rad = findViewById(R.id.radio_light1);
+                RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
                     try {
@@ -402,11 +414,10 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     TextView value_view = findViewById(R.id.mode_light_view);
-                    value_view.setText("Showing some nearest values: ");
+                    value_view.setText("Showing some nearest measurements (unit : " + LIGHT_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
-                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -423,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView value_view = findViewById(R.id.mode_light_view);
-                                value_view.setText("Showing some nearest values: ");
+                                value_view.setText("Showing some nearest measurements (unit : " + LIGHT_UNIT +"):");
                                 break;
                             case R.id.radio_light2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
@@ -433,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView hourly_view = findViewById(R.id.mode_light_view);
-                                hourly_view.setText("Measurement by hour in day : "+ day + "-"+ (month + 1) + "-" + year);
+                                hourly_view.setText("Measurement by hour (unit : " + LIGHT_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_light3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
@@ -443,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView daily_view = findViewById(R.id.mode_light_view);
-                                daily_view.setText("Measurement by day in month : " + (month + 1) + "-" + year);
+                                daily_view.setText("Measurement by day (unit : " + LIGHT_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_light4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
@@ -453,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 TextView monthly_view = findViewById(R.id.mode_light_view);
-                                monthly_view.setText("Measurement by month in year : "  + year);
+                                monthly_view.setText("Measurement by month (unit : " + LIGHT_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_light5:
                             {
@@ -464,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_light_view);
-                                        custom_view.setText("Measurement by hour in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
+                                        custom_view.setText("Measurement by hour (unit : " + LIGHT_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
                                         try {
                                             getValueInCustomDate(fifth_choosing,LIGHT,DdayOfMonth,(Dmonth+1),Dyear);
                                         } catch (ParseException e) {
@@ -480,11 +491,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-                String AI_choosing = dropdown.getSelectedItem().toString();
-//                sendDatatoAI(AI_choosing,LIGHT);
-                if(num_of_choices == 1)
+               String AI_choosing = dropdown.getSelectedItem().toString();
+               if(num_of_choices == 1)
                     setupAITimer(AI_choosing,LIGHT);
-                else
+               else
                     sendDatatoAI(AI_choosing,LIGHT);
 
             }
@@ -530,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawDataOnGraph(results,hours,types,DAY_MODE);
+        drawDataOnGraph(results,hours,types,HOURLY_MODE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -551,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawDataOnGraph(results,hours,types,DAY_MODE);
+        drawDataOnGraph(results,hours,types,HOURLY_MODE);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getValueThisMonth(String deviceID, String types) throws ParseException {
@@ -570,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawDataOnGraph(results,days,types,MONTH_MODE);
+        drawDataOnGraph(results,days,types,DAILY_MODE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -590,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        drawDataOnGraph(results,months,types,YEAR_MODE);
+        drawDataOnGraph(results,months,types,MONTHLY_MODE);
     }
 
 
@@ -600,9 +610,9 @@ public class MainActivity extends AppCompatActivity {
     private void drawDataOnGraph(Vector<Double> results, Vector<String> date, String graphtype, String mode) throws ParseException {
 
         GraphView gv;
-        if(graphtype.equals(TEMP))
+        if(graphtype == TEMP)
             gv = graphTemperature;
-        else if(graphtype.equals(HUMIDITY))
+        else if(graphtype == HUMIDITY)
             gv = graphHumidity;
         else
             gv = graphLightLevel;
@@ -614,10 +624,9 @@ public class MainActivity extends AppCompatActivity {
             // add new DataPoint object to the array for each of your list entries
             if(mode.equals(VALUE_MODE)) {
                 String temp_date = date.get(i);
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date firstDate = first_date_format.parse(temp_date);
                 Calendar first_cal = Calendar.getInstance();
-                assert firstDate != null;
                 first_cal.setTime(firstDate);
                 long second = first_cal.getTimeInMillis();
                 mappoint.put(i, second);
@@ -632,10 +641,10 @@ public class MainActivity extends AppCompatActivity {
         LineGraphSeries<DataPoint> seriesTemp = new LineGraphSeries<DataPoint>(dataPoints);
 
 
-        configGraph(gv,results.size(),seriesTemp);
+        configGraph(gv,results.size(),seriesTemp,mode);
         showDataOnGraph(seriesTemp, gv);
         if (mode.equals(VALUE_MODE)) {
-            @SuppressLint("SimpleDateFormat") final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             gv.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -665,21 +674,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void configGraph(GraphView gv, int num, LineGraphSeries<DataPoint> seriesTemp){
+    private void configGraph(GraphView gv, int num, LineGraphSeries<DataPoint> seriesTemp, String mode){
             int max_y ;
             if(gv == graphTemperature)
             {
                 max_y = MAX_TEMP;
                 seriesTemp.setColor(Color.rgb(226,91,34));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.GREEN);
             }
             else if(gv == graphHumidity)
             {
                 max_y = MAX_HUMIDITY;
                 seriesTemp.setColor(Color.rgb(56,149,164));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.BLUE);
+
             }
             else {
                 max_y = MAX_LIGHT;
                 seriesTemp.setColor(Color.rgb(123,135,13));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.YELLOW);
             }
             gv.getViewport().setMinY(0);
             gv.getViewport().setMaxY(max_y);
@@ -690,18 +703,35 @@ public class MainActivity extends AppCompatActivity {
             gv.getViewport().setYAxisBoundsManual(true);
             gv.getViewport().setXAxisBoundsManual(true);
             gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
-            if (num <= 3)
-            {
-                gv.getGridLabelRenderer().setTextSize(30f);
+            if(mode.equals(VALUE_MODE)) {
+                if (num <= 3) {
+                    gv.getGridLabelRenderer().setTextSize(45f);
+                } else if (num == 4) {
+                    gv.getGridLabelRenderer().setTextSize(30f);
+                } else {
+                    gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+                }
+                gv.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
             }
-            else if(num == 4)
+            else if(mode.equals(HOURLY_MODE))
             {
-                gv.getGridLabelRenderer().setTextSize(24f);
+                gv.getGridLabelRenderer().setHorizontalAxisTitle("Hour");
+                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
             }
-            else
+            else if(mode.equals(DAILY_MODE))
             {
-                gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+            gv.getGridLabelRenderer().setHorizontalAxisTitle("Day");
+            gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
             }
+            else if(mode.equals(MONTHLY_MODE))            {
+            gv.getGridLabelRenderer().setHorizontalAxisTitle("Month");
+            gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+            }
+
+
+
+
 
     }
 
@@ -718,6 +748,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendDatatoAI(String temp_device_id,String type){
+
+
         GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id,type);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
@@ -748,26 +780,16 @@ public class MainActivity extends AppCompatActivity {
         recommendThreshold(AI_result,type);
 
     }
-    @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
-            textTemperature.setText("Recommended temperature threshold " + AI_result);
+            textTemperature.setText("Recommended temperature threshold " + String.valueOf(AI_result));
         else if(type.equals(HUMIDITY))
-            textHumidity.setText("Recommended humidity threshold " + AI_result);
+            textHumidity.setText("Recommended humidity threshold " + String.valueOf(AI_result));
         else
-            textLightLevel.setText("Recommended light density threshold " + AI_result);
-    }
+            textLightLevel.setText("Recommended light density threshold " + String.valueOf(AI_result));
 
-    private void setupAITimer(final String temp_device_id, final String type){
-        Timer mTimer = new Timer();
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-                sendDatatoAI(temp_device_id,type);
-            }
-        };
-        mTimer.schedule(mTask, DELAY, PERIOD);
 
     }
+
 
 }
