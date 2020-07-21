@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,6 +28,8 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import Database.Garden_Database_Control;
 import Helper.DeviceInformation;
@@ -45,6 +50,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
     AlphaAnimation outAnimation;
     FrameLayout progressBarHolder;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,8 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         ConstraintLayout readingLayout = findViewById(R.id.PlantDetail_reading);
         progressBarHolder = findViewById(R.id.progressBarHolder);
         Button removePlant_Btn = findViewById(R.id.PlantDetail_RemovePlant_Btn);
-
+        LinearLayout linearReadingLayout = findViewById(R.id.plantDetail_deviceReading);
+        ConstraintLayout lastDeviceReadingLayout = findViewById(R.id.plantDetail_lastReading_Layout);
         // Set text
         plant_nameTV.setText(getIntent().getStringExtra("plant_detail.plant_name"));
         buy_dateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
@@ -80,29 +87,32 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         amountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
 
         // Get linked device
-        DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
-                UserLoginManagement.getInstance(this).getSensor());
-
-        assert sensorInfo != null;
-        if(sensorInfo.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)){
-            readingLayout.setVisibility(View.GONE);
-            device_readingType1TV.setText("Light intensity");
-            readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
-            readingBar1.setEndValue(Constants.MAX_LIGHT);
+        if(Objects.equals(getIntent().getStringExtra("plant_detail.linked_sensor_id"), "None")){
+            linearReadingLayout.setVisibility(View.GONE);
+            lastDeviceReadingLayout.setVisibility(View.GONE);
         }
-        else if(sensorInfo.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
-            device_readingTypeTV.setText("Humidity");
-            device_readingType1TV.setText("Temperature");
-            readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
-            readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
-            readingBar.setEndValue(Constants.MAX_HUMID);
-            readingBar1.setEndValue(Constants.MAX_TEMP);
+        else {
+            DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
+                    UserLoginManagement.getInstance(this).getSensor());
+            assert sensorInfo != null;
+            if (sensorInfo.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)) {
+                readingLayout.setVisibility(View.GONE);
+                device_readingType1TV.setText("Light intensity");
+                readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
+                readingBar1.setEndValue(Constants.MAX_LIGHT);
+            } else if (sensorInfo.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
+                device_readingTypeTV.setText("Humidity");
+                device_readingType1TV.setText("Temperature");
+                readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
+                readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
+                readingBar.setEndValue(Constants.MAX_HUMID);
+                readingBar1.setEndValue(Constants.MAX_TEMP);
+            }
+            
+            // Get reading
+            Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
+                    this, this);
         }
-
-
-        // Get reading
-        Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
-                this, this);
 
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
             @Override

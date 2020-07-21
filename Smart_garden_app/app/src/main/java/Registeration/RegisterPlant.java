@@ -50,10 +50,11 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
 
         // Set up spinner
         Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
-        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size()];
-        for(int i = 0; i < sensor_id.length; i++){
+        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size() + 1];
+        for(int i = 0; i < sensor_id.length - 1; i++){
             sensor_id[i] = sensor.get(i).getDevice_id();
         }
+        sensor_id[sensor_id.length - 1] = "None";
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
         linked_sensor_idSpinner.setAdapter(arrayAdapter);
 
