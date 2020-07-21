@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 
 import android.os.Build;
@@ -43,20 +44,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import Background_service.RecordMeasurementService;
+import Database.Garden_Database_Control;
+import Helper.Constants;
+import Helper.Helper;
+import Helper.VolleyCallBack;
+import Login_RegisterUser.UserLoginManagement;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VolleyCallBack {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY =  "TH";
+    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
     protected final static String TEMP = "T";
     protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = "L";
+    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -84,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
     //User ID from teammate part
     protected String user_id = "10";
 
+    //Overview text view
+    TextView averageTemp_TV;
+    TextView averageHumid_TV;
+    TextView averageLight_TV;
+    TextView number_devices_TV;
 
     @SuppressLint("WrongThread")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -104,6 +119,15 @@ public class MainActivity extends AppCompatActivity {
         makeHumidDeviceSpinner(TEMP_HUMIDITY);
         makeLightDeviceSpinner(LIGHT);
 
+
+        averageTemp_TV = findViewById(R.id.Report_DeviceLastReading_TV);
+        averageHumid_TV = findViewById(R.id.Report_DeviceLastReading1_TV);
+        averageLight_TV = findViewById(R.id.Report_DeviceLastReading2_TV);
+        number_devices_TV = findViewById(R.id.Report_DeviceLastReading3_TV);
+
+        // Get device info
+        Garden_Database_Control.FetchDevicesInfo(this, this);
+
     }
 
     private void setupAITimer(final String temp_device_id, final String type){
@@ -117,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
         mTimer.schedule(mTask, DELAY, PERIOD);
 
     }
-
-
 
     private void makeTempDeviceSpinner(final String type)
     {
@@ -139,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -159,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -250,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void makeHumidDeviceSpinner(final String type)
     {
         GetDeviceByType getDeviceByType = new GetDeviceByType(user_id,type);
@@ -270,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -291,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -345,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_humid_view);
@@ -399,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -418,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
+                    @SuppressLint("SetTextI18n")
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         Calendar c;
@@ -472,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
                                 DatePickerDialog dpd;
 
                                 dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                                    @SuppressLint("SetTextI18n")
                                     @Override
                                     public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                                         TextView custom_view = findViewById(R.id.mode_light_view);
@@ -603,16 +632,13 @@ public class MainActivity extends AppCompatActivity {
         drawDataOnGraph(results,months,types,MONTHLY_MODE);
     }
 
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void drawDataOnGraph(Vector<Double> results, Vector<String> date, String graphtype, String mode) throws ParseException {
 
         GraphView gv;
-        if(graphtype == TEMP)
+        if(graphtype.equals(TEMP))
             gv = graphTemperature;
-        else if(graphtype == HUMIDITY)
+        else if(graphtype.equals(HUMIDITY))
             gv = graphHumidity;
         else
             gv = graphLightLevel;
@@ -624,9 +650,10 @@ public class MainActivity extends AppCompatActivity {
             // add new DataPoint object to the array for each of your list entries
             if(mode.equals(VALUE_MODE)) {
                 String temp_date = date.get(i);
-                SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date firstDate = first_date_format.parse(temp_date);
                 Calendar first_cal = Calendar.getInstance();
+                assert firstDate != null;
                 first_cal.setTime(firstDate);
                 long second = first_cal.getTimeInMillis();
                 mappoint.put(i, second);
@@ -644,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
         configGraph(gv,results.size(),seriesTemp,mode);
         showDataOnGraph(seriesTemp, gv);
         if (mode.equals(VALUE_MODE)) {
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             gv.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
@@ -680,19 +707,21 @@ public class MainActivity extends AppCompatActivity {
             {
                 max_y = MAX_TEMP;
                 seriesTemp.setColor(Color.rgb(226,91,34));
-                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.GREEN);
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.rgb(174,100,42));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(14);
             }
             else if(gv == graphHumidity)
             {
                 max_y = MAX_HUMIDITY;
                 seriesTemp.setColor(Color.rgb(56,149,164));
-                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.BLUE);
-
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.rgb(51,153,204));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(14);
             }
             else {
                 max_y = MAX_LIGHT;
                 seriesTemp.setColor(Color.rgb(123,135,13));
-                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.YELLOW);
+                gv.getGridLabelRenderer().setHorizontalAxisTitleColor(Color.rgb(208,145,69));
+                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(14);
             }
             gv.getViewport().setMinY(0);
             gv.getViewport().setMaxY(max_y);
@@ -703,39 +732,32 @@ public class MainActivity extends AppCompatActivity {
             gv.getViewport().setYAxisBoundsManual(true);
             gv.getViewport().setXAxisBoundsManual(true);
             gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
-            if(mode.equals(VALUE_MODE)) {
-                if (num <= 3) {
-                    gv.getGridLabelRenderer().setTextSize(45f);
-                } else if (num == 4) {
-                    gv.getGridLabelRenderer().setTextSize(30f);
-                } else {
-                    gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-                }
-                gv.getGridLabelRenderer().setHorizontalAxisTitle("Date");
-                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+            switch (mode) {
+                case VALUE_MODE:
+                    if (num <= 3) {
+                        gv.getGridLabelRenderer().setTextSize(45f);
+                    } else if (num == 4) {
+                        gv.getGridLabelRenderer().setTextSize(30f);
+                    } else {
+                        gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+                    }
+                    gv.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+                    gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+                    break;
+                case HOURLY_MODE:
+                    gv.getGridLabelRenderer().setHorizontalAxisTitle("Hour");
+                    gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+                    break;
+                case DAILY_MODE:
+                    gv.getGridLabelRenderer().setHorizontalAxisTitle("Day");
+                    gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+                    break;
+                case MONTHLY_MODE:
+                    gv.getGridLabelRenderer().setHorizontalAxisTitle("Month");
+                    gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
+                    break;
             }
-            else if(mode.equals(HOURLY_MODE))
-            {
-                gv.getGridLabelRenderer().setHorizontalAxisTitle("Hour");
-                gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
-            }
-            else if(mode.equals(DAILY_MODE))
-            {
-            gv.getGridLabelRenderer().setHorizontalAxisTitle("Day");
-            gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
-            }
-            else if(mode.equals(MONTHLY_MODE))            {
-            gv.getGridLabelRenderer().setHorizontalAxisTitle("Month");
-            gv.getGridLabelRenderer().setHorizontalAxisTitleTextSize(TITLE_SIZE);
-            }
-
-
-
-
-
     }
-
-
 
     private void showDataOnGraph(LineGraphSeries<DataPoint> series, GraphView graph){
         if(graph.getSeries().size() > 0){
@@ -748,8 +770,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendDatatoAI(String temp_device_id,String type){
-
-
         GetDataFromURL getDataFromURL = new GetDataFromURL(temp_device_id,type);
         Thread thread = new Thread(getDataFromURL);
         thread.start();
@@ -765,8 +785,6 @@ public class MainActivity extends AppCompatActivity {
         Vector<String> dates = getDataFromURL.date;
 
 
-
-
         SendDataToAI sendDataToAI = new SendDataToAI(results,dates);
         Thread second_thread = new Thread(sendDataToAI);
         second_thread.start();
@@ -780,16 +798,104 @@ public class MainActivity extends AppCompatActivity {
         recommendThreshold(AI_result,type);
 
     }
+
+    @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
-            textTemperature.setText("Recommended temperature threshold " + String.valueOf(AI_result));
+            textTemperature.setText("Recommended temperature threshold " + AI_result);
         else if(type.equals(HUMIDITY))
-            textHumidity.setText("Recommended humidity threshold " + String.valueOf(AI_result));
+            textHumidity.setText("Recommended humidity threshold " + AI_result);
         else
-            textLightLevel.setText("Recommended light density threshold " + String.valueOf(AI_result));
-
-
+            textLightLevel.setText("Recommended light density threshold " + AI_result);
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onSuccessResponse(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (!jsonObject.getBoolean("error")) {
+                JSONArray jsonArray = jsonObject.getJSONArray("list");
+                final String[] get_device_id = new String[jsonArray.length()];
+                final String[] get_device_name = new String[jsonArray.length()];
+                final String[] get_linked_device_id = new String[jsonArray.length()];
+                final String[] get_linked_device_name = new String[jsonArray.length()];
+                final String[] get_device_type = new String[jsonArray.length()];
+                final String[] get_threshold = new String[jsonArray.length()];
+                final String[] get_status = new String[jsonArray.length()];
+                final String[] get_status_date = new String[jsonArray.length()];
+                float sum_temp = 0;
+                float sum_humid = 0;
+                float sum_light = 0;
+                int count_temp_humid = 0;
+                int count_light = 0;
+                int count_output = 0;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    get_device_id[i] = obj.getString("device_id");
+                    get_device_name[i] = obj.getString("device_name");
+                    get_linked_device_id[i] = obj.getString("linked_device_id");
+                    get_linked_device_name[i] = obj.getString("linked_device_name");
+                    get_threshold[i] = obj.getString("threshold");
+                    get_status[i] = obj.getString("status");
+                    get_status_date[i] = obj.getString("date");
+                    if(obj.getString("status").equals("null")){
+                        get_status[i] = "No record";
+                        get_status_date[i] = "No record";
+                    }
+                    // Get device type and summarize
+                    if(Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID)) {
+                        get_device_type[i] = Constants.OUTPUT_TYPE;
+                        if(!get_status[i].equals("Off")){
+                            count_output += 1;
+                        }
+                    }
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID)) {
+                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
+                        if(!get_status[i].equals("No record")){
+                            count_light += 1;
+                            sum_light += Integer.parseInt(get_status[i]);
+                        }
+                    }
+                    else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID)) {
+                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
+                        if(!get_status[i].equals("No record")){
+                            count_temp_humid += 1;
+//                            Log.i("Status", get_status[i]);
+                            sum_temp += Integer.parseInt(get_status[i].split(":")[0]);
+                            sum_humid += Integer.parseInt(get_status[i].split(":")[1]);
+                        }
+                    }
+                }
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
+                // Summarize reading for user
+                if (count_temp_humid == 0) {
+                    averageTemp_TV.setText("No reading");
+                    averageHumid_TV.setText("No reading");
+                }
+                else {
+                    averageTemp_TV.setText(sum_temp / count_temp_humid + "\u2103");
+                    averageHumid_TV.setText(sum_humid / count_temp_humid + "%");
+                }
 
+                if (count_light == 0) {
+                    averageLight_TV.setText("No reading");
+                }
+                else {
+                    averageLight_TV.setText(sum_light / count_light + " lux");
+                }
+                number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
+
+            }
+            else{
+                averageTemp_TV.setText("No reading");
+                averageHumid_TV.setText("No reading");
+                averageLight_TV.setText("No reading");
+                number_devices_TV.setText(0 +"");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
