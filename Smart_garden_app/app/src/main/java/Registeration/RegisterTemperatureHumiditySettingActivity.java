@@ -28,6 +28,8 @@ import DeviceController.Device_Control;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
+import Login_RegisterUser.UserLoginManagement;
+import Helper.DeviceInformation;
 
 public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivity implements VolleyCallBack {
 
@@ -94,6 +96,11 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
                 //Check output id format
                 if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
                     Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //If device is already registered
+                if(checkUserHasDevice(linked_device_id)){
+                    Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -163,5 +170,19 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         outAnimation.setDuration(200);
         progressBarHolder.setAnimation(outAnimation);
         progressBarHolder.setVisibility(View.GONE);
+    }
+
+    // Check if device has existed on user
+    public boolean checkUserHasDevice(String device_id){
+        DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
+        if(user_device_information == null){
+            return false;
+        }
+        for (DeviceInformation deviceInformation : user_device_information) {
+            if (device_id.equals(deviceInformation.getDevice_id())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

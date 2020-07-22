@@ -67,7 +67,7 @@
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Registeration.RegisterDeviceSettingActivity"
+            android:name="Registeration.RegisterLightSettingActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
         <activity

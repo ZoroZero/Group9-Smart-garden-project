@@ -66,7 +66,7 @@ public class ChangePlantSettingActivity extends AppCompatActivity implements Vol
             sensor_id[i] = sensor.get(i).getDevice_id();
         }
         sensor_id[sensor_id.length - 1] = "None";
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
         linked_sensor_idSpinner.setAdapter(arrayAdapter);
 
         linked_sensor_idSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

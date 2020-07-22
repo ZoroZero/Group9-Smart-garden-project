@@ -32,10 +32,9 @@ import Helper.DeviceInformation;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
-import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 
-public class RegisterDeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
+public class RegisterLightSettingActivity extends AppCompatActivity implements VolleyCallBack {
 
     // MQTT client
     MqttAndroidClient client = null;
@@ -101,7 +100,7 @@ public class RegisterDeviceSettingActivity extends AppCompatActivity implements 
                 }
 
                 Garden_Database_Control.registerDevice(device_id, device_name,
-                        linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterDeviceSettingActivity.this);
+                        linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterLightSettingActivity.this);
                 //Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
             }
         });

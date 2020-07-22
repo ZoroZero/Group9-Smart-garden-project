@@ -10,7 +10,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -80,7 +79,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }
-                check_sensor_exist(device_id, device_name);
+                searchDevice(device_id, device_name);
                 //searchDevice();
             }
         });
@@ -111,7 +110,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
 
                 Intent deviceSetting = null;
                 if(device_type.equals(Constants.LIGHT_SENSOR_TYPE)) {
-                    deviceSetting = new Intent(getApplicationContext(), RegisterDeviceSettingActivity.class);
+                    deviceSetting = new Intent(getApplicationContext(), RegisterLightSettingActivity.class);
                 }
                 else if(device_type.equals(Constants.TEMPHUMI_SENSOR_TYPE)){
                     deviceSetting = new Intent(getApplicationContext(), RegisterTemperatureHumiditySettingActivity.class);
@@ -171,7 +170,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
     }
 
 
-    private void check_sensor_exist(String device_id, String device_name){
+    private void searchDevice(String device_id, String device_name){
         topic = device_name + "/" + device_id;
         IOT_Server_Access.Subscribe(topic, getApplicationContext());
         startLoading();
