@@ -30,9 +30,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
     private TextView device_lastReadingTV;
     private TextView device_lastReadingTimeTV;
-    private TextView device_readingTypeTV;
     private TextView device_lastReading1TV;
-    private TextView device_readingType1TV;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
     private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
 
@@ -45,13 +43,22 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
 
         // Component
         TextView device_TopicTV = findViewById(R.id.DeviceDetail_DeviceTopic_TV);
-        TextView device_ThresholdTV = findViewById(R.id.deviceDetail_DeviceThreshold_TV);
+        TextView ThresholdLabel1 = findViewById(R.id.deviceThreshold1);
+        TextView ThresholdLabel2 = findViewById(R.id.deviceThreshold2);
+        TextView device_Threshold1TV = findViewById(R.id.deviceDetail_DeviceThreshold1_TV);
+        TextView device_Threshold2TV = findViewById(R.id.deviceDetail_DeviceThreshold2_TV);
+
         TextView device_typeTV = findViewById(R.id.deviceDetail_DeviceType_TV);
+        TextView linked_device_idTV = findViewById(R.id.DeviceDetail_LinkedOutputID_TV);
+        TextView linked_device_nameTV = findViewById(R.id.DeviceDetail_LinkedOutputName_TV);
+        TextView device_IDTV = findViewById(R.id.DeviceDetail_DeviceID_TV);
+        TextView device_NameTV = findViewById(R.id.DeviceDetail_DeviceName_TV);
         device_lastReadingTV = findViewById(R.id.deviceDetail_DeviceLastReading_TV);
-        device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
+
+        TextView device_readingTypeTV = findViewById(R.id.deviceDetail_readingType_TV);
         device_lastReadingTimeTV = findViewById(R.id.deviceDetail_DeviceLastReadingTime_TV);
         device_lastReading1TV = findViewById(R.id.deviceDetail_DeviceLastReading1_TV);
-        device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
+        TextView device_readingType1TV = findViewById(R.id.deviceDetail_readingType1_TV);
         readingBar = findViewById(R.id.deviceDetail_DeviceLastReading);
         readingBar1 = findViewById(R.id.deviceDetail_DeviceLastReading1);
         ConstraintLayout reading1 = findViewById(R.id.reading);
@@ -61,18 +68,31 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         // Set text
         device_TopicTV.setText(getIntent().getStringExtra("device_detail.device_name") +
                 "/" + getIntent().getStringExtra("device_detail.device_id"));
-        device_ThresholdTV.setText(getIntent().getStringExtra("device_detail.device_threshold"));
+        device_IDTV.setText(getIntent().getStringExtra("device_detail.device_id"));
+        device_NameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
+        linked_device_idTV.setText(getIntent().getStringExtra("device_detail.linked_device_id"));
+        linked_device_nameTV.setText(getIntent().getStringExtra("device_detail.linked_device_name"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
+
         if(Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_type")).equals(Constants.LIGHT_SENSOR_TYPE)){
             reading1.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingBar1.setEndValue(Constants.MAX_LIGHT);
+            ThresholdLabel1.setText("Intensity threshold");
+            device_Threshold1TV.setText(getIntent().getStringExtra("device_detail.device_threshold") + " lux");
+            ThresholdLabel2.setVisibility(View.GONE);
+            device_Threshold2TV.setVisibility(View.GONE);
         }
         else{
             device_readingTypeTV.setText("Humidity");
             device_readingType1TV.setText("Temperature");
             readingBar.setEndValue(Constants.MAX_HUMID);
             readingBar1.setEndValue(Constants.MAX_TEMP);
+            ThresholdLabel1.setText("Temperature threshold");
+            ThresholdLabel2.setText("Temperature threshold");
+            String[] thresholds = Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_threshold")).split(":");
+            device_Threshold1TV.setText(thresholds[0] + "\u2103");
+            device_Threshold2TV.setText(thresholds[1] + "%");
         }
 
         // Set return button
@@ -145,6 +165,4 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             e.printStackTrace();
         }
     }
-
-
 }

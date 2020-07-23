@@ -104,6 +104,10 @@ public class DeviceListViewActivity extends AppCompatActivity implements VolleyC
                         deviceInformationVector.elementAt(position).getDevice_type());
                 showDeviceListDetail.putExtra("device_detail.device_threshold",
                         deviceInformationVector.elementAt(position).getThreshold());
+                showDeviceListDetail.putExtra("device_detail.linked_device_id",
+                        deviceInformationVector.elementAt(position).getLinked_device_id());
+                showDeviceListDetail.putExtra("device_detail.linked_device_name",
+                        deviceInformationVector.elementAt(position).getLinked_device_name());
                 startActivity(showDeviceListDetail);
             }
         });

@@ -53,8 +53,11 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_output_detail);
 
         //Component
-        TextView device_idTV = findViewById(R.id.OutputDeviceDetail_DeviceID_TV);
-        TextView device_nameTV = findViewById(R.id.outputDeviceDetail_DeviceName_TV);
+        TextView device_IDTV = findViewById(R.id.OutputDeviceDetail_DeviceID_TV);
+        TextView device_NameTV = findViewById(R.id.OutputDeviceDetail_DeviceName_TV);
+        TextView device_TopicTV = findViewById(R.id.OutputDeviceDetail_DeviceTopic_TV);
+        TextView linked_device_idTV = findViewById(R.id.outputDeviceDetail_LinkedDeviceId_TV);
+        TextView linked_device_nameTV = findViewById(R.id.OutputDeviceDetail_LinkedSensorName_TV);
         TextView device_typeTV = findViewById(R.id.outputDeviceDetail_DeviceType_TV);
         device_statusTV = findViewById(R.id.outputDeviceDetail_DeviceStatus_TV);
         device_lastReadingTV = findViewById(R.id.OutputDetail_DeviceLastReading_TV);
@@ -77,8 +80,13 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         lightPowerTV = findViewById(R.id.outputDeviceDetail_LightPower_TV);
 
         //Set text
-        device_idTV.setText(getIntent().getStringExtra("device_detail.device_id"));
-        device_nameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
+        device_IDTV.setText(getIntent().getStringExtra("device_detail.device_id"));
+        device_NameTV.setText(getIntent().getStringExtra("device_detail.device_name"));
+        device_TopicTV.setText(getIntent().getStringExtra("device_detail.device_name") + "/" +
+                getIntent().getStringExtra("device_detail.device_id"));
+
+        linked_device_idTV.setText(getIntent().getStringExtra("device_detail.linked_device_id"));
+        linked_device_nameTV.setText(getIntent().getStringExtra("device_detail.linked_device_name"));
         device_typeTV.setText(getIntent().getStringExtra("device_detail.device_type"));
         getDeviceInfo();
 
