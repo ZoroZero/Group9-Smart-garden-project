@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context="Userprofile.OutputDetailActivity">
+    tools:context="GardenManagement.Device.OutputDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -484,7 +484,7 @@
                 <View
                     android:id="@+id/divider19"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="1.5dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="10dp"
@@ -496,7 +496,7 @@
                 <View
                     android:id="@+id/divider21"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="1.5dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="10dp"

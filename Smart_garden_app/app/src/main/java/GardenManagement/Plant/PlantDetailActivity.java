@@ -1,4 +1,4 @@
-package Userprofile;
+package GardenManagement.Plant;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -59,7 +59,6 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
 
 //        IOT_Server_Access.connect(this);
         // Components
-
         TextView plant_nameTV = findViewById(R.id.Detail_Plantname_TV);
         TextView buy_dateTV = findViewById(R.id.Detail_BuyDate_TV);
         TextView buy_locationTV = findViewById(R.id.Detail_BuyLocation_TV);

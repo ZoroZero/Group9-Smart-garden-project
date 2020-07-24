@@ -1,4 +1,4 @@
-package Userprofile;
+package GardenManagement.Device;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

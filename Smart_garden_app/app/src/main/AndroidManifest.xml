@@ -21,32 +21,32 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="Userprofile.ChangePlantSettingActivity"></activity>
-        <activity android:name="Userprofile.DeviceListViewActivity" />
+        <activity android:name="GardenManagement.Plant.ChangePlantSettingActivity"></activity>
+        <activity android:name="GardenManagement.Device.DeviceListViewActivity" />
         <activity android:name="DeviceController.DeviceSettingActivity" /> <!-- Activity -->
         <activity
             android:name="Registeration.RegisterTemperatureHumiditySettingActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.OutputDetailActivity"
+            android:name="GardenManagement.Device.OutputDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.HomeActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.DeviceDetailActivity"
+            android:name="GardenManagement.Device.DeviceDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.PlantDetailActivity"
+            android:name="GardenManagement.Plant.PlantDetailActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.PlantListView"
+            android:name="GardenManagement.Plant.PlantListView"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="Userprofile.DeviceListOverViewActivity"
+            android:name="GardenManagement.Device.DeviceListOverViewActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.RegisterUserActivity"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context="Userprofile.PlantDetailActivity">
+    tools:context="GardenManagement.Plant.PlantDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                         android:id="@+id/PLantDetail_PlantnameLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="16dp"
                         android:text="Plant name: "
                         android:textColor="@color/colorPrimary"
@@ -126,7 +126,7 @@
                         android:id="@+id/PLantDetail_BuyDateLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Planted date:"
                         android:textColor="@color/colorPrimary"
@@ -151,7 +151,7 @@
                         android:id="@+id/PLantDetail_BuyLocationLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Buy location: "
                         android:textColor="@color/colorPrimary"
@@ -176,7 +176,7 @@
                         android:id="@+id/PLantDetail_AmountLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Amount: "
                         android:textColor="@color/colorPrimary"
@@ -203,11 +203,12 @@
                     android:id="@+id/plantDetail_deviceReading"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30">
+                    app:layout_constraintTop_toBottomOf="@+id/divider23">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/PlantDetail_reading"
@@ -251,14 +252,13 @@
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading" />
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading" />
 
                         <ImageView
                             android:id="@+id/PlantDetail_readingTypeIcon_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toTopOf="@+id/PlantDetail_DeviceLastReading_TV"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading"
@@ -322,8 +322,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
                             app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading1" />
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1" />
 
                         <ImageView
                             android:id="@+id/PlantDetail_readingTypeIcon1_TV"
@@ -370,11 +369,35 @@
                     android:id="@+id/PlantDetail_ChangeSettingPlant_Btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/round_green_shadow_btn"
                     android:text="Change setting"
                     android:textColor="#708238"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider24" />
+
+                <View
+                    android:id="@+id/divider23"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30" />
+
+                <View
+                    android:id="@+id/divider24"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/plantDetail_lastReading_Layout" />

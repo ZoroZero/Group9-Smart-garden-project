@@ -29,8 +29,8 @@ import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
-import Userprofile.DeviceListOverViewActivity;
-import Userprofile.PlantListView;
+import GardenManagement.Device.DeviceListOverViewActivity;
+import GardenManagement.Plant.PlantListView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
 

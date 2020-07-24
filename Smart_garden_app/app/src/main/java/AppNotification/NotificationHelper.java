@@ -11,7 +11,7 @@ import Helper.Constants;
 import com.example.smartgarden.R;
 
 import Helper.DeviceInformation;
-import Userprofile.DeviceDetailActivity;
+import GardenManagement.Device.DeviceDetailActivity;
 
 public class NotificationHelper {
 
