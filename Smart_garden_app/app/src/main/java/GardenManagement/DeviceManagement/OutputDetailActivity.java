@@ -1,4 +1,4 @@
-package GardenManagement.Device;
+package GardenManagement.DeviceManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import GardenManagement.Device.DeviceListOverViewActivity;
 import Helper.Constants;
 import com.example.smartgarden.R;
 

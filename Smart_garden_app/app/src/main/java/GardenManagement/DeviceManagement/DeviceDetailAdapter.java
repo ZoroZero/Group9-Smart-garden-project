@@ -1,4 +1,4 @@
-package GardenManagement.Device;
+package GardenManagement.DeviceManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

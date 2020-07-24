@@ -21,32 +21,32 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="GardenManagement.Plant.ChangePlantSettingActivity"></activity>
-        <activity android:name="GardenManagement.Device.DeviceListViewActivity" />
+        <activity android:name="GardenManagement.PlantManagement.ChangePlantSettingActivity"></activity>
+        <activity android:name="GardenManagement.DeviceManagement.DeviceListViewActivity" />
         <activity android:name="DeviceController.DeviceSettingActivity" /> <!-- Activity -->
         <activity
             android:name="Registeration.RegisterTemperatureHumiditySettingActivity"
             android:label="@string/register_device"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="GardenManagement.Device.OutputDetailActivity"
+            android:name="GardenManagement.DeviceManagement.OutputDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.HomeActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="GardenManagement.Device.DeviceDetailActivity"
+            android:name="GardenManagement.DeviceManagement.DeviceDetailActivity"
             android:label="@string/device_detail"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="GardenManagement.Plant.PlantDetailActivity"
+            android:name="GardenManagement.PlantManagement.PlantDetailActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="GardenManagement.Plant.PlantListView"
+            android:name="GardenManagement.PlantManagement.PlantListView"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name="GardenManagement.Device.DeviceListOverViewActivity"
+            android:name="GardenManagement.DeviceManagement.DeviceListOverViewActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name="Login_RegisterUser.RegisterUserActivity"

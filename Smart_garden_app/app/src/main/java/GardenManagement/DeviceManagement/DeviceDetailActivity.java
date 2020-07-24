@@ -1,4 +1,4 @@
-package GardenManagement.Device;
+package GardenManagement.DeviceManagement;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

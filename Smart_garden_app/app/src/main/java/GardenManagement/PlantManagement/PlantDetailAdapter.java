@@ -1,4 +1,4 @@
-package GardenManagement.Plant;
+package GardenManagement.PlantManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

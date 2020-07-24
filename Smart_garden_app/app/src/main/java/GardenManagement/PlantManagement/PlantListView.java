@@ -1,4 +1,4 @@
-package GardenManagement.Plant;
+package GardenManagement.PlantManagement;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
