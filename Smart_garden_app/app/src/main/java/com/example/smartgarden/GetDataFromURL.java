@@ -83,11 +83,9 @@ public class GetDataFromURL implements Runnable {
                     String this_date = jsonArray.getJSONObject(i).getString("date");
                     this.date.add(this_date);
                 }
-                Log.e("fix", String.valueOf(this.results));
             }
 
         } catch (IOException | JSONException e) {
-            Log.e("errors",e.toString());
             e.printStackTrace();
         }
     }

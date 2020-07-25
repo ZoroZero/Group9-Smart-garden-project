@@ -65,12 +65,9 @@ public class SendDataToAI  implements Runnable{
                 JSONObject json = new JSONObject(jsonData);
 
                 this.AI_result = json.getDouble("result");
-
-
             }
 
         } catch (IOException | JSONException e) {
-            Log.e("errors",e.toString());
             e.printStackTrace();
         }
     }

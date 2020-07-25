@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 ;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -68,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
     protected final static String HOURLY_MODE = "Hourly";
     protected final static String DAILY_MODE = "Daily";
     protected final static String MONTHLY_MODE = "Monthly";
+    protected final static String CUSTOM_MODE = "Custom";
 
-    //Schedule for AI timer
-    protected final static int DELAY = 20;
-    protected final static int PERIOD = 5000;
+
 
     //Unit
     protected final static String TEMP_UNIT = "\u2103";
@@ -81,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
     //Title size
     protected final static float TITLE_SIZE = 70f;
 
+
+    //For refresh
+    protected String temp_last_choosing;
+    protected String temp_last_mode;
+    protected String humidity_last_choosing;
+    protected String humidity_last_mode;
+    protected String light_last_choosing;
+    protected String light_last_mode;
     //User ID from teammate part
     protected String user_id = "10";
 
@@ -106,18 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupAITimer(final String temp_device_id, final String type){
-        Timer mTimer = new Timer();
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-                sendDatatoAI(temp_device_id,type);
-            }
-        };
-        mTimer.schedule(mTask, DELAY, PERIOD);
-
-    }
-
 
 
     private void makeTempDeviceSpinner(final String type)
@@ -133,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         }
         //get the spinner from the xml.
         final Spinner dropdown = findViewById(R.id.spinner1);
+        final String temp_type = TEMP;
+        final String temp_unit = TEMP_UNIT;
         //create a list of items for the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
         final int num_of_choices = adapter.getCount();
@@ -149,85 +147,70 @@ public class MainActivity extends AppCompatActivity {
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_temp1);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
+                    temp_last_choosing = choosing;
+                    temp_last_mode = VALUE_MODE;
                     try {
-                        getMeasurementFromDatabase(choosing,TEMP);
+                        showDataByMode(choosing,temp_type,VALUE_MODE,temp_unit);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    TextView value_view = findViewById(R.id.mode_temp_view);
-                    value_view.setText("Showing some nearest measurements (unit : " + TEMP_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        Calendar c;
-                        c = Calendar.getInstance();
-                        int day = c.get(Calendar.DAY_OF_MONTH);
-                        int month = c.get(Calendar.MONTH) ;
-                        int year = c.get(Calendar.YEAR);
                         switch(checkedId){
                             case R.id.radio_temp1:
                                 String choosing = dropdown.getSelectedItem().toString();
+                                temp_last_choosing = choosing;
+                                temp_last_mode = VALUE_MODE;
                                 try {
-                                    getMeasurementFromDatabase(choosing,TEMP);
+                                    showDataByMode(choosing,temp_type,VALUE_MODE,temp_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView value_view = findViewById(R.id.mode_temp_view);
-                                value_view.setText("Showing some nearest measurements (unit : " + TEMP_UNIT +"):");
                                 break;
                             case R.id.radio_temp2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
+                                temp_last_choosing = second_choosing;
+                                temp_last_mode = HOURLY_MODE;
                                 try {
-                                    getValueToday(second_choosing,TEMP);
+                                    showDataByMode(second_choosing,temp_type,HOURLY_MODE,temp_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView hourly_view = findViewById(R.id.mode_temp_view);
-                                hourly_view.setText("Measurement by hour (unit : " + TEMP_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
 
                             case R.id.radio_temp3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
+                                temp_last_choosing = third_choosing;
+                                temp_last_mode = DAILY_MODE;
                                 try {
-                                    getValueThisMonth(third_choosing,TEMP);
+                                    showDataByMode(third_choosing,temp_type,DAILY_MODE,temp_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView daily_view = findViewById(R.id.mode_temp_view);
-                                daily_view.setText("Measurement by day (unit : " + TEMP_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_temp4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
+                                temp_last_choosing = fourth_choosing;
+                                temp_last_mode = MONTHLY_MODE;
                                 try {
-                                    getValueThisYear(fourth_choosing,TEMP);
+                                    showDataByMode(fourth_choosing,temp_type,MONTHLY_MODE,temp_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView monthly_view = findViewById(R.id.mode_temp_view);
-                                monthly_view.setText("Measurement by month (unit : " + TEMP_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_temp5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                DatePickerDialog dpd;
-
-                                dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                                    @Override
-                                    public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
-                                        TextView custom_view = findViewById(R.id.mode_temp_view);
-                                        custom_view.setText("Measurement by hour (unit : " + TEMP_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
-                                        try {
-                                            getValueInCustomDate(fifth_choosing,TEMP,DdayOfMonth,(Dmonth+1),Dyear);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                }, year, month, day);
-                                dpd.show();
-
+                                temp_last_choosing = fifth_choosing;
+                                temp_last_mode = CUSTOM_MODE;
+                                try {
+                                    showDataByMode(fifth_choosing,temp_type,CUSTOM_MODE,temp_unit);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
                                 break;
                         }
@@ -235,10 +218,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 String AI_choosing = dropdown.getSelectedItem().toString();
-                if(num_of_choices == 1)
-                    setupAITimer(AI_choosing,TEMP);
-                else
-                    sendDatatoAI(AI_choosing,TEMP);
+                sendDatatoAI(AI_choosing,TEMP);
+//                if(num_of_choices == 1)
+//                    setupAITimer(AI_choosing,TEMP);
+//                else
+//                    sendDatatoAI(AI_choosing,TEMP);
 
             }
 
@@ -262,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        final String humid_type = HUMIDITY;
+        final String humid_unit = HUMIDITY_UNIT;
         //get the spinner from the xml.
         final Spinner dropdown = findViewById(R.id.spinner2);
         //create a list of items for the spinner.
@@ -281,83 +267,69 @@ public class MainActivity extends AppCompatActivity {
 
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
+                    humidity_last_choosing = choosing;
+                    humidity_last_mode = VALUE_MODE;
                     try {
-                        getMeasurementFromDatabase(choosing,HUMIDITY);
+                        showDataByMode(choosing,humid_type,VALUE_MODE,humid_unit);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    TextView value_view = findViewById(R.id.mode_humid_view);
-                    value_view.setText("Showing some nearest measurements (unit : " + HUMIDITY_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        Calendar c;
-                        c = Calendar.getInstance();
-                        int day = c.get(Calendar.DAY_OF_MONTH);
-                        int month = c.get(Calendar.MONTH) ;
-                        int year = c.get(Calendar.YEAR);
                         switch(checkedId){
                             case R.id.radio_humid1:
                                 String choosing = dropdown.getSelectedItem().toString();
+                                humidity_last_choosing = choosing;
+                                humidity_last_mode = VALUE_MODE;
                                 try {
-                                    getMeasurementFromDatabase(choosing,HUMIDITY);
+                                    showDataByMode(choosing,humid_type,VALUE_MODE,humid_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView value_view = findViewById(R.id.mode_humid_view);
-                                value_view.setText("Showing some nearest measurements (unit : " + HUMIDITY_UNIT +"):");
                                 break;
                             case R.id.radio_humid2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
+                                humidity_last_choosing = second_choosing;
+                                humidity_last_mode = HOURLY_MODE;
                                 try {
-                                    getValueToday(second_choosing,HUMIDITY);
+                                    showDataByMode(second_choosing,humid_type,HOURLY_MODE,humid_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView hourly_view = findViewById(R.id.mode_humid_view);
-                                hourly_view.setText("Measurement by hour (unit : " + HUMIDITY_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_humid3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
+                                humidity_last_choosing = third_choosing;
+                                humidity_last_mode = DAILY_MODE;
                                 try {
-                                    getValueThisMonth(third_choosing,HUMIDITY);
+                                    showDataByMode(third_choosing,humid_type,DAILY_MODE,humid_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView daily_view = findViewById(R.id.mode_humid_view);
-                                daily_view.setText("Measurement by day (unit : " + HUMIDITY_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_humid4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
+                                humidity_last_choosing = fourth_choosing;
+                                humidity_last_mode = MONTHLY_MODE;
                                 try {
-                                    getValueThisYear(fourth_choosing,HUMIDITY);
+                                    showDataByMode(fourth_choosing,humid_type,MONTHLY_MODE,humid_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView monthly_view = findViewById(R.id.mode_humid_view);
-                                monthly_view.setText("Measurement by month (unit : " + HUMIDITY_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_humid5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                DatePickerDialog dpd;
-
-                                dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                                    @Override
-                                    public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
-                                        TextView custom_view = findViewById(R.id.mode_humid_view);
-                                        custom_view.setText("Measurement by hour (unit : " + HUMIDITY_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
-                                        try {
-                                            getValueInCustomDate(fifth_choosing,HUMIDITY,DdayOfMonth,(Dmonth+1),Dyear);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                }, year, month, day);
-                                dpd.show();
+                                humidity_last_choosing = fifth_choosing;
+                                humidity_last_mode = CUSTOM_MODE;
+                                try {
+                                    showDataByMode(fifth_choosing,humid_type,CUSTOM_MODE,humid_unit);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
                             }
                             break;
@@ -365,10 +337,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 String AI_choosing = dropdown.getSelectedItem().toString();
-                if(num_of_choices == 1)
-                    setupAITimer(AI_choosing,HUMIDITY);
-                else
-                    sendDatatoAI(AI_choosing,HUMIDITY);
+                sendDatatoAI(AI_choosing,HUMIDITY);
 
             }
 
@@ -393,10 +362,14 @@ public class MainActivity extends AppCompatActivity {
         }
         //get the spinner from the xml.
         final Spinner dropdown = findViewById(R.id.spinner3);
+        final String light_type = LIGHT;
+        final String light_unit = LIGHT_UNIT;
         //create a list of items for the spinner.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, results);
         final int num_of_choices = adapter.getCount();
+
         dropdown.setAdapter(adapter);
+
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -406,96 +379,79 @@ public class MainActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 final RadioGroup radioGroup = findViewById(R.id.radio_light);
                 RadioButton rad = (RadioButton) findViewById(R.id.radio_light1);
+                Button bt = findViewById(R.id.button_temp);
                 if(rad.isChecked()){
                     String choosing = dropdown.getSelectedItem().toString();
+                    light_last_choosing = choosing;
+                    light_last_mode = VALUE_MODE;
                     try {
-                        getMeasurementFromDatabase(choosing,type);
+                        showDataByMode(choosing,light_type,VALUE_MODE,light_unit);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    TextView value_view = findViewById(R.id.mode_light_view);
-                    value_view.setText("Showing some nearest measurements (unit : " + LIGHT_UNIT +"):");
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        Calendar c;
-                        c = Calendar.getInstance();
-                        int day = c.get(Calendar.DAY_OF_MONTH);
-                        int month = c.get(Calendar.MONTH) ;
-                        int year = c.get(Calendar.YEAR);
                         switch(checkedId){
                             case R.id.radio_light1:
                                 String choosing = dropdown.getSelectedItem().toString();
+                                light_last_choosing = choosing;
+                                light_last_mode= VALUE_MODE;
                                 try {
-                                    getMeasurementFromDatabase(choosing,type);
+                                    showDataByMode(choosing,light_type,VALUE_MODE,light_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView value_view = findViewById(R.id.mode_light_view);
-                                value_view.setText("Showing some nearest measurements (unit : " + LIGHT_UNIT +"):");
                                 break;
                             case R.id.radio_light2:
                                 String second_choosing = dropdown.getSelectedItem().toString();
+                                light_last_choosing = second_choosing;
+                                light_last_mode = HOURLY_MODE;
                                 try {
-                                    getValueToday(second_choosing,type);
+                                    showDataByMode(second_choosing,light_type,HOURLY_MODE,light_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView hourly_view = findViewById(R.id.mode_light_view);
-                                hourly_view.setText("Measurement by hour (unit : " + LIGHT_UNIT +") in day : "+ day + "-"+ (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_light3:
                                 String third_choosing = dropdown.getSelectedItem().toString();
+                                light_last_choosing = third_choosing;
+                                light_last_mode = DAILY_MODE;
                                 try {
-                                    getValueThisMonth(third_choosing,type);
+                                    showDataByMode(third_choosing,light_type,DAILY_MODE,light_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView daily_view = findViewById(R.id.mode_light_view);
-                                daily_view.setText("Measurement by day (unit : " + LIGHT_UNIT +") in month : " + (month + 1) + "-" + year);
                                 break;
                             case R.id.radio_light4:
                                 String fourth_choosing = dropdown.getSelectedItem().toString();
+                                light_last_choosing = fourth_choosing;
+                                light_last_mode = MONTHLY_MODE;
                                 try {
-                                    getValueThisYear(fourth_choosing,type);
+                                    showDataByMode(fourth_choosing,light_type,MONTHLY_MODE,light_unit);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                TextView monthly_view = findViewById(R.id.mode_light_view);
-                                monthly_view.setText("Measurement by month (unit : " + LIGHT_UNIT +") in year : "  + year);
                                 break;
                             case R.id.radio_light5:
                             {
                                 final String fifth_choosing = dropdown.getSelectedItem().toString();
-                                DatePickerDialog dpd;
-
-                                dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                                    @Override
-                                    public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
-                                        TextView custom_view = findViewById(R.id.mode_light_view);
-                                        custom_view.setText("Measurement by hour (unit : " + LIGHT_UNIT +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
-                                        try {
-                                            getValueInCustomDate(fifth_choosing,LIGHT,DdayOfMonth,(Dmonth+1),Dyear);
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                }, year, month, day);
-                                dpd.show();
-
+                                light_last_choosing = fifth_choosing;
+                                light_last_mode = CUSTOM_MODE;
+                                try {
+                                    showDataByMode(fifth_choosing,light_type,CUSTOM_MODE,light_unit);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
                             break;
                         }
                     }
                 });
                String AI_choosing = dropdown.getSelectedItem().toString();
-               if(num_of_choices == 1)
-                    setupAITimer(AI_choosing,LIGHT);
-               else
-                    sendDatatoAI(AI_choosing,LIGHT);
+               sendDatatoAI(AI_choosing,LIGHT);
 
             }
 
@@ -506,6 +462,92 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void showDataByMode(final String choosing, final String type, String mode, final String unit) throws ParseException {
+        final TextView tv ;
+        Calendar c;
+        c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) ;
+        int year = c.get(Calendar.YEAR);
+        switch(type)
+        {
+            case TEMP:
+                tv = findViewById(R.id.mode_temp_view);
+                break;
+            case HUMIDITY:
+                tv = findViewById(R.id.mode_humid_view);
+                break;
+            case LIGHT:
+                tv = findViewById(R.id.mode_light_view);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+        if(mode.equals(VALUE_MODE))
+        {
+            getMeasurementFromDatabase(choosing,type);
+            tv.setText("Showing some nearest measurements (unit : " + unit +"):");
+        }
+        else if(mode.equals(HOURLY_MODE))
+        {
+            getValueToday(choosing,type);
+            tv.setText("Measurement by hour (unit : " + unit +") in day : "+ day + "-"+ (month + 1) + "-" + year);
+        }
+        else if(mode.equals(DAILY_MODE))
+        {
+            getValueThisMonth(choosing,type);
+            tv.setText("Measurement by day (unit : " + unit +") in month : " + (month + 1) + "-" + year);
+        }
+        else if(mode.equals(MONTHLY_MODE))
+        {
+            getValueThisYear(choosing,type);
+            tv.setText("Measurement by month (unit : " + unit +") in year : "  + year);
+        }
+        else
+        {
+
+            DatePickerDialog dpd;
+            dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
+                    tv.setText("Measurement by hour (unit : " + unit +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );
+                    try {
+                        getValueInCustomDate(choosing,type,DdayOfMonth,(Dmonth+1),Dyear);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, year, month, day);
+            dpd.show();
+        }
+
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void temp_refresh(View v) throws ParseException {
+        showDataByMode(temp_last_choosing,TEMP,temp_last_mode,TEMP_UNIT);
+        sendDatatoAI(temp_last_choosing,TEMP);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void humidity_refresh(View v) throws ParseException {
+        showDataByMode(humidity_last_choosing,HUMIDITY,humidity_last_mode,HUMIDITY_UNIT);
+        sendDatatoAI(humidity_last_choosing,HUMIDITY);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void light_refresh(View v) throws ParseException {
+        showDataByMode(light_last_choosing,LIGHT,light_last_mode,LIGHT_UNIT);
+        sendDatatoAI(light_last_choosing,LIGHT);
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getMeasurementFromDatabase(String temp_device_id, String type) throws ParseException {
