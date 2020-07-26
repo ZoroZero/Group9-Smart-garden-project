@@ -44,8 +44,6 @@ public class GetDeviceByType implements Runnable {
 
             int responsesCode = 0;
 
-            Log.e("test1", String.valueOf(user_id));
-            Log.e("test_2",type);
 
             responses = client.newCall(request).execute();
 
@@ -66,10 +64,8 @@ public class GetDeviceByType implements Runnable {
                     this.results.add(temp);
                 }
             }
-            Log.e("test_list", String.valueOf(this.results));
 
         } catch (IOException | JSONException e) {
-            Log.e("errors",e.toString());
             e.printStackTrace();
         }
     }
