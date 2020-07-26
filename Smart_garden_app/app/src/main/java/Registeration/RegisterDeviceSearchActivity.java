@@ -15,8 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import Helper.Constants;
+
 import com.example.smartgarden.R;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -24,11 +25,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Helper.DeviceInformation;
+import Helper.Constants;
+import Helper.Helper;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.HomeActivity;
-import Login_RegisterUser.UserLoginManagement;
-import Helper.Helper;
 
 public class RegisterDeviceSearchActivity extends AppCompatActivity {
     MqttAndroidClient client;
@@ -71,7 +71,11 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Required field is empty", Toast.LENGTH_LONG).show();
                     return;
                 }
-                else if(checkUserHasDevice(device_id)){
+                if(device_id.length() >= 50 || device_name.length() >= 50){
+                    Toast.makeText(getApplicationContext(), "Device id or device name is too long ", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(Helper.checkUserHasDevice(device_id, getApplicationContext())){
                     Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -152,7 +156,6 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void startLoading(){
         searchDeviceBtn.setEnabled(false);
         inAnimation = new AlphaAnimation(0f, 1f);
@@ -168,7 +171,6 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         progressBarHolder.setVisibility(View.GONE);
         searchDeviceBtn.setEnabled(true);
     }
-
 
     private void searchDevice(String device_id, String device_name){
         topic = device_name + "/" + device_id;
@@ -192,17 +194,5 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
         }.start();
     }
 
-    // Check if device has existed on user
-    public boolean checkUserHasDevice(String device_id){
-        DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
-        if(user_device_information == null){
-            return false;
-        }
-        for (DeviceInformation deviceInformation : user_device_information) {
-            if (device_id.equals(deviceInformation.getDevice_id())) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 }

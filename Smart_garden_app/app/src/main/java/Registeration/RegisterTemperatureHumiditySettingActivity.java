@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import Helper.Constants;
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -25,11 +24,10 @@ import org.json.JSONObject;
 
 import Database.Garden_Database_Control;
 import DeviceController.Device_Control;
+import Helper.Constants;
 import Helper.Helper;
 import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
-import Login_RegisterUser.UserLoginManagement;
-import Helper.DeviceInformation;
 
 public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivity implements VolleyCallBack {
 
@@ -79,35 +77,7 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                //Get params
-                final String tempThreshold = thresholdTempET.getText().toString();
-                final String humidThreshold = thresholdHumidET.getText().toString();
-                final String device_id = getIntent().getStringExtra("device_id");
-                final String device_name = getIntent().getStringExtra("device_name");
-                linked_device_id = linkedDeviceIdET.getText().toString();
-                linked_device_name = linkedDeviceNameET.getText().toString();
-                final String threshold = tempThreshold + ":" + humidThreshold;
-                //Check if empty
-                if (linked_device_id.equals("") || linked_device_name.equals("")
-                        || tempThreshold.equals("") || humidThreshold.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //Check output id format
-                if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
-                    Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                //If device is already registered
-                if(checkUserHasDevice(linked_device_id)){
-                    Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // Register device
-                Garden_Database_Control.registerDevice(device_id, device_name,
-                        linked_device_id, linked_device_name, threshold, getApplicationContext(),
-                        RegisterTemperatureHumiditySettingActivity.this);
+                registerTempHumidSensor();
                 //Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
             }
         });
@@ -122,7 +92,36 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         });
     }
 
+    private void registerTempHumidSensor(){
+        final String tempThreshold = thresholdTempET.getText().toString();
+        final String humidThreshold = thresholdHumidET.getText().toString();
+        linked_device_id = linkedDeviceIdET.getText().toString();
+        linked_device_name = linkedDeviceNameET.getText().toString();
+        final String device_id = getIntent().getStringExtra("device_id");
+        final String device_name = getIntent().getStringExtra("device_name");
+        final String threshold = tempThreshold + ":" + humidThreshold;
+        //Check if empty
+        if (linked_device_id.equals("") || linked_device_name.equals("")
+                || tempThreshold.equals("") || humidThreshold.equals("")) {
+            Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //Check output id format
+        if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
+            Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+            return;
+        }
+        //If device is already registered
+        if(Helper.checkUserHasDevice(linked_device_id, getApplicationContext())){
+            Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // Register device
+        Garden_Database_Control.registerDevice(device_id, device_name,
+                linked_device_id, linked_device_name, threshold, getApplicationContext(),
+                RegisterTemperatureHumiditySettingActivity.this);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -155,7 +154,6 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         }.start();
     }
 
-
     private void startLoading(){
         inAnimation = new AlphaAnimation(0f, 1f);
         inAnimation.setDuration(200);
@@ -170,19 +168,5 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
         outAnimation.setDuration(200);
         progressBarHolder.setAnimation(outAnimation);
         progressBarHolder.setVisibility(View.GONE);
-    }
-
-    // Check if device has existed on user
-    public boolean checkUserHasDevice(String device_id){
-        DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
-        if(user_device_information == null){
-            return false;
-        }
-        for (DeviceInformation deviceInformation : user_device_information) {
-            if (device_id.equals(deviceInformation.getDevice_id())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

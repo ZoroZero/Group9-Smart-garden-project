@@ -81,26 +81,7 @@ public class RegisterLightSettingActivity extends AppCompatActivity implements V
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                final String threshold = thresholdET.getText().toString();
-                final String device_id = getIntent().getStringExtra("device_id");
-                final String device_name = getIntent().getStringExtra("device_name");
-                linked_device_id = linkedDeviceId.getText().toString();
-                linked_device_name = linkedDeviceName.getText().toString();
-                if (linked_device_id.equals("") || linked_device_name.equals("") || threshold.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
-                    Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(checkUserHasDevice(linked_device_id)){
-                    Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                Garden_Database_Control.registerDevice(device_id, device_name,
-                        linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterLightSettingActivity.this);
+                registerLightSensor();
                 //Device_Control.turnDeviceOff(linked_device_id, linked_device_name, getApplicationContext());
             }
         });
@@ -130,6 +111,33 @@ public class RegisterLightSettingActivity extends AppCompatActivity implements V
 
             }
         });
+    }
+
+    private void registerLightSensor(){
+        final String threshold = thresholdET.getText().toString();
+        final String device_id = getIntent().getStringExtra("device_id");
+        final String device_name = getIntent().getStringExtra("device_name");
+        linked_device_id = linkedDeviceId.getText().toString();
+        linked_device_name = linkedDeviceName.getText().toString();
+        if (linked_device_id.equals("") || linked_device_name.equals("") || threshold.equals("")) {
+            Toast.makeText(getApplicationContext(), "Empty field", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(linked_device_id.length() >= 50 || linked_device_name.length() >= 50){
+            Toast.makeText(getApplicationContext(), "Device id or device name is too long", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!Helper.stringContainsItemFromList(linked_device_id, Constants.OUTPUT_ID)){
+            Toast.makeText(getApplicationContext(), "Invalid output id", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(Helper.checkUserHasDevice(linked_device_id, getApplicationContext())){
+            Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Garden_Database_Control.registerDevice(device_id, device_name,
+                linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterLightSettingActivity.this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -174,19 +182,5 @@ public class RegisterLightSettingActivity extends AppCompatActivity implements V
         outAnimation.setDuration(200);
         progressBarHolder.setAnimation(outAnimation);
         progressBarHolder.setVisibility(View.GONE);
-    }
-
-    // Check if device has existed on user
-    public boolean checkUserHasDevice(String device_id){
-        DeviceInformation[] user_device_information = UserLoginManagement.getInstance(this).getDevice_list();
-        if(user_device_information == null){
-            return false;
-        }
-        for (DeviceInformation deviceInformation : user_device_information) {
-            if (device_id.equals(deviceInformation.getDevice_id())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

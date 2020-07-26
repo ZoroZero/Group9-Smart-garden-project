@@ -66,7 +66,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/round_green_shadow_btn"
             android:text="Return"
-            android:textColor="#C238EB"
+            android:textColor="@color/colorWhite"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

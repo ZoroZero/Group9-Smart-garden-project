@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -16,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -63,6 +65,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         TextView buy_dateTV = findViewById(R.id.Detail_BuyDate_TV);
         TextView buy_locationTV = findViewById(R.id.Detail_BuyLocation_TV);
         TextView amountTV = findViewById(R.id.Detail_Amount_TV);
+        TextView sensorIDTV = findViewById(R.id.Detail_SensorId_TV);
         readingTimeTV= findViewById(R.id.Detail_LastReadingTime_TV);
         device_lastReadingTV = findViewById(R.id.PlantDetail_DeviceLastReading_TV);
         TextView device_readingTypeTV = findViewById(R.id.PlantDetail_readingType_TV);
@@ -85,7 +88,7 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         buy_dateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
         buy_locationTV.setText(getIntent().getStringExtra("plant_detail.buy_location"));
         amountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
-
+        sensorIDTV.setText(getIntent().getStringExtra("plant_detail.linked_sensor_id"));
         // Get linked device
         if(Objects.equals(getIntent().getStringExtra("plant_detail.linked_sensor_id"), "None")){
             linearReadingLayout.setVisibility(View.GONE);
@@ -112,6 +115,17 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
             // Get reading
             Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
                     this, this);
+
+            final Handler handler=new Handler();
+            handler.post(new Runnable(){
+                @Override
+                public void run() {
+                    // Get reading
+                    Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
+                            getApplicationContext(), PlantDetailActivity.this);
+                    handler.postDelayed(this,2000); // set time here to refresh textView
+                }
+            });
         }
 
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +264,9 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                                         }
                                     }.start();
 
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Wrong password", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })
