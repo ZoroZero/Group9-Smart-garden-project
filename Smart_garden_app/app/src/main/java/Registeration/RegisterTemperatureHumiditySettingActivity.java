@@ -117,6 +117,22 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
             return;
         }
 
+        try{
+            int tempThresholdCheck = Integer.parseInt(tempThreshold);
+            int humidThresholdCheck = Integer.parseInt(humidThreshold);
+            if(tempThresholdCheck >= Constants.MAX_TEMP){
+                Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(humidThresholdCheck >= Constants.MAX_HUMID){
+                Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }catch(Exception e){
+            Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // Register device
         Garden_Database_Control.registerDevice(device_id, device_name,
                 linked_device_id, linked_device_name, threshold, getApplicationContext(),

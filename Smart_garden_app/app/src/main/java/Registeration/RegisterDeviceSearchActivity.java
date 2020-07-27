@@ -79,7 +79,12 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Device is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)) {
+                if(!Helper.stringContainsItemFromList(device_id, Constants.LIGHT_SENSOR_ID)
+                        && !Helper.stringContainsItemFromList(device_id, Constants.TEMPHUMI_SENSOR_ID)) {
+                    Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(Helper.stringContainsItemFromList(device_id, Constants.OUTPUT_ID)){
                     Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
                     return;
                 }

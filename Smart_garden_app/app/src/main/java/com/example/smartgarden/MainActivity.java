@@ -48,16 +48,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import Helper.Constants;
+import Login_RegisterUser.UserLoginManagement;
 
 
 public class MainActivity extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY =  "TH";
+    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
     protected final static String TEMP = "T";
     protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = "L";
+    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -71,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
     protected final static String MONTHLY_MODE = "Monthly";
     protected final static String CUSTOM_MODE = "Custom";
 
-
-
     //Unit
     protected final static String TEMP_UNIT = "\u2103";
     protected final static String HUMIDITY_UNIT = "%";
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     //Title size
     protected final static float TITLE_SIZE = 70f;
 
-
     //For refresh
     protected String temp_last_choosing;
     protected String temp_last_mode;
@@ -89,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
     protected String humidity_last_mode;
     protected String light_last_choosing;
     protected String light_last_mode;
-    //User ID from teammate part
-    protected String user_id = "10";
 
+    //User ID from teammate part
+    protected String user_id = UserLoginManagement.getInstance(this).getUserId() + "";
 
     @SuppressLint("WrongThread")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -113,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         makeLightDeviceSpinner(LIGHT);
 
     }
-
 
 
     private void makeTempDeviceSpinner(final String type)
@@ -527,8 +525,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void temp_refresh(View v) throws ParseException {
         showDataByMode(temp_last_choosing,TEMP,temp_last_mode,TEMP_UNIT);
@@ -546,8 +542,6 @@ public class MainActivity extends AppCompatActivity {
         showDataByMode(light_last_choosing,LIGHT,light_last_mode,LIGHT_UNIT);
         sendDatatoAI(light_last_choosing,LIGHT);
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getMeasurementFromDatabase(String temp_device_id, String type) throws ParseException {
@@ -605,6 +599,7 @@ public class MainActivity extends AppCompatActivity {
         }
         drawDataOnGraph(results,hours,types,HOURLY_MODE);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getValueThisMonth(String deviceID, String types) throws ParseException {
         GetValueThisMonth getThisMonthValue = new GetValueThisMonth(deviceID,types);
@@ -644,8 +639,6 @@ public class MainActivity extends AppCompatActivity {
         }
         drawDataOnGraph(results,months,types,MONTHLY_MODE);
     }
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -777,8 +770,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     private void showDataOnGraph(LineGraphSeries<DataPoint> series, GraphView graph){
         if(graph.getSeries().size() > 0){
             graph.getSeries().remove(0);
@@ -822,6 +813,8 @@ public class MainActivity extends AppCompatActivity {
         recommendThreshold(AI_result,type);
 
     }
+
+    @SuppressLint("SetTextI18n")
     private void recommendThreshold(double AI_result, String type) {
         if(type.equals(TEMP))
             textTemperature.setText("Recommended temperature threshold " + String.valueOf(AI_result));
@@ -832,6 +825,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 }

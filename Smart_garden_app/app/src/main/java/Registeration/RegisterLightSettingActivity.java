@@ -136,6 +136,17 @@ public class RegisterLightSettingActivity extends AppCompatActivity implements V
             return;
         }
 
+        try{
+            int thresholdCheck = Integer.parseInt(threshold);
+            if(thresholdCheck >= Constants.MAX_LIGHT){
+                Toast.makeText(getApplicationContext(), "Threshold is too high", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }catch(Exception e){
+            Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Garden_Database_Control.registerDevice(device_id, device_name,
                 linked_device_id, linked_device_name, threshold, getApplicationContext(), RegisterLightSettingActivity.this);
     }

@@ -30,7 +30,7 @@
             android:layout_weight="0.8"
             android:gravity="center_vertical|center_horizontal"
             android:text="Garden parameters"
-            android:textColor="#ffadff2f"
+            android:textColor="@color/colorPrimary"
             android:textSize="22dp"
             android:textStyle="bold" />
 
@@ -51,11 +51,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#e6adff2f"
+                android:background="@color/temperatureColor"
                 android:text="Temperature"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
@@ -136,21 +137,30 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background= "@drawable/temp_border"
-                android:text= "Refresh"
-                android:textColor="@color/colorWhite"
-                android:onClick="temp_refresh"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/temp_border"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
-                android:fontFamily = "@font/roboto_medium"
-                />
+                android:onClick="temp_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
 
 
+            <View
+                android:id="@+id/divider22"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="?android:attr/listDivider" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#e6adff2f"
+                android:layout_marginTop="10dp"
+                android:background="@color/humidityColor"
                 android:text="Humidity measurement"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
@@ -222,23 +232,34 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 android:textStyle="bold"/>
+
             <Button
                 android:id="@+id/button_humidity"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background= "@drawable/humidity_border"
-                android:text= "Refresh"
-                android:textColor="@color/colorWhite"
-                android:onClick="humidity_refresh"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/humidity_border"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
-                android:fontFamily = "@font/roboto_medium"
-                />
+                android:onClick="humidity_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
+
+            <View
+                android:id="@+id/divider25"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="?android:attr/listDivider" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#e6adff2f"
+                android:background="@color/lightColor"
                 android:text="Light density"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
@@ -308,18 +329,19 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 android:textStyle="bold" />
+
             <Button
                 android:id="@+id/button_light"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background= "@drawable/light_border"
-                android:text= "Refresh"
-                android:textColor="@color/colorWhite"
-                android:onClick="light_refresh"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/light_border"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
-                android:fontFamily = "@font/roboto_medium"
-                />
+                android:onClick="light_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
 
 
 
