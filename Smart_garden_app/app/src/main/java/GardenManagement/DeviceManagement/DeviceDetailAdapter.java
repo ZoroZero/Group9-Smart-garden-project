@@ -1,4 +1,4 @@
-package Userprofile;
+package GardenManagement.DeviceManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -65,10 +65,9 @@ public class DeviceDetailAdapter extends BaseAdapter{
         // Get name from array
         String id = devices.elementAt(position).getDevice_id();
         String type = devices.elementAt(position).getDevice_type();
-        String name = devices.elementAt(position).getDevice_name();
 
         // Set texts
-        device_TopicTV.setText("Topic: " + name + "/" + id);
+        device_TopicTV.setText("Device ID: " + id);
         Device_type.setText(type);
 
         next_icon.setImageResource(R.drawable.ic_baseline_navigate_next_24);

@@ -29,8 +29,8 @@ import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Registeration.RegisterDeviceSearchActivity;
 import Registeration.RegisterPlant;
-import Userprofile.DeviceListOverViewActivity;
-import Userprofile.PlantListView;
+import GardenManagement.DeviceManagement.DeviceListOverViewActivity;
+import GardenManagement.PlantManagement.PlantListView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
 
@@ -218,7 +218,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     averageLight_TV.setText("No reading");
                 }
                 else {
-                    averageLight_TV.setText(sum_light / count_light + "%");
+                    averageLight_TV.setText(sum_light / count_light + " lux");
                 }
                 number_devices_TV.setText(count_light + count_output + count_temp_humid +"");
 

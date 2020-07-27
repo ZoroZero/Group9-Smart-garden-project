@@ -1,4 +1,4 @@
-package Userprofile;
+package GardenManagement.DeviceManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import GardenManagement.PlantManagement.PlantListView;
 import Helper.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
@@ -104,6 +105,10 @@ public class DeviceListViewActivity extends AppCompatActivity implements VolleyC
                         deviceInformationVector.elementAt(position).getDevice_type());
                 showDeviceListDetail.putExtra("device_detail.device_threshold",
                         deviceInformationVector.elementAt(position).getThreshold());
+                showDeviceListDetail.putExtra("device_detail.linked_device_id",
+                        deviceInformationVector.elementAt(position).getLinked_device_id());
+                showDeviceListDetail.putExtra("device_detail.linked_device_name",
+                        deviceInformationVector.elementAt(position).getLinked_device_name());
                 startActivity(showDeviceListDetail);
             }
         });

@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="24dp"
                     android:text="Device ID"
                     android:textColor="#9AB59A"
                     android:textSize="18sp"
@@ -138,69 +138,20 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/Registerdevice_TV3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="32dp"
-                    android:lineSpacingExtra="18sp"
-                    android:text="Device Type"
-                    android:textColor="#9AB59A"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout14" />
-
-                <RadioGroup
-                    android:id="@+id/radioGroup2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Registerdevice_TV3">
-
-                    <RadioButton
-                        android:id="@+id/radio_light"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="onRadioButtonClicked"
-                        android:text="Light Sensor"
-                        android:textColor="#9AB59A"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        android:id="@+id/radio_temphumi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="onRadioButtonClicked"
-                        android:text="Temperature Humidity Sensor"
-                        android:textColor="#9AB59A"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </RadioGroup>
-
                 <Button
                     android:id="@+id/searchDeviceBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/round_green_shadow_btn"
-                    android:text="Submit"
-                    android:textColor="#708238"
+                    android:text="Search"
+                    android:textColor="@color/colorWhite"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout14" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

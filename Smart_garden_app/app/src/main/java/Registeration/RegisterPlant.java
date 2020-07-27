@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;
 
 import org.json.JSONException;
@@ -36,6 +35,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
     private EditText buy_locationET;
     private EditText amountET;
     private String linked_sensor_id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +50,11 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
 
         // Set up spinner
         Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
-        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size()];
-        for(int i = 0; i < sensor_id.length; i++){
+        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size() + 1];
+        for(int i = 0; i < sensor_id.length - 1; i++){
             sensor_id[i] = sensor.get(i).getDevice_id();
         }
+        sensor_id[sensor_id.length - 1] = "None";
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
         linked_sensor_idSpinner.setAdapter(arrayAdapter);
 
@@ -93,17 +94,7 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String plant_name = plant_nameET.getText().toString();
-                final String buy_date = buy_date_input.getText().toString();
-                final String buy_location = buy_locationET.getText().toString();
-                final String amount = amountET.getText().toString();
-//                final String linked_sensor_id = linked_sensor_idSpinner.getText().toString();
-                if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("") || linked_sensor_id.equals("")){
-                    Toast.makeText(getApplicationContext(), "Empty field detected", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount, linked_sensor_id,
-                        getApplicationContext(), RegisterPlant.this);
+                registerPlant();
             }
         });
     }
@@ -119,13 +110,30 @@ public class RegisterPlant extends AppCompatActivity implements VolleyCallBack {
         Intent showResult = new Intent(getApplicationContext(), RegisterMessageActivity.class);
         assert jsonObject != null;
         try {
-            showResult.putExtra("register_type", "Add plant");
+            showResult.putExtra("register_type", "Add new plant");
             showResult.putExtra("register_message", jsonObject.getString("message"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         startActivity(showResult);
         //Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+    }
+
+    private void registerPlant(){
+        final String plant_name = plant_nameET.getText().toString();
+        final String buy_date = buy_date_input.getText().toString();
+        final String buy_location = buy_locationET.getText().toString();
+        final String amount = amountET.getText().toString();
+//                final String linked_sensor_id = linked_sensor_idSpinner.getText().toString();
+        if(plant_name.equals("") || buy_date.equals("") || buy_location.equals("") || amount.equals("") || linked_sensor_id.equals("")){
+            Toast.makeText(getApplicationContext(), "Empty field detected", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(plant_name.length() >= 90 || buy_location.length() > 200){
+            Toast.makeText(getApplicationContext(), "Overflow field detected", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Garden_Database_Control.addNewPlant(plant_name, buy_date, buy_location, amount, linked_sensor_id,
+                getApplicationContext(), RegisterPlant.this);
     }
 }

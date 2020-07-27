@@ -14,6 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.Vector;
 
+import Login_RegisterUser.UserLoginManagement;
+
 public class Helper {
     private static final String TAG = "Helper";
 
@@ -73,5 +75,19 @@ public class Helper {
         }
 
         return hex.toString();
+    }
+
+    // Check if device has existed on user
+    public static boolean checkUserHasDevice(String device_id, Context context){
+        DeviceInformation[] user_device_information = UserLoginManagement.getInstance(context).getDevice_list();
+        if(user_device_information == null){
+            return false;
+        }
+        for (DeviceInformation deviceInformation : user_device_information) {
+            if (device_id.equals(deviceInformation.getDevice_id())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

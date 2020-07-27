@@ -19,6 +19,8 @@ import com.example.smartgarden.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import Background_service.RecordMeasurementService;
 import Database.Garden_Database_Control;
 import Helper.Helper;
@@ -47,8 +49,8 @@ public class RegisterMessageActivity extends AppCompatActivity implements Volley
                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             }
         });
-
-        Garden_Database_Control.FetchDevicesInfo(this, this);
+        if(Objects.equals(getIntent().getStringExtra("register_type"), "Register new device"))
+            Garden_Database_Control.FetchDevicesInfo(this, this);
     }
 
     @Override

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context="Userprofile.PlantDetailActivity">
+    tools:context="GardenManagement.PlantManagement.PlantDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,30 +28,76 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/round_header">
 
-                <TextView
-                    android:id="@+id/PLantDetail_ReadingTimeLabelTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/plantDetail_SensorId_Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
-                    android:text="Last reading:"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
-
-                <TextView
-                    android:id="@+id/Detail_LastReadingTime_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="Plant name: "
-                    android:textColor="#708238"
-                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/plantDetail_deviceReading">
+
+                    <TextView
+                        android:id="@+id/Detail_SensorId_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="TextView"
+                        android:textColor="@color/lightColor"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/Detail_SensorIdLabel_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Linked sensor id:"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/plantDetail_lastReading_Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/plantDetail_SensorId_Layout">
+
+                    <TextView
+                        android:id="@+id/PLantDetail_ReadingTimeLabelTV2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Last reading:"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/Detail_LastReadingTime_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="Plant name: "
+                        android:textColor="#708238"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout30"
@@ -91,7 +137,7 @@
                         android:id="@+id/PLantDetail_PlantnameLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="16dp"
                         android:text="Plant name: "
                         android:textColor="@color/colorPrimary"
@@ -116,7 +162,7 @@
                         android:id="@+id/PLantDetail_BuyDateLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Planted date:"
                         android:textColor="@color/colorPrimary"
@@ -141,7 +187,7 @@
                         android:id="@+id/PLantDetail_BuyLocationLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Buy location: "
                         android:textColor="@color/colorPrimary"
@@ -166,7 +212,7 @@
                         android:id="@+id/PLantDetail_AmountLabelTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="24dp"
                         android:text="Amount: "
                         android:textColor="@color/colorPrimary"
@@ -190,14 +236,15 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout5"
+                    android:id="@+id/plantDetail_deviceReading"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30">
+                    app:layout_constraintTop_toBottomOf="@+id/divider23">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/PlantDetail_reading"
@@ -241,14 +288,13 @@
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading" />
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading" />
 
                         <ImageView
                             android:id="@+id/PlantDetail_readingTypeIcon_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toTopOf="@+id/PlantDetail_DeviceLastReading_TV"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/PlantDetail_DeviceLastReading"
@@ -312,8 +358,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/PlantDetail_DeviceLastReading1"
                             app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1"
-                            app:layout_constraintTop_toBottomOf="@+id/PlantDetail_DeviceLastReading1" />
+                            app:layout_constraintStart_toStartOf="@+id/PlantDetail_DeviceLastReading1" />
 
                         <ImageView
                             android:id="@+id/PlantDetail_readingTypeIcon1_TV"
@@ -348,13 +393,55 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/round_green_shadow_btn"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:text="Remove plant"
-                    android:textColor="#708238"
+                    android:textColor="@color/colorWhite"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/PLantDetail_ReadingTimeLabelTV2" />
+                    app:layout_constraintTop_toBottomOf="@+id/PlantDetail_ChangeSettingPlant_Btn" />
+
+                <Button
+                    android:id="@+id/PlantDetail_ChangeSettingPlant_Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/round_green_shadow_btn"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="Change properties"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider24" />
+
+                <View
+                    android:id="@+id/divider23"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout30" />
+
+                <View
+                    android:id="@+id/divider24"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/plantDetail_lastReading_Layout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

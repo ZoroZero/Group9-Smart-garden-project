@@ -4,6 +4,10 @@ public class Constants {
     private static final String ROOT_URL = "//Android/v1";
 
     private static final String MQTT_URL = "//Android/MQTT";
+
+    public static final String DATABASE_IP = "192.168.1.127";
+
+    public static final String AI_PORT = ":5000";
     // Register url
     public static final String REGISTER_URL = ROOT_URL + "/registerUser.php";
 
@@ -40,6 +44,29 @@ public class Constants {
     // Delete plant
     public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";
 
+    // Change plant setting
+    public static final String CHANGE_PLANT_SETTING = ROOT_URL + "/changePlantSetting.php";
+
+    // Get device by type
+    public static final String GET_DEVICE_BY_TYPE = ROOT_URL + "/getInputDevicesWithType.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_MONTH = ROOT_URL + "/getValueThisMonth.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_YEAR = ROOT_URL + "/getValueThisYear.php";
+
+    // Get value by month
+    public static final String GET_VALUE_BY_DAY = ROOT_URL + "/getValueToday.php";
+
+    // Get value by custom date
+    public static final String GET_VALUE_BY_CUSTOM_DATE = ROOT_URL + "/getValueInCustomDate.php";
+
+    // Send data to AI
+    public static final String SEND_DATA_TO_AI = "/api/post_some_data";
+
+
+
     // Device id identifier
     public static String[] OUTPUT_ID = {"LightD", "Speaker"};
 
@@ -57,7 +84,7 @@ public class Constants {
 
 
     // Default value for register device
-    public static int DEFAULT_LIGHT = 20;
+    public static int DEFAULT_LIGHT = 200;
 
     public static int DEFAULT_TEMP = 30;
 

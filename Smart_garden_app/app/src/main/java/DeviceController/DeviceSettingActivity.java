@@ -4,13 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import GardenManagement.DeviceManagement.DeviceListViewActivity;
 import Helper.Constants;
 import com.example.smartgarden.R;
 
@@ -24,13 +29,22 @@ import Login_RegisterUser.UserLoginManagement;
 
 public class DeviceSettingActivity extends AppCompatActivity implements VolleyCallBack {
 
+    Button submitBtn;
+    private String device_type;
+    private EditText threshold_Input1;
+    private EditText threshold_Input2;
+    // Loading animation
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+    FrameLayout progressBarHolder;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_setting);
         DeviceInformation deviceInformation;
-        final String device_type = getIntent().getStringExtra("device_setting.device_type");
+        device_type = getIntent().getStringExtra("device_setting.device_type");
         assert device_type != null;
         if(device_type.equals(Constants.OUTPUT_TYPE)){
             deviceInformation = Helper.Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_setting.device_id"),
@@ -51,10 +65,12 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
         ConstraintLayout threshold2 = findViewById(R.id.changeSetting_threshold2);
         TextView new_threshold_Type1 = findViewById(R.id.changeSetting_newThresholdType1);
         TextView new_threshold_Type2 = findViewById(R.id.changeSetting_newThresholdType2);
-        final EditText threshold_Input1 = findViewById(R.id.changeSetting_thresholdInput1);
-        final EditText threshold_Input2 = findViewById(R.id.changeSetting_thresholdInput2);
+        threshold_Input1 = findViewById(R.id.changeSetting_thresholdInput1);
+        threshold_Input2 = findViewById(R.id.changeSetting_thresholdInput2);
 
-        Button submitBtn = findViewById(R.id.changeSetting_submitBtn);
+        submitBtn = findViewById(R.id.changeSetting_submitBtn);
+        progressBarHolder = findViewById(R.id.changeDeviceSetting_progressBarHolder);
+
         // Set text
         assert deviceInformation != null;
         deviceId.setText(deviceInformation.getDevice_id());
@@ -80,31 +96,120 @@ public class DeviceSettingActivity extends AppCompatActivity implements VolleyCa
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(device_type.contains("Light")){
-                    final String threshold = threshold_Input1.getText().toString();
-                    Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
-                            threshold, getApplicationContext(), DeviceSettingActivity.this);
-                }
-                else{
-                    final String temp_threshold = threshold_Input1.getText().toString();
-                    final String humid_threshold = threshold_Input2.getText().toString();
-                    final String threshold = temp_threshold + ":" + humid_threshold;
-                    Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
-                            threshold, getApplicationContext(), DeviceSettingActivity.this);
-                }
+//                if(device_type.contains("Light")){
+//                    final String threshold = threshold_Input1.getText().toString();
+//                    if(threshold.equals("")){
+//                        Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
+//                            threshold, getApplicationContext(), DeviceSettingActivity.this);
+//                }
+//                else{
+//                    final String temp_threshold = threshold_Input1.getText().toString();
+//                    final String humid_threshold = threshold_Input2.getText().toString();
+//                    if(temp_threshold.equals("") || humid_threshold.equals("")){
+//                        Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    final String threshold = temp_threshold + ":" + humid_threshold;
+//                    Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
+//                            threshold, getApplicationContext(), DeviceSettingActivity.this);
+//                }
+                changeDeviceSetting();
             }
         });
+    }
+
+    private void changeDeviceSetting(){
+        if(device_type.contains("Light")){
+            final String threshold = threshold_Input1.getText().toString();
+            if(threshold.equals("")){
+                Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+                return;
+            }
+            try{
+                int thresholdCheck = Integer.parseInt(threshold);
+                if(thresholdCheck >= Constants.MAX_LIGHT){
+                    Toast.makeText(getApplicationContext(), "Threshold is too high", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
+                return;
+            }
+            Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
+                    threshold, getApplicationContext(), DeviceSettingActivity.this);
+        }
+        else{
+            final String temp_threshold = threshold_Input1.getText().toString();
+            final String humid_threshold = threshold_Input2.getText().toString();
+            if(temp_threshold.equals("") || humid_threshold.equals("")){
+                Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            try{
+                int tempThresholdCheck = Integer.parseInt(temp_threshold);
+                int humidThresholdCheck = Integer.parseInt(humid_threshold);
+                if(tempThresholdCheck >= Constants.MAX_TEMP){
+                    Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(humidThresholdCheck >= Constants.MAX_HUMID){
+                    Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            final String threshold = temp_threshold + ":" + humid_threshold;
+            Garden_Database_Control.changeDeviceThreshold(getIntent().getStringExtra("device_setting.device_id"),
+                    threshold, getApplicationContext(), DeviceSettingActivity.this);
+        }
     }
 
     @Override
     public void onSuccessResponse(String result) {
         try {
-            JSONObject jsonObject = new JSONObject(result);
-            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-            finish();
+            final JSONObject jsonObject = new JSONObject(result);
+            startLoading();
+            new CountDownTimer(3000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+                public void onFinish() {
+                    stopLoading();
+                    try {
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Intent returnAct = new Intent(getApplicationContext(), DeviceListViewActivity.class);
+                    returnAct.putExtra("device_list.type", "sensor");
+                    startActivity(returnAct);
+                    finish();
+                }
+            }.start();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    private void startLoading(){
+        submitBtn.setEnabled(false);
+        inAnimation = new AlphaAnimation(0f, 1f);
+        inAnimation.setDuration(200);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading(){
+        outAnimation = new AlphaAnimation(1f, 0f);
+        outAnimation.setDuration(200);
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
+        submitBtn.setEnabled(true);
     }
 }

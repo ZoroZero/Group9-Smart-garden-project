@@ -84,7 +84,6 @@ public class RecordMeasurementService extends Service{
     public void onDestroy() {
         super.onDestroy();
         stoptimertask();
-
 //        Intent broadcastIntent = new Intent();
 //        broadcastIntent.setAction("RestartService");
 //        broadcastIntent.setClass(this, RestartService.class);
@@ -116,7 +115,7 @@ public class RecordMeasurementService extends Service{
                 }
             }
         };
-        timer.schedule(timerTask, 1000, 10000);
+        timer.schedule(timerTask, 1000, 12000);
     }
 
     public void stoptimertask() {

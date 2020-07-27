@@ -26,12 +26,11 @@
 
         <TextView
             android:layout_width="1dp"
-
             android:layout_height="50dp"
             android:layout_weight="0.8"
             android:gravity="center_vertical|center_horizontal"
             android:text="Garden parameters"
-            android:textColor="#ffadff2f"
+            android:textColor="@color/colorPrimary"
             android:textSize="22dp"
             android:textStyle="bold" />
 
@@ -52,15 +51,65 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#e6adff2f"
+                android:background="@color/temperatureColor"
                 android:text="Temperature"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="center"/>
+
+            <RadioGroup android:id = "@+id/radio_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation= "horizontal"
+                android:gravity="center">
+                <RadioButton android:id="@+id/radio_temp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overview"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/radio_temp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:text="Hourly" />
+                <RadioButton android:id="@+id/radio_temp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily" />
+                <RadioButton android:id="@+id/radio_temp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_temp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_temp_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <com.jjoe64.graphview.GraphView
@@ -69,15 +118,200 @@
                 android:layout_height="250dp"
                 android:layout_margin="5dp" />
 
+
+            <TextView
+                android:id="@+id/temp_view"
+                android:text= "Waiting for AI training"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                />
+
+
+            <Button
+                android:id="@+id/button_temp"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/temp_border"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:onClick="temp_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
+
+
+            <View
+                android:id="@+id/divider22"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="?android:attr/listDivider" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#e6adff2f"
+                android:layout_marginTop="10dp"
+                android:background="@color/humidityColor"
+                android:text="Humidity measurement"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="center"/>
+
+            <RadioGroup android:id = "@+id/radio_humidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation= "horizontal"
+                android:gravity="center">
+                <RadioButton android:id="@+id/radio_humid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overview"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/radio_humid2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:text="Hourly" />
+                <RadioButton android:id="@+id/radio_humid3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily" />
+                <RadioButton android:id="@+id/radio_humid4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_humid5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_humid_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graphHumidLevel"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/humid_view"
+                android:text= "Waiting for AI training"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/button_humidity"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/humidity_border"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:onClick="humidity_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
+
+            <View
+                android:id="@+id/divider25"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/lightColor"
                 android:text="Light density"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+            <Spinner
+                android:id="@+id/spinner3"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="center"/>
+
+            <RadioGroup android:id = "@+id/radio_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation= "horizontal"
+                android:gravity="center">
+                <RadioButton android:id="@+id/radio_light1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overview"
+                    android:checked="true"/>
+                <RadioButton
+                    android:id="@+id/radio_light2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:text="Hourly" />
+                <RadioButton android:id="@+id/radio_light3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily" />
+                <RadioButton android:id="@+id/radio_light4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Monthly" />
+                <RadioButton android:id="@+id/radio_light5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/mode_light_view"
+                android:gravity="center"
+                android:fontFamily = "@font/roboto_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <com.jjoe64.graphview.GraphView
@@ -85,16 +319,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_margin="5dp" />
-
-
-
+            <TextView
+                android:id="@+id/light_view"
+                android:text= "Waiting for AI training"
+                android:fontFamily = "@font/roboto_medium"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/button_create"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/button_light"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:text="CREATE PDF" />
+                android:layout_marginTop="10dp"
+                android:background="@drawable/light_border"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:onClick="light_refresh"
+                android:text="Refresh"
+                android:textColor="@color/colorWhite" />
+
+
 
 
         </LinearLayout>

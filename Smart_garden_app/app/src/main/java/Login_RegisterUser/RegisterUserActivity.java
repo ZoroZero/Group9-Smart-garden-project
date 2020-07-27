@@ -46,6 +46,10 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
     public void registerUser(){
         final String username = usernameText.getText().toString().trim();
         final String password = passwordText.getText().toString().trim();
+        if(password.length() < 8){
+            Toast.makeText(getApplicationContext(), "Password must be at least 8 character", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final String email = emailText.getText().toString().trim();
         Garden_Database_Control.RegisterUser(username, password, email,this, this);
     }

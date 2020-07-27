@@ -1,4 +1,4 @@
-package Userprofile;
+package GardenManagement.DeviceManagement;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import GardenManagement.PlantManagement.PlantListView;
 import Helper.Constants;
 import com.example.smartgarden.MainActivity;
 import com.example.smartgarden.R;

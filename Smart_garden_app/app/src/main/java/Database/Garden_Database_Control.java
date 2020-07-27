@@ -518,4 +518,43 @@ public class Garden_Database_Control {
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
+    // Change plant setting
+    public static void changePlantSetting(final String plant_name, final String buy_date, final String new_buy_location,
+                                          final String new_amount, final String new_linked_device_id,
+                                          final Context context, final VolleyCallBack callBack){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        final String user_id = UserLoginManagement.getInstance(context).getUserId() + "";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.CHANGE_PLANT_SETTING,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            callBack.onSuccessResponse(response);
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", user_id);
+                params.put("plant_name", plant_name);
+                params.put("buy_date", buy_date);
+                params.put("new_buy_location", new_buy_location);
+                params.put("new_amount", new_amount);
+                params.put("linked_device_id", new_linked_device_id);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
 }
