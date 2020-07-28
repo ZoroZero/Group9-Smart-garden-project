@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 import Database.Garden_Database_Control;
-import DeviceController.DeviceSettingActivity;
 import Helper.VolleyCallBack;
 
 public class DeviceDetailActivity extends AppCompatActivity implements VolleyCallBack {
@@ -113,7 +112,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
         changeSettingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent changeSetting = new Intent(getApplicationContext(), DeviceSettingActivity.class);
+                Intent changeSetting = new Intent(getApplicationContext(), SensorSettingActivity.class);
                 changeSetting.putExtra("device_setting.device_id", getIntent().getStringExtra("device_detail.device_id"));
                 changeSetting.putExtra("device_setting.device_name", getIntent().getStringExtra("device_detail.device_name"));
                 changeSetting.putExtra("device_setting.device_type", getIntent().getStringExtra("device_detail.device_type"));

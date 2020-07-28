@@ -5,7 +5,7 @@ public class Constants {
 
     private static final String MQTT_URL = "//Android/MQTT";
 
-    public static final String DATABASE_IP = "10.127.23.230";
+    public static final String DATABASE_IP = "192.168.1.171";
 
     public static final String AI_PORT = ":5000";
     // Register url
@@ -40,6 +40,9 @@ public class Constants {
 
     // Change device threshold
     public static final String CHANGE_THRESHOLD = ROOT_URL + "/changeDeviceThreshold.php";
+
+    // Change device threshold
+    public static final String CHANGE_DEVICE_SETTING = ROOT_URL + "/changeDeviceProperties.php";
 
     // Delete plant
     public static final String REMOVE_PLANT = ROOT_URL + "/removePlant.php";

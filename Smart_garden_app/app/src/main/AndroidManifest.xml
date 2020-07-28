@@ -23,7 +23,7 @@
         tools:targetApi="m">
         <activity android:name="GardenManagement.PlantManagement.ChangePlantSettingActivity"></activity>
         <activity android:name="GardenManagement.DeviceManagement.DeviceListViewActivity" />
-        <activity android:name="DeviceController.DeviceSettingActivity" /> <!-- Activity -->
+        <activity android:name="GardenManagement.DeviceManagement.SensorSettingActivity" /> <!-- Activity -->
         <activity
             android:name="Registeration.RegisterTemperatureHumiditySettingActivity"
             android:label="@string/register_device"

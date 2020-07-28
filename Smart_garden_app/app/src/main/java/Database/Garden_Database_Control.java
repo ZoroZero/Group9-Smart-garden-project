@@ -478,6 +478,50 @@ public class Garden_Database_Control {
         Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
+
+    // Change device threshold
+    public static void changeDeviceSettings(final String input_id, final String new_input_name,
+                                           final String new_output_id, final String new_output_name, final String new_threshold,
+                                           final Context context, final VolleyCallBack callBack){
+        String database_ip = Helper.getConfigValue(context, "database_server");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://" + database_ip + Constants.CHANGE_DEVICE_SETTING,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(!jsonObject.getBoolean("error")) {
+                                callBack.onSuccessResponse(response);
+                            }else{
+                                Toast.makeText(context, jsonObject.getString("message"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("input_id", input_id);
+                params.put("new_input_name", new_input_name);
+                params.put("new_output_id", new_output_id);
+                params.put("new_output_name", new_output_name);
+                params.put("new_threshold", new_threshold);
+                return params;
+            }
+        };
+        Database_RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
     // Change device threshold
     public static void removePlant(final String plant_name, final String buy_date, final String buy_location,
                                    final Context context){
