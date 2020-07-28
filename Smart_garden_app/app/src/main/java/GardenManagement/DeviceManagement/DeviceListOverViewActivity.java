@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import GardenManagement.PlantManagement.PlantListView;
 import Helper.Constants;
-import com.example.smartgarden.MainActivity;
+import Report.ViewReport;
 import com.example.smartgarden.R;
 
 import IOT_Server.IOT_Server_Access;
@@ -121,7 +121,7 @@ public class DeviceListOverViewActivity extends AppCompatActivity {
                 finish();
                 return true;
             case 5:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), ViewReport.class));
                 finish();
                 return true;
             case 6:

@@ -1,4 +1,4 @@
-package com.example.smartgarden;
+package Database.DatabaseService;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -24,7 +24,7 @@ public class SendDataToAI  implements Runnable{
     private String url = "http://" + Constants.DATABASE_IP + Constants.AI_PORT + Constants.SEND_DATA_TO_AI;
     protected Vector<Double> results = new Vector<>();
     protected Vector<String> dates = new Vector<>();
-    protected Double AI_result ;
+    public Double AI_result ;
     public SendDataToAI(Vector<Double> results, Vector<String> dates){
         this.results = results;
         this.dates = dates;

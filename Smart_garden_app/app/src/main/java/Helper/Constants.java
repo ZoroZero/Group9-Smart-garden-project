@@ -5,7 +5,7 @@ public class Constants {
 
     private static final String MQTT_URL = "//Android/MQTT";
 
-    public static final String DATABASE_IP = "192.168.1.127";
+    public static final String DATABASE_IP = "10.127.23.230";
 
     public static final String AI_PORT = ":5000";
     // Register url

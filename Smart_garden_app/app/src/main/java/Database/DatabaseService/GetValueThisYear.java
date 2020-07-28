@@ -1,5 +1,6 @@
-package com.example.smartgarden;
+package Database.DatabaseService;
 
+import Report.ViewReport;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -19,32 +20,32 @@ import java.util.Vector;
 
 import Helper.Constants;
 
-public class GetValueThisMonth implements Runnable{
+public class GetValueThisYear implements Runnable {
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_VALUE_BY_MONTH;
+    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_VALUE_BY_YEAR;
     private String device_id;
     private String type;
     private String query_type  = "";
-    private final String TEMP_HUMIDITY = MainActivity.TEMP_HUMIDITY;
-    private final String TEMP = MainActivity.TEMP;
-    private final String HUMIDITY = MainActivity.HUMIDITY;
-    private final String LIGHT = MainActivity.LIGHT;
-    protected Vector<Double> results = new Vector<>();
-    protected Vector<String> days = new Vector<>();
-    public GetValueThisMonth(String device_id, String type){
+    private final String TEMP_HUMIDITY = ViewReport.TEMP_HUMIDITY;
+    private final String TEMP = ViewReport.TEMP;
+    private final String HUMIDITY = ViewReport.HUMIDITY;
+    private final String LIGHT = ViewReport.LIGHT;
+    public Vector<Double> results = new Vector<>();
+    public Vector<String> months = new Vector<>();
+    public GetValueThisYear(String device_id, String type){
         this.device_id = device_id;
         this.type = type;
     }
 
     @Override
     public void run() {
+        if(this.type.equals(TEMP) || this.type.equals(HUMIDITY))
+        {
+            query_type = TEMP_HUMIDITY;
+        }
+        else
+            query_type = this.type;
         try {
-            if(this.type.equals(TEMP) || this.type.equals(HUMIDITY))
-            {
-                query_type = TEMP_HUMIDITY;
-            }
-            else
-                query_type = this.type;
             RequestBody formBody = new FormEncodingBuilder()
                     .add("device_id",device_id)
                     .add("type",query_type)
@@ -75,6 +76,7 @@ public class GetValueThisMonth implements Runnable{
                 JSONArray jsonArray = json.getJSONArray("date");
 
                 int length = jsonArray.length();
+                boolean finalMeasure = false ;
                 String first_measurement = jsonArray.getJSONObject(0).getString("measurement");
                 double sum;
                 if (this.type.equals(LIGHT))
@@ -92,18 +94,20 @@ public class GetValueThisMonth implements Runnable{
                     else
                         sum = humidity;
                 }
+
                 String first_date = jsonArray.getJSONObject(0).getString("date");
                 SimpleDateFormat first_date_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date firstDate = first_date_format.parse(first_date);
                 Calendar first_cal = Calendar.getInstance();
                 first_cal.setTime(firstDate);
-                int today = first_cal.get(Calendar.DAY_OF_MONTH);
+                int thisMonth = first_cal.get(Calendar.MONTH) + 1;
+
                 double count = 1.0 ;
                 for(int i = 0 ; i < length ; i ++)
                 {
                     if(i == length - 1) {
                         this.results.add(sum/count);
-                        this.days.add(String.valueOf(today));
+                        this.months.add(String.valueOf(thisMonth));
                         break;
                     }
                     String temp = jsonArray.getJSONObject(i + 1).getString("measurement");
@@ -128,11 +132,11 @@ public class GetValueThisMonth implements Runnable{
                     Date parsedDate = dateFormat.parse(this_date);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(parsedDate);
-                    int nextday = cal.get(Calendar.DAY_OF_MONTH);
+                    int nextMonth = cal.get(Calendar.MONTH) + 1;
 
-                    if(nextday != today) {
+                    if(nextMonth != thisMonth) {
                         this.results.add(sum/count);
-                        this.days.add(String.valueOf(today));
+                        this.months.add(String.valueOf(thisMonth));
                         sum = temp_value;
                         count = 1 ;
                     }
@@ -140,9 +144,10 @@ public class GetValueThisMonth implements Runnable{
                         sum += temp_value;
                         count += 1;
                     }
-                    today = nextday;
+                    thisMonth = nextMonth;
                 }
             }
+
 
         } catch (ParseException ex) {
             ex.printStackTrace();

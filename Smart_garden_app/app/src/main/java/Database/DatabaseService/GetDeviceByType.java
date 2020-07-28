@@ -1,4 +1,4 @@
-package com.example.smartgarden;
+package Database.DatabaseService;
 
 import android.util.Log;
 
@@ -22,7 +22,7 @@ public class GetDeviceByType implements Runnable {
     private String url = "http://" + Constants.DATABASE_IP + Constants.GET_DEVICE_BY_TYPE;
     private String type;
     private String user_id;
-    protected Vector<String> results = new Vector<>();
+    public Vector<String> results = new Vector<>();
     public GetDeviceByType(String user_id, String type){
         this.user_id = user_id;
         this.type = type;

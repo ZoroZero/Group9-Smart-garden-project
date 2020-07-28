@@ -78,6 +78,8 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             reading1.setVisibility(View.GONE);
             device_readingType1TV.setText("Light intensity");
             readingBar1.setEndValue(Constants.MAX_LIGHT);
+            readingBar1.setDividerSize(100);
+            readingBar1.setDividerSize(1);
             ThresholdLabel1.setText("Intensity threshold");
             device_Threshold1TV.setText(getIntent().getStringExtra("device_detail.device_threshold") + " lux");
             ThresholdLabel2.setVisibility(View.GONE);
@@ -88,6 +90,10 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             device_readingType1TV.setText("Temperature");
             readingBar.setEndValue(Constants.MAX_HUMID);
             readingBar1.setEndValue(Constants.MAX_TEMP);
+            readingBar1.setDividerSize(5);
+            readingBar1.setDividerSize(1);
+            readingBar.setDividerSize(25);
+            readingBar.setDividerSize(2);
             ThresholdLabel1.setText("Temperature threshold");
             ThresholdLabel2.setText("Temperature threshold");
             String[] thresholds = Objects.requireNonNull(getIntent().getStringExtra("device_detail.device_threshold")).split(":");

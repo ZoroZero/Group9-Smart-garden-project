@@ -197,20 +197,22 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/changeSetting_thresholdInput1"
-                        android:layout_width="100dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
                         android:ems="10"
                         android:inputType="number"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/changeSetting_newThresholdType1" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -232,20 +234,22 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/changeSetting_thresholdInput2"
-                        android:layout_width="100dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
                         android:ems="10"
                         android:inputType="number"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/changeSetting_newThresholdType2" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -21,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.example.smartgarden.MainActivity;
+import Report.ViewReport;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -112,7 +112,7 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                 finish();
                 return true;
             case 5:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), ViewReport.class));
                 finish();
                 return true;
             case 6:

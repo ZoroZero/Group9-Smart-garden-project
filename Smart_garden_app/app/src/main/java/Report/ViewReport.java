@@ -1,4 +1,4 @@
-package com.example.smartgarden;
+package Report;
 
 
 
@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 ;
@@ -24,7 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 
-
+import com.example.smartgarden.R;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -44,22 +43,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
+import Database.DatabaseService.GetDataFromURL;
+import Database.DatabaseService.GetDeviceByType;
+import Database.DatabaseService.GetValueInCustomDate;
+import Database.DatabaseService.GetValueThisMonth;
+import Database.DatabaseService.GetValueThisYear;
+import Database.DatabaseService.GetValueToday;
+import Database.DatabaseService.SendDataToAI;
 import Helper.Constants;
 import Login_RegisterUser.UserLoginManagement;
 
 
-public class MainActivity extends AppCompatActivity {
+public class ViewReport extends AppCompatActivity {
     GraphView graphTemperature,graphHumidity,graphLightLevel;
     TextView  textTemperature,textHumidity,textLightLevel;
     //Constant for device type
-    protected final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
-    protected final static String TEMP = "T";
-    protected final static String HUMIDITY = "H";
-    protected final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
+    public final static String TEMP_HUMIDITY = Constants.TEMPHUMI_SENSOR_TYPE;
+    public final static String TEMP = "T";
+    public final static String HUMIDITY = "H";
+    public final static String LIGHT = Constants.LIGHT_SENSOR_TYPE;
 
     //Constant for value threshold
     protected final static int MAX_TEMP = 50;
@@ -508,7 +512,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
             DatePickerDialog dpd;
-            dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+            dpd = new DatePickerDialog(ViewReport.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int Dyear, int Dmonth, int DdayOfMonth) {
                     tv.setText("Measurement by hour (unit : " + unit +") in day : " + DdayOfMonth + "-"+ (Dmonth + 1) + "-" + Dyear );

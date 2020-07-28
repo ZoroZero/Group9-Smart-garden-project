@@ -100,11 +100,14 @@ public class DeviceDetailAdapter extends BaseAdapter{
                 device_icon.setImageResource(R.drawable.ic_display_light_icon);
                 if(devices.elementAt(position).getStatus().equals("Off")) {
                     statusIcon.setImageResource(R.drawable.ic_power_off_24);
+                    statusTV.setText(devices.elementAt(position).getStatus());
                 }
                 else{
+                    String[] status = devices.elementAt(position).getStatus().split("-");
                     statusIcon.setImageResource(R.drawable.ic_light_30);
+                    statusTV.setText(status[0] + " - " + Integer.parseInt(status[1])*100/255 +"%" );
                 }
-                statusTV.setText(devices.elementAt(position).getStatus());
+
                 statusTV1.setVisibility(View.GONE);
                 statusIcon1.setVisibility(View.GONE);
                 return v;

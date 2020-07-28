@@ -302,7 +302,7 @@ public class Garden_Database_Control {
 
                                     // Send notification
                                     NotificationHelper.displayDeviceNotification(sensors.get(position), "Warning",
-                                            "Device" + sensors.get(position).getDevice_id() + " is sending a warning",
+                                            "Device " + sensors.get(position).getDevice_id() + " change output" + sensors.get(position).getLinked_device_id() + " power to " + new_Intensity*100/255,
                                             context);
                                 }
                             } catch (JSONException e) {

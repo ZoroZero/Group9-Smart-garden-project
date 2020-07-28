@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import Helper.Constants;
-import com.example.smartgarden.MainActivity;
+import Report.ViewReport;
 import com.example.smartgarden.R;
 
 import org.json.JSONArray;
@@ -135,7 +135,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), RegisterPlant.class));
                 return;
             case R.id.Home_ViewReport_Btn:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), ViewReport.class));
                 return;
             case R.id.Home_Logout_Btn:
                 UserLoginManagement.getInstance(getApplicationContext()).logOut();

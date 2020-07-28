@@ -1,7 +1,6 @@
-package com.example.smartgarden;
+package Database.DatabaseService;
 
-import android.util.Log;
-
+import Report.ViewReport;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -21,32 +20,25 @@ import java.util.Vector;
 
 import Helper.Constants;
 
-public class GetValueInCustomDate implements Runnable{
+public class GetValueThisMonth implements Runnable{
     private OkHttpClient client = new OkHttpClient();
-    private String url = "http://" + Constants.DATABASE_IP +  Constants.GET_VALUE_BY_CUSTOM_DATE;
+    private String url = "http://" + Constants.DATABASE_IP + Constants.GET_VALUE_BY_MONTH;
     private String device_id;
     private String type;
-    private int day;
-    private int month;
-    private int year;
     private String query_type  = "";
-    private final String TEMP_HUMIDITY = MainActivity.TEMP_HUMIDITY;
-    private final String TEMP = MainActivity.TEMP;
-    private final String HUMIDITY = MainActivity.HUMIDITY;
-    private final String LIGHT = MainActivity.LIGHT;
-    protected Vector<Double> results = new Vector<>();
-    protected Vector<String> hours = new Vector<>();
-    public GetValueInCustomDate(String device_id, String type, int day, int month, int year){
+    private final String TEMP_HUMIDITY = ViewReport.TEMP_HUMIDITY;
+    private final String TEMP = ViewReport.TEMP;
+    private final String HUMIDITY = ViewReport.HUMIDITY;
+    private final String LIGHT = ViewReport.LIGHT;
+    public Vector<Double> results = new Vector<>();
+    public Vector<String> days = new Vector<>();
+    public GetValueThisMonth(String device_id, String type){
         this.device_id = device_id;
         this.type = type;
-        this.day = day;
-        this.month = month;
-        this.year = year;
     }
 
     @Override
     public void run() {
-
         try {
             if(this.type.equals(TEMP) || this.type.equals(HUMIDITY))
             {
@@ -57,9 +49,6 @@ public class GetValueInCustomDate implements Runnable{
             RequestBody formBody = new FormEncodingBuilder()
                     .add("device_id",device_id)
                     .add("type",query_type)
-                    .add("day", String.valueOf(day))
-                    .add("month", String.valueOf(month))
-                    .add("year", String.valueOf(year))
                     .build();
             Request request = new Request.Builder()
                     .url(url)
@@ -79,7 +68,7 @@ public class GetValueInCustomDate implements Runnable{
             if ((responsesCode = responses.code()) == 200){
 
                 String jsonData = responses.body().string();
-                Log.i("Json data", jsonData);
+
                 JSONObject json = new JSONObject(jsonData);
 
 
@@ -109,13 +98,13 @@ public class GetValueInCustomDate implements Runnable{
                 Date firstDate = first_date_format.parse(first_date);
                 Calendar first_cal = Calendar.getInstance();
                 first_cal.setTime(firstDate);
-                int thisHour = first_cal.get(Calendar.HOUR_OF_DAY);
+                int today = first_cal.get(Calendar.DAY_OF_MONTH);
                 double count = 1.0 ;
                 for(int i = 0 ; i < length ; i ++)
                 {
                     if(i == length - 1) {
                         this.results.add(sum/count);
-                        this.hours.add(String.valueOf(thisHour));
+                        this.days.add(String.valueOf(today));
                         break;
                     }
                     String temp = jsonArray.getJSONObject(i + 1).getString("measurement");
@@ -140,23 +129,21 @@ public class GetValueInCustomDate implements Runnable{
                     Date parsedDate = dateFormat.parse(this_date);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(parsedDate);
-                    int nextHour = cal.get(Calendar.HOUR_OF_DAY);
+                    int nextday = cal.get(Calendar.DAY_OF_MONTH);
 
-
-                    if(nextHour != thisHour) {
+                    if(nextday != today) {
                         this.results.add(sum/count);
-                        this.hours.add(String.valueOf(thisHour));
+                        this.days.add(String.valueOf(today));
                         sum = temp_value;
-                        count = 1;
+                        count = 1 ;
                     }
                     else {
                         sum += temp_value;
                         count += 1;
                     }
-                    thisHour = nextHour;
+                    today = nextday;
                 }
             }
-
 
         } catch (ParseException ex) {
             ex.printStackTrace();
@@ -167,4 +154,5 @@ public class GetValueInCustomDate implements Runnable{
         }
 
     }
+
 }

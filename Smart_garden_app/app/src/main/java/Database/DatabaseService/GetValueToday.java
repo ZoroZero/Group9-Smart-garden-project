@@ -1,7 +1,6 @@
-package com.example.smartgarden;
+package Database.DatabaseService;
 
-import android.util.Log;
-
+import Report.ViewReport;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -27,12 +26,12 @@ public class GetValueToday implements Runnable {
     private String device_id;
     private String type;
     private String query_type  = "";
-    private final String TEMP_HUMIDITY = MainActivity.TEMP_HUMIDITY;
-    private final String TEMP = MainActivity.TEMP;
-    private final String HUMIDITY = MainActivity.HUMIDITY;
-    private final String LIGHT = MainActivity.LIGHT;
-    protected Vector<Double> results = new Vector<>();
-    protected Vector<String> hours = new Vector<>();
+    private final String TEMP_HUMIDITY = ViewReport.TEMP_HUMIDITY;
+    private final String TEMP = ViewReport.TEMP;
+    private final String HUMIDITY = ViewReport.HUMIDITY;
+    private final String LIGHT = ViewReport.LIGHT;
+    public Vector<Double> results = new Vector<>();
+    public Vector<String> hours = new Vector<>();
     public GetValueToday(String device_id, String type){
         this.device_id = device_id;
         this.type = type;

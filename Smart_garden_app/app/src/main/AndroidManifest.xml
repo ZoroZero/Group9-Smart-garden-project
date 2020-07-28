@@ -61,7 +61,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="Report.ViewReport" />
         <activity
             android:name="Registeration.RegisterDeviceSearchActivity"
             android:label="@string/register_device"
