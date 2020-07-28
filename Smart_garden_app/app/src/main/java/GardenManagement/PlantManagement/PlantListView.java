@@ -41,7 +41,6 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
     private String[] plant_buy_date;
     private String[] plant_buy_location;
     private String[] plant_amount;
-    private String[] linked_sensor_id;
     private TextView totalPlantTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +145,6 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                 plant_buy_date = new String[jsonArray.length()];
                 plant_buy_location = new String[jsonArray.length()];
                 plant_amount = new String[jsonArray.length()];
-                linked_sensor_id = new String[jsonArray.length()];
                 int total_plant = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
@@ -155,11 +153,10 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                     plant_buy_date[i] = obj.getString("Buy_date");
                     plant_buy_location[i] = obj.getString("Buy_location");
                     plant_amount[i] = obj.getInt("Amount") +"";
-                    linked_sensor_id[i] = obj.getString("linked_device_id");
                     total_plant += obj.getInt("Amount");
                 }
                 PlantDetailAdapter itemAdapter = new PlantDetailAdapter(getApplicationContext(), plant_name,
-                        plant_buy_date, plant_amount, linked_sensor_id);
+                        plant_buy_date, plant_amount);
                 plantListView.setAdapter(itemAdapter);
                 totalPlantTV.setText(total_plant + " plants");
 
@@ -177,8 +174,6 @@ public class PlantListView extends AppCompatActivity implements VolleyCallBack {
                                 plant_buy_location[position]);
                         showPlantDetail.putExtra("plant_detail.amount",
                                 plant_amount[position]);
-                        showPlantDetail.putExtra("plant_detail.linked_sensor_id",
-                                linked_sensor_id[position]);
 
                         startActivity(showPlantDetail);
                     }

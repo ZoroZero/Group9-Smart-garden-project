@@ -158,8 +158,7 @@ public class Garden_Database_Control {
 
     // Add new plant
     public static void addNewPlant(final String plant_name, final String buy_date, final String buy_location,
-                                   final String amount, final String linked_sensor_id,
-                                   final Context context, final VolleyCallBack callBack){
+                                   final String amount, final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         final String user_id = UserLoginManagement.getInstance(context).getUserId()+"";
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -188,7 +187,6 @@ public class Garden_Database_Control {
                 params.put("buy_date", buy_date);
                 params.put("buy_location", buy_location);
                 params.put("amount", amount);
-                params.put("linked_device_id", linked_sensor_id);
                 return params;
             }
         };
@@ -520,8 +518,7 @@ public class Garden_Database_Control {
 
     // Change plant setting
     public static void changePlantSetting(final String plant_name, final String buy_date, final String new_buy_location,
-                                          final String new_amount, final String new_linked_device_id,
-                                          final Context context, final VolleyCallBack callBack){
+                                          final String new_amount, final Context context, final VolleyCallBack callBack){
         String database_ip = Helper.getConfigValue(context, "database_server");
         final String user_id = UserLoginManagement.getInstance(context).getUserId() + "";
 
@@ -551,7 +548,6 @@ public class Garden_Database_Control {
                 params.put("buy_date", buy_date);
                 params.put("new_buy_location", new_buy_location);
                 params.put("new_amount", new_amount);
-                params.put("linked_device_id", new_linked_device_id);
                 return params;
             }
         };

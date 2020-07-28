@@ -142,6 +142,10 @@ public class RegisterLightSettingActivity extends AppCompatActivity implements V
                 Toast.makeText(getApplicationContext(), "Threshold is too high", Toast.LENGTH_LONG).show();
                 return;
             }
+            else if(thresholdCheck < Constants.MIN_LIGHT){
+                Toast.makeText(getApplicationContext(), "Threshold is too low", Toast.LENGTH_LONG).show();
+                return;
+            }
         }catch(Exception e){
             Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
             return;

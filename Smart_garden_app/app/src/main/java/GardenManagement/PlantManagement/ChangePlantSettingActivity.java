@@ -28,7 +28,6 @@ import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
 
 public class ChangePlantSettingActivity extends AppCompatActivity implements VolleyCallBack {
-    private String new_linked_sensor_id = "";
     private EditText newBuyLocationET;
     private EditText newAmountET;
     private Button submitBtn;
@@ -46,8 +45,6 @@ public class ChangePlantSettingActivity extends AppCompatActivity implements Vol
         TextView plantDateTV = findViewById(R.id.plantDate_TV);
         TextView currentBuyLocationTV = findViewById(R.id.plantCurrBuyLocationTextVIew);
         TextView currentAmountTV = findViewById(R.id.plantCurrAmountTextVIew);
-        TextView currentDeviceIDTV = findViewById(R.id.plantCurrDeviceIDTextVIew);
-        Spinner linked_sensor_idSpinner = findViewById(R.id.changePlantSetting_SensorID);
         newBuyLocationET = findViewById(R.id.changePlantSetting_BuyLocationEditText);
         newAmountET = findViewById(R.id.changePlantSetting_AmountEditText);
         progressBarHolder = findViewById(R.id.changePlantSetting_progressBarHolder);
@@ -59,31 +56,8 @@ public class ChangePlantSettingActivity extends AppCompatActivity implements Vol
         plantDateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
         currentBuyLocationTV.setText(getIntent().getStringExtra("plant_detail.buy_location"));
         currentAmountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
-        currentDeviceIDTV.setText(getIntent().getStringExtra("plant_detail.linked_sensor_id"));
         newBuyLocationET.setText(getIntent().getStringExtra("plant_detail.buy_location"));
         newAmountET.setText(getIntent().getStringExtra("plant_detail.amount"));
-
-        // Set up spinner
-        Vector<DeviceInformation> sensor = UserLoginManagement.getInstance(this).getSensor();
-        final String[] sensor_id = new String[UserLoginManagement.getInstance(this).getSensor().size() + 1];
-        for(int i = 0; i < sensor_id.length - 1; i++){
-            sensor_id[i] = sensor.get(i).getDevice_id();
-        }
-        sensor_id[sensor_id.length - 1] = "None";
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, sensor_id);
-        linked_sensor_idSpinner.setAdapter(arrayAdapter);
-
-        linked_sensor_idSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                new_linked_sensor_id = sensor_id[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,21 +78,20 @@ public class ChangePlantSettingActivity extends AppCompatActivity implements Vol
         startLoading();
         final String new_buy_location = newBuyLocationET.getText().toString();
         final String new_amount = newAmountET.getText().toString();
-        if(new_amount.equals("") || new_buy_location.equals("") || new_linked_sensor_id.equals("")){
+        if(new_amount.equals("") || new_buy_location.equals("")){
             Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
         }
         else if(new_buy_location.length() >= 200){
             Toast.makeText(getApplicationContext(), "New buy location is too long", Toast.LENGTH_LONG).show();
         }
         else if(new_amount.equals(getIntent().getStringExtra("plant_detail.amount")) &&
-                new_buy_location.equals(getIntent().getStringExtra("plant_detail.buy_location"))&&
-                new_linked_sensor_id.equals(getIntent().getStringExtra("plant_detail.linked_sensor_id"))){
+                new_buy_location.equals(getIntent().getStringExtra("plant_detail.buy_location"))){
             Toast.makeText(getApplicationContext(), "No change needed to applied", Toast.LENGTH_LONG).show();
         }
         else{
             Garden_Database_Control.changePlantSetting(getIntent().getStringExtra("plant_detail.plant_name"),
                     getIntent().getStringExtra("plant_detail.buy_date"), new_buy_location, new_amount,
-                    new_linked_sensor_id, getApplicationContext(), ChangePlantSettingActivity.this);
+                     getApplicationContext(), ChangePlantSettingActivity.this);
         }
     }
 

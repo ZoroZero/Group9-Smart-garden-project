@@ -31,6 +31,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import Database.Garden_Database_Control;
@@ -41,12 +45,11 @@ import Login_RegisterUser.HomeActivity;
 import Login_RegisterUser.UserLoginManagement;
 
 public class PlantDetailActivity extends AppCompatActivity implements VolleyCallBack {
-    private TextView readingTimeTV;
-    private TextView device_lastReadingTV;
-    private TextView device_lastReading1TV;
-    private pl.pawelkleczkowski.customgauge.CustomGauge readingBar;
-    private pl.pawelkleczkowski.customgauge.CustomGauge readingBar1;
 
+    TextView averageTemp_TV;
+    TextView averageHumid_TV;
+    TextView averageLight_TV;
+    TextView planted_day_TV;
     // Loading animation
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
@@ -59,74 +62,65 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_detail);
 
+        Calendar calendar = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = calendar.getTime();
+
 //        IOT_Server_Access.connect(this);
         // Components
+        averageTemp_TV = findViewById(R.id.Home_DeviceLastReading_TV);
+        averageHumid_TV = findViewById(R.id.Home_DeviceLastReading1_TV);
+        averageLight_TV = findViewById(R.id.Home_DeviceLastReading2_TV);
+        planted_day_TV = findViewById(R.id.Home_DeviceLastReading3_TV);
+        TextView planted_type_TV = findViewById(R.id.Home_readingType3_TV);
+
         TextView plant_nameTV = findViewById(R.id.Detail_Plantname_TV);
         TextView buy_dateTV = findViewById(R.id.Detail_BuyDate_TV);
         TextView buy_locationTV = findViewById(R.id.Detail_BuyLocation_TV);
         TextView amountTV = findViewById(R.id.Detail_Amount_TV);
-        TextView sensorIDTV = findViewById(R.id.Detail_SensorId_TV);
-        readingTimeTV= findViewById(R.id.Detail_LastReadingTime_TV);
-        device_lastReadingTV = findViewById(R.id.PlantDetail_DeviceLastReading_TV);
-        TextView device_readingTypeTV = findViewById(R.id.PlantDetail_readingType_TV);
-        device_lastReading1TV = findViewById(R.id.PlantDetail_DeviceLastReading1_TV);
-        TextView device_readingType1TV = findViewById(R.id.PlantDetail_readingType1_TV);
 
-        ImageView readingTypeIcon = findViewById(R.id.PlantDetail_readingTypeIcon_TV);
-        ImageView readingTypeIcon1 = findViewById(R.id.PlantDetail_readingTypeIcon1_TV);
-
-        readingBar = findViewById(R.id.PlantDetail_DeviceLastReading);
-        readingBar1 = findViewById(R.id.PlantDetail_DeviceLastReading1);
-        ConstraintLayout readingLayout = findViewById(R.id.PlantDetail_reading);
         progressBarHolder = findViewById(R.id.progressBarHolder);
         Button removePlant_Btn = findViewById(R.id.PlantDetail_RemovePlant_Btn);
         Button changePlantSetting_Btn = findViewById(R.id.PlantDetail_ChangeSettingPlant_Btn);
-        LinearLayout linearReadingLayout = findViewById(R.id.plantDetail_deviceReading);
-        ConstraintLayout lastDeviceReadingLayout = findViewById(R.id.plantDetail_lastReading_Layout);
+
         // Set text
         plant_nameTV.setText(getIntent().getStringExtra("plant_detail.plant_name"));
         buy_dateTV.setText(getIntent().getStringExtra("plant_detail.buy_date"));
         buy_locationTV.setText(getIntent().getStringExtra("plant_detail.buy_location"));
         amountTV.setText(getIntent().getStringExtra("plant_detail.amount"));
-        sensorIDTV.setText(getIntent().getStringExtra("plant_detail.linked_sensor_id"));
-        // Get linked device
-        if(Objects.equals(getIntent().getStringExtra("plant_detail.linked_sensor_id"), "None")){
-            linearReadingLayout.setVisibility(View.GONE);
-            lastDeviceReadingLayout.setVisibility(View.GONE);
+
+        // Get planted day
+        Date plantedDay = null;
+        try {
+            plantedDay = dateFormat.parse(Objects.requireNonNull(getIntent().getStringExtra("plant_detail.buy_date")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assert plantedDay != null;
+        long difference = today.getTime() - plantedDay.getTime();
+        long differenceDates = Math.abs(difference) / (24 * 60 * 60 * 1000);
+        String dayDifference = Long.toString(differenceDates);
+        // Set texts
+        if(difference < 0){
+            planted_day_TV.setText(dayDifference);
+            planted_type_TV.setText("till plant");
         }
         else {
-            DeviceInformation sensorInfo = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
-                    UserLoginManagement.getInstance(this).getSensor());
-            assert sensorInfo != null;
-            if (sensorInfo.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)) {
-                readingLayout.setVisibility(View.GONE);
-                device_readingType1TV.setText("Light intensity");
-                readingTypeIcon1.setImageResource(R.drawable.ic_light_30);
-                readingBar1.setEndValue(Constants.MAX_LIGHT);
-            } else if (sensorInfo.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
-                device_readingTypeTV.setText("Humidity");
-                device_readingType1TV.setText("Temperature");
-                readingTypeIcon.setImageResource(R.drawable.ic_humidity_30);
-                readingTypeIcon1.setImageResource(R.drawable.ic_temphumi_sensor_icon_black);
-                readingBar.setEndValue(Constants.MAX_HUMID);
-                readingBar1.setEndValue(Constants.MAX_TEMP);
-            }
-            
-            // Get reading
-            Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
-                    this, this);
-
-            final Handler handler=new Handler();
-            handler.post(new Runnable(){
-                @Override
-                public void run() {
-                    // Get reading
-                    Garden_Database_Control.getDeviceLastReading(getIntent().getStringExtra("plant_detail.linked_sensor_id"),
-                            getApplicationContext(), PlantDetailActivity.this);
-                    handler.postDelayed(this,2000); // set time here to refresh textView
-                }
-            });
+            planted_day_TV.setText(dayDifference);
         }
+
+        // Get reading
+        Garden_Database_Control.FetchDevicesInfo(this, this);
+
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Get reading
+                        Garden_Database_Control.FetchDevicesInfo(getApplicationContext(), PlantDetailActivity.this);
+                        handler.postDelayed(this, 2000); // set time here to refresh textView
+                    }
+        });
 
         removePlant_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +138,6 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
                 changeSetting.putExtra("plant_detail.buy_date", getIntent().getStringExtra("plant_detail.buy_date"));
                 changeSetting.putExtra("plant_detail.buy_location", getIntent().getStringExtra("plant_detail.buy_location"));
                 changeSetting.putExtra("plant_detail.amount", getIntent().getStringExtra("plant_detail.amount"));
-                changeSetting.putExtra("plant_detail.linked_sensor_id", getIntent().getStringExtra("plant_detail.linked_sensor_id"));
                 startActivity(changeSetting);
             }
         });
@@ -153,36 +146,82 @@ public class PlantDetailActivity extends AppCompatActivity implements VolleyCall
     @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessResponse(String result) {
-        JSONObject jsonObject;
         try {
-            jsonObject = new JSONObject(result);
-            if(!jsonObject.getBoolean("error")){
-                if(jsonObject.has("reading")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("reading");
-                    final JSONObject reading  = jsonArray.getJSONObject(0);
-                    //Log.i("JSON object", String.valueOf(reading));
-                    String type = reading.getString("type");
-                    readingTimeTV.setText(reading.getString("date"));
-                    if(type.equals(Constants.TEMPHUMI_SENSOR_TYPE)) {
-                        String[] measurements = reading.getString("measurement").split(":");
-                        device_lastReadingTV.setText(measurements[1] + "%");
-                        readingBar.setValue(Math.min(Integer.parseInt(measurements[1]), readingBar.getEndValue()));
-                        device_lastReading1TV.setText(measurements[0] + "\u2103");
-                        readingBar1.setValue(Math.min(Integer.parseInt(measurements[0]), readingBar1.getEndValue()));
+            JSONObject jsonObject = new JSONObject(result);
+            if (!jsonObject.getBoolean("error")) {
+                JSONArray jsonArray = jsonObject.getJSONArray("list");
+                final String[] get_device_id = new String[jsonArray.length()];
+                final String[] get_device_name = new String[jsonArray.length()];
+                final String[] get_linked_device_id = new String[jsonArray.length()];
+                final String[] get_linked_device_name = new String[jsonArray.length()];
+                final String[] get_device_type = new String[jsonArray.length()];
+                final String[] get_threshold = new String[jsonArray.length()];
+                final String[] get_status = new String[jsonArray.length()];
+                final String[] get_status_date = new String[jsonArray.length()];
+                float sum_temp = 0;
+                float sum_humid = 0;
+                float sum_light = 0;
+                int count_temp_humid = 0;
+                int count_light = 0;
+                int count_output = 0;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    get_device_id[i] = obj.getString("device_id");
+                    get_device_name[i] = obj.getString("device_name");
+                    get_linked_device_id[i] = obj.getString("linked_device_id");
+                    get_linked_device_name[i] = obj.getString("linked_device_name");
+                    get_threshold[i] = obj.getString("threshold");
+                    get_status[i] = obj.getString("status");
+                    get_status_date[i] = obj.getString("date");
+                    if (obj.getString("status").equals("null")) {
+                        get_status[i] = "No record";
+                        get_status_date[i] = "No record";
                     }
-                    else{
-                        String measurement = reading.getString("measurement");
-                        device_lastReading1TV.setText(measurement + " lux");
-                        readingBar1.setValue(Math.min(Integer.parseInt(measurement), readingBar1.getEndValue()));
+                    // Get device type and summarize
+                    if (Helper.stringContainsItemFromList(get_device_id[i], Constants.OUTPUT_ID)) {
+                        get_device_type[i] = Constants.OUTPUT_TYPE;
+                        if (!get_status[i].equals("Off")) {
+                            count_output += 1;
+                        }
+                    } else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.LIGHT_SENSOR_ID)) {
+                        get_device_type[i] = Constants.LIGHT_SENSOR_TYPE;
+                        if (!get_status[i].equals("No record")) {
+                            count_light += 1;
+                            sum_light += Integer.parseInt(get_status[i]);
+                        }
+                    } else if (Helper.stringContainsItemFromList(get_device_id[i], Constants.TEMPHUMI_SENSOR_ID)) {
+                        get_device_type[i] = Constants.TEMPHUMI_SENSOR_TYPE;
+                        if (!get_status[i].equals("No record")) {
+                            count_temp_humid += 1;
+//                            Log.i("Status", get_status[i]);
+                            sum_temp += Integer.parseInt(get_status[i].split(":")[0]);
+                            sum_humid += Integer.parseInt(get_status[i].split(":")[1]);
+                        }
                     }
                 }
-                else{
-                    device_lastReadingTV.setText("No record");
-                    device_lastReading1TV.setText("No record");
-                    readingTimeTV.setText("No record");
+                UserLoginManagement.getInstance(this).storeUserDevices(get_device_id, get_device_name, get_linked_device_id,
+                        get_linked_device_name, get_device_type, get_threshold, get_status, get_status_date);
+                // Summarize reading for user
+                if (count_temp_humid == 0) {
+                    averageTemp_TV.setText("No reading");
+                    averageHumid_TV.setText("No reading");
+                } else {
+                    averageTemp_TV.setText(sum_temp / count_temp_humid + "\u2103");
+                    averageHumid_TV.setText(sum_humid / count_temp_humid + "%");
+                }
+
+                if (count_light == 0) {
+                    averageLight_TV.setText("No reading");
+                } else {
+                    averageLight_TV.setText(sum_light / count_light + " lux");
                 }
             }
-        } catch (JSONException e) {
+            else{
+                averageTemp_TV.setText("No reading");
+                averageHumid_TV.setText("No reading");
+                averageLight_TV.setText("No reading");
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

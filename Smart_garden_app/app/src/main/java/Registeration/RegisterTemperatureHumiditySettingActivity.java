@@ -124,8 +124,17 @@ public class RegisterTemperatureHumiditySettingActivity extends AppCompatActivit
                 Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
                 return;
             }
-            if(humidThresholdCheck >= Constants.MAX_HUMID){
-                Toast.makeText(getApplicationContext(), "Temperature threshold is too high", Toast.LENGTH_LONG).show();
+            else if(tempThresholdCheck < Constants.MIN_TEMP){
+                Toast.makeText(getApplicationContext(), "Temperature threshold is too low", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            else if(humidThresholdCheck >= Constants.MAX_HUMID){
+                Toast.makeText(getApplicationContext(), "Humidity threshold is too high", Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if(humidThresholdCheck < Constants.MIN_HUMID){
+                Toast.makeText(getApplicationContext(), "Humidity threshold is too low", Toast.LENGTH_LONG).show();
                 return;
             }
         }catch(Exception e){

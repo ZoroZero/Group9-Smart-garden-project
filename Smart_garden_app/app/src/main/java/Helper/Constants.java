@@ -96,6 +96,14 @@ public class Constants {
 
     public static int MAX_HUMID = 100;
 
+    public static int MIN_LIGHT = 10;
+
+    public static int MIN_TEMP = 10;
+
+    public static int MIN_HUMID = 10;
+
+    public static int MIN_PLANT_AMOUNT= 1;
+
     // Notification
     public static String CHANNEL_ID = "smart_garden";
 

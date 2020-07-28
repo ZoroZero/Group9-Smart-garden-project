@@ -21,17 +21,15 @@ public class PlantDetailAdapter  extends BaseAdapter {
     private String[] plant_names;
     private String[] plant_buy_dates;
     private String[] plant_amounts;
-    private String[] linked_sensor_ids;
     private SimpleDateFormat dateFormat;
     private Date today;
 
     @SuppressLint("SimpleDateFormat")
     public PlantDetailAdapter(Context context, String[] plant_names, String[] plant_buy_dates,
-                              String[] plant_amounts, String[] linked_sensor_ids){
+                              String[] plant_amounts){
         this.plant_names = plant_names;
         this.plant_buy_dates = plant_buy_dates;
         this.plant_amounts = plant_amounts;
-        this.linked_sensor_ids = linked_sensor_ids;
         mInfoInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Calendar calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -62,12 +60,10 @@ public class PlantDetailAdapter  extends BaseAdapter {
         TextView nameTextView = v.findViewById(R.id.PlantDetail_PlantName_TV);
         TextView buy_dateTextView = v.findViewById(R.id.PlantDetail_BuyDate_TV);
         TextView amountTextView = v.findViewById(R.id.PlantDetail_Amount_TV);
-        TextView linkedSensorIDTextView = v.findViewById(R.id.PlantDetail_LinkedSensorID_TV);
         // Get name from array
         String name = plant_names[position];
         String date = plant_buy_dates[position];
         String amount = plant_amounts[position];
-        String linked_sensor_id = linked_sensor_ids[position];
         Date plantedDay = null;
         try {
             plantedDay = dateFormat.parse(date);
@@ -87,7 +83,6 @@ public class PlantDetailAdapter  extends BaseAdapter {
             buy_dateTextView.setText("Days planted: " + dayDifference);
         }
         amountTextView.setText("Amount: " + amount);
-        linkedSensorIDTextView.setText("Sensor: " + linked_sensor_id);
         return v;
     }
 }
