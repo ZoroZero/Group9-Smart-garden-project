@@ -21,7 +21,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name="GardenManagement.PlantManagement.ChangePlantSettingActivity"></activity>
+        <activity android:name="GardenManagement.DeviceManagement.OutputSettingActivity"></activity>
+        <activity android:name="GardenManagement.PlantManagement.ChangePlantSettingActivity" />
         <activity android:name="GardenManagement.DeviceManagement.DeviceListViewActivity" />
         <activity android:name="GardenManagement.DeviceManagement.SensorSettingActivity" /> <!-- Activity -->
         <activity

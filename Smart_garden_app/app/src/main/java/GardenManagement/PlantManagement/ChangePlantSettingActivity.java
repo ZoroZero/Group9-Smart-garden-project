@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.Vector;
 
 import Database.Garden_Database_Control;
+import Helper.Constants;
 import Helper.DeviceInformation;
 import Helper.VolleyCallBack;
 import Login_RegisterUser.UserLoginManagement;
@@ -75,24 +76,37 @@ public class ChangePlantSettingActivity extends AppCompatActivity implements Vol
     }
 
     private void changePlantProperties(){
-        startLoading();
+
         final String new_buy_location = newBuyLocationET.getText().toString();
         final String new_amount = newAmountET.getText().toString();
         if(new_amount.equals("") || new_buy_location.equals("")){
             Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
+            return;
         }
         else if(new_buy_location.length() >= 200){
             Toast.makeText(getApplicationContext(), "New buy location is too long", Toast.LENGTH_LONG).show();
+            return;
         }
         else if(new_amount.equals(getIntent().getStringExtra("plant_detail.amount")) &&
                 new_buy_location.equals(getIntent().getStringExtra("plant_detail.buy_location"))){
             Toast.makeText(getApplicationContext(), "No change needed to applied", Toast.LENGTH_LONG).show();
+            return;
         }
-        else{
-            Garden_Database_Control.changePlantSetting(getIntent().getStringExtra("plant_detail.plant_name"),
+
+        try{
+            int thresholdCheck = Integer.parseInt(new_amount);
+            if(thresholdCheck < Constants.MIN_PLANT_AMOUNT){
+                Toast.makeText(getApplicationContext(), "Invalid amount", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Invalid amount format", Toast.LENGTH_LONG).show();
+            return;
+        }
+        startLoading();
+        Garden_Database_Control.changePlantSetting(getIntent().getStringExtra("plant_detail.plant_name"),
                     getIntent().getStringExtra("plant_detail.buy_date"), new_buy_location, new_amount,
                      getApplicationContext(), ChangePlantSettingActivity.this);
-        }
     }
 
     @Override

@@ -296,33 +296,31 @@
                     android:id="@+id/changePlantSetting__returnBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/round_green_shadow_btn"
                     android:fontFamily="sans-serif-light"
                     android:text="Return"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider17" />
+                    app:layout_constraintTop_toBottomOf="@+id/changePlantSetting__SubmitBtn" />
 
                 <Button
                     android:id="@+id/changePlantSetting__SubmitBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
                     android:background="@drawable/round_green_shadow_btn"
                     android:fontFamily="sans-serif-light"
                     android:text="Submit"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/changePlantSetting__returnBtn" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider17" />
 
                 <View
                     android:id="@+id/divider13"

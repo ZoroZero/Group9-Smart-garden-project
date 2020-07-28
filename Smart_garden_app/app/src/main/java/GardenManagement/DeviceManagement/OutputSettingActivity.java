@@ -1,8 +1,5 @@
 package GardenManagement.DeviceManagement;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +12,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import Helper.Constants;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.smartgarden.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -27,22 +26,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Database.Garden_Database_Control;
+import Helper.Constants;
 import Helper.DeviceInformation;
-import Helper.VolleyCallBack;
 import Helper.Helper;
+import Helper.VolleyCallBack;
 import IOT_Server.IOT_Server_Access;
 import Login_RegisterUser.UserLoginManagement;
-
-public class SensorSettingActivity extends AppCompatActivity implements VolleyCallBack {
+public class OutputSettingActivity extends AppCompatActivity implements VolleyCallBack {
     MqttAndroidClient client;
     Button submitBtn;
-    private String device_type;
-    private EditText new_device_nameET;
+    private EditText new_input_nameET;
     private EditText new_output_idET;
     private EditText new_output_nameET;
     private EditText threshold_Input1;
     private EditText threshold_Input2;
     private DeviceInformation deviceInformation;
+    private DeviceInformation linkedSensorInformation;
     private boolean changeSetting = false;
     // Loading animation
     AlphaAnimation inAnimation;
@@ -53,63 +52,60 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_setting);
+        setContentView(R.layout.activity_output_setting);
 
         if (IOT_Server_Access.client == null) {
             IOT_Server_Access.connect(getApplicationContext());
         }
         client = IOT_Server_Access.client;
-
-        device_type = getIntent().getStringExtra("device_setting.device_type");
-        assert device_type != null;
         deviceInformation = Helper.findDeviceWithDeviceId(getIntent().getStringExtra("device_setting.device_id"),
-                    UserLoginManagement.getInstance(this).getSensor());
+                UserLoginManagement.getInstance(this).getOutput());
 
+        assert deviceInformation != null;
+        linkedSensorInformation = Helper.findDeviceWithDeviceId(deviceInformation.getLinked_device_id(),
+                UserLoginManagement.getInstance(this).getSensor());
         // Component
-        TextView deviceId = findViewById(R.id.changeSetting_deviceId_TV);
-        TextView deviceType = findViewById(R.id.changeSetting_deviceType_TV);
-        TextView deviceName = findViewById(R.id.changeSetting_deviceName_TV);
-        TextView outputID = findViewById(R.id.changeSetting_outputID_TV);
-        TextView outputName = findViewById(R.id.changeSetting_outputName_TV);
+        TextView inputID = findViewById(R.id.OutputSetting_deviceId_TV);
+        TextView inputName = findViewById(R.id.OutputSetting_deviceName_TV);
+        TextView deviceId = findViewById(R.id.OutputSetting_outputID_TV);
+        TextView deviceName = findViewById(R.id.OutputSetting_outputName_TV);
 //        ConstraintLayout threshold1 = findViewById(R.id.changeSetting_threshold1);
-        ConstraintLayout current_threshold2 = findViewById(R.id.changeSetting_current_threshold2);
-        TextView currentThresholdType1 = findViewById(R.id.changeSetting_ThresHoldType1_TV);
-        TextView currentThresholdType2 = findViewById(R.id.changeSetting_ThresHoldType2_TV);
-        TextView currentThreshold1 = findViewById(R.id.changeSetting_deviceThreshold1_TV);
-        TextView currentThreshold2 = findViewById(R.id.changeSetting_deviceThreshold2_TV);
-        ConstraintLayout threshold2 = findViewById(R.id.changeSetting_threshold2);
-        TextView new_threshold_Type1 = findViewById(R.id.changeSetting_newThresholdType1);
-        TextView new_threshold_Type2 = findViewById(R.id.changeSetting_newThresholdType2);
+        ConstraintLayout current_threshold2 = findViewById(R.id.OutputSetting_current_threshold2);
+        TextView currentThresholdType1 = findViewById(R.id.OutputSetting_ThresHoldType1_TV);
+        TextView currentThresholdType2 = findViewById(R.id.OutputSetting_ThresHoldType2_TV);
+        TextView currentThreshold1 = findViewById(R.id.OutputSetting_deviceThreshold1_TV);
+        TextView currentThreshold2 = findViewById(R.id.OutputSetting_deviceThreshold2_TV);
+        ConstraintLayout threshold2 = findViewById(R.id.OutputSetting_threshold2);
+        TextView new_threshold_Type1 = findViewById(R.id.OutputSetting_newThresholdType1);
+        TextView new_threshold_Type2 = findViewById(R.id.OutputSetting_newThresholdType2);
 
-        new_device_nameET = findViewById(R.id.changeSetting_newDeviceName_ET);
-        new_output_idET = findViewById(R.id.changeSetting_outputID_ET);
-        new_output_nameET = findViewById(R.id.changeSetting_outputName_ET);
-        threshold_Input1 = findViewById(R.id.changeSetting_thresholdInput1);
-        threshold_Input2 = findViewById(R.id.changeSetting_thresholdInput2);
+        new_input_nameET = findViewById(R.id.OutputSetting_newDeviceName_ET);
+        new_output_idET = findViewById(R.id.OutputSetting_outputID_ET);
+        new_output_nameET = findViewById(R.id.OutputSetting_outputName_ET);
+        threshold_Input1 = findViewById(R.id.OutputSetting_thresholdInput1);
+        threshold_Input2 = findViewById(R.id.OutputSetting_thresholdInput2);
 
-        submitBtn = findViewById(R.id.changeSetting_submitBtn);
+        submitBtn = findViewById(R.id.OutputSetting_submitBtn);
         progressBarHolder = findViewById(R.id.changeDeviceSetting_progressBarHolder);
 
         // Set text
-        assert deviceInformation != null;
         deviceId.setText(deviceInformation.getDevice_id());
-        deviceType.setText(deviceInformation.getDevice_type());
         deviceName.setText(deviceInformation.getDevice_name());
-        outputID.setText(deviceInformation.getLinked_device_id());
-        outputName.setText(deviceInformation.getLinked_device_name());
-        new_device_nameET.setText(deviceInformation.getDevice_name());
-        new_output_idET.setText(deviceInformation.getLinked_device_id());
-        new_output_nameET.setText(deviceInformation.getLinked_device_name());
+        inputID.setText(deviceInformation.getLinked_device_id());
+        inputName.setText(deviceInformation.getLinked_device_name());
+        new_input_nameET.setText(deviceInformation.getLinked_device_name());
+        new_output_idET.setText(deviceInformation.getDevice_id());
+        new_output_nameET.setText(deviceInformation.getDevice_name());
 
         // Set threshold display
-        if(device_type.contains("Light")){
+        if(linkedSensorInformation.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)){
             threshold2.setVisibility(View.GONE);
             current_threshold2.setVisibility(View.GONE);
             new_threshold_Type1.setText("New preferred light intensity:");
             currentThresholdType1.setText("Light intensity threshold: ");
             currentThreshold1.setText(deviceInformation.getThreshold() + " lux");
         }
-        else{
+        else if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             String[] thresholds = deviceInformation.getThreshold().split(":");
             new_threshold_Type1.setText("New preferred temperature(\u2103):");
             new_threshold_Type2.setText("New preferred humidity (%):");
@@ -118,11 +114,14 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
             currentThresholdType2.setText("Humidity threshold: ");
             currentThreshold2.setText(thresholds[1] + "%");
         }
-
+        else{
+            Toast.makeText(this, "Unidentified type", Toast.LENGTH_SHORT).show();
+            finish();
+        }
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeSensorDeviceSetting();
+                changeOutputDeviceSetting();
             }
         });
 
@@ -145,11 +144,12 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
                     new_device_type = Constants.LIGHT_SENSOR_TYPE;
                 }
 
-                if(new_device_type.equals("") || !device_type.equals(new_device_type)){
-                    Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+                if(linkedSensorInformation.getDevice_type().equals(new_device_type)){
+                    changeSetting = true;
                 }
                 else{
-                    changeSetting = true;
+                    Toast.makeText(getApplicationContext(), "Invalid sensor id", Toast.LENGTH_LONG).show();
+                    changeSetting = false;
                 }
 
             }
@@ -161,20 +161,20 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
         });
     }
 
-    private void changeSensorDeviceSetting(){
-        final String device_id = deviceInformation.getDevice_id();
-        final String new_input_name = new_device_nameET.getText().toString();
+    private void changeOutputDeviceSetting(){
+        final String device_id = deviceInformation.getLinked_device_id();
+        final String new_input_name = new_input_nameET.getText().toString();
         final String new_output_id = new_output_idET.getText().toString();
         final String new_output_name = new_output_nameET.getText().toString();
         if(new_input_name.equals("") || new_output_id.equals("") || new_output_name.equals("")){
             Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
             return;
         }
-        else if(!new_output_id.equals(deviceInformation.getLinked_device_id()) && Helper.checkUserHasDevice(new_output_id, this) ){
+        else if(!new_output_id.equals(deviceInformation.getDevice_id()) && Helper.checkUserHasDevice(new_output_id, this) ){
             Toast.makeText(getApplicationContext(), "Device id is already registered", Toast.LENGTH_LONG).show();
             return;
         }
-        if(device_type.contains("Light")){
+        if(linkedSensorInformation.getDevice_type().equals(Constants.LIGHT_SENSOR_TYPE)){
             final String threshold = threshold_Input1.getText().toString();
             if(threshold.equals("")){
                 Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
@@ -196,7 +196,7 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
             }
             searchNewSensorDevice(device_id, new_input_name, new_output_id, new_output_name, threshold);
         }
-        else{
+        else if(linkedSensorInformation.getDevice_type().equals(Constants.TEMPHUMI_SENSOR_TYPE)){
             final String temp_threshold = threshold_Input1.getText().toString();
             final String humid_threshold = threshold_Input2.getText().toString();
             if(temp_threshold.equals("") || humid_threshold.equals("")){
@@ -233,31 +233,6 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
         }
     }
 
-    @Override
-    public void onSuccessResponse(String result) {
-        try {
-            final JSONObject jsonObject = new JSONObject(result);
-            new CountDownTimer(3000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                }
-                public void onFinish() {
-                    stopLoading();
-                    try {
-                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Intent returnAct = new Intent(getApplicationContext(), DeviceListViewActivity.class);
-                    returnAct.putExtra("device_list.type", "sensor");
-                    startActivity(returnAct);
-                    finish();
-                }
-            }.start();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void startLoading(){
         submitBtn.setEnabled(false);
         inAnimation = new AlphaAnimation(0f, 1f);
@@ -276,31 +251,56 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
 
     private void searchNewSensorDevice(final String device_id, final String device_name, final String new_output_id,
                               final String new_output_name, final String new_threshold){
-        if(device_name.equals(deviceInformation.getDevice_name())){
+        if(device_name.equals(deviceInformation.getLinked_device_name())){
             startLoading();
             Garden_Database_Control.changeDeviceSettings(device_id, device_name, new_output_id,
-                    new_output_name, new_threshold, getApplicationContext(), SensorSettingActivity.this);
+                    new_output_name, new_threshold, getApplicationContext(), OutputSettingActivity.this);
         }
         else {
             final String topic = device_name + "/" + device_id;
             IOT_Server_Access.Subscribe(topic, getApplicationContext());
             startLoading();
-            new CountDownTimer(20000, 1000) {
+            new CountDownTimer(5000, 1000) {
                 public void onTick(long millisUntilFinished) {
                     if (changeSetting) {
                         IOT_Server_Access.Unsubscribe(topic);
                         Garden_Database_Control.changeDeviceSettings(device_id, device_name, new_output_id,
-                                new_output_name, new_threshold, getApplicationContext(), SensorSettingActivity.this);
+                                new_output_name, new_threshold, getApplicationContext(), OutputSettingActivity.this);
                         this.cancel();
                     }
                 }
 
                 public void onFinish() {
                     stopLoading();
-                    Toast.makeText(getApplicationContext(), "No device " + topic + " with " + device_type + " found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "No device " + topic + " found", Toast.LENGTH_LONG).show();
                     IOT_Server_Access.Unsubscribe(topic);
                 }
             }.start();
+        }
+    }
+
+    @Override
+    public void onSuccessResponse(String result) {
+        try {
+            final JSONObject jsonObject = new JSONObject(result);
+            new CountDownTimer(3000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                }
+                public void onFinish() {
+                    stopLoading();
+                    try {
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Intent returnAct = new Intent(getApplicationContext(), DeviceListViewActivity.class);
+                    returnAct.putExtra("device_list.type", "output");
+                    startActivity(returnAct);
+                    finish();
+                }
+            }.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

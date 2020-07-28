@@ -75,6 +75,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         wake_Btn = findViewById(R.id.outputDeviceDetail_Wake_Btn);
         sleep_Btn = findViewById(R.id.outputDeviceDetail_Sleep_Btn);
         Button return_Btn = findViewById(R.id.item_returnButton);
+        Button changeSetting_Btn = findViewById(R.id.outputDevice_changeSettingBtn);
 
         lightPowerSB = findViewById(R.id.outputDeviceDetail_LightPower_SeekBar);
         lightPowerTV = findViewById(R.id.outputDeviceDetail_LightPower_TV);
@@ -152,7 +153,7 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
         wake_Btn.setOnClickListener(this);
         sleep_Btn.setOnClickListener(this);
         return_Btn.setOnClickListener(this);
-
+        changeSetting_Btn.setOnClickListener(this);
 
         final Handler handler=new Handler();
         handler.post(new Runnable(){
@@ -327,6 +328,11 @@ public class OutputDetailActivity extends AppCompatActivity implements View.OnCl
                 startActivity(new Intent(getApplicationContext(), DeviceListOverViewActivity.class));
                 finish();
                 break;
+            case R.id.outputDevice_changeSettingBtn:
+                Intent changeSetting = new Intent(getApplicationContext(), OutputSettingActivity.class);
+                changeSetting.putExtra("device_setting.device_id", deviceInformation.getDevice_id());
+                startActivity(changeSetting);
+
         }
     }
 }
