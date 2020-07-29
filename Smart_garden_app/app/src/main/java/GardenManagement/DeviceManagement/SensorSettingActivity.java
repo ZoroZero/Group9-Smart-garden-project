@@ -174,7 +174,7 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
             Toast.makeText(getApplicationContext(), "Device id is already registered", Toast.LENGTH_LONG).show();
             return;
         }
-        if(device_type.contains("Light")){
+        if(device_type.equals(Constants.LIGHT_SENSOR_TYPE)){
             final String threshold = threshold_Input1.getText().toString();
             if(threshold.equals("")){
                 Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_LONG).show();
@@ -192,6 +192,11 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
                 }
             }catch(Exception e){
                 Toast.makeText(getApplicationContext(), "Invalid threshold", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(new_input_name.equals(deviceInformation.getDevice_name()) && new_output_id.equals(deviceInformation.getLinked_device_id())
+                    && new_output_name.equals(deviceInformation.getLinked_device_name()) && threshold.equals(deviceInformation.getThreshold())){
+                Toast.makeText(getApplicationContext(), "No changes happen", Toast.LENGTH_LONG).show();
                 return;
             }
             searchNewSensorDevice(device_id, new_input_name, new_output_id, new_output_name, threshold);
@@ -229,6 +234,11 @@ public class SensorSettingActivity extends AppCompatActivity implements VolleyCa
             }
 
             final String threshold = temp_threshold + ":" + humid_threshold;
+            if(new_input_name.equals(deviceInformation.getDevice_name()) && new_output_id.equals(deviceInformation.getLinked_device_id())
+                    && new_output_name.equals(deviceInformation.getLinked_device_name()) && threshold.equals(deviceInformation.getThreshold())){
+                Toast.makeText(getApplicationContext(), "No changes happen", Toast.LENGTH_LONG).show();
+                return;
+            }
             searchNewSensorDevice(device_id, new_input_name, new_output_id, new_output_name, threshold);
         }
     }

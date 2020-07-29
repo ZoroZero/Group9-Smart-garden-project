@@ -1,11 +1,13 @@
 package Helper;
 
+import java.util.regex.Pattern;
+
 public class Constants {
     private static final String ROOT_URL = "//Android/v1";
 
     private static final String MQTT_URL = "//Android/MQTT";
 
-    public static final String DATABASE_IP = "192.168.1.171";
+    public static final String DATABASE_IP = "172.20.10.8";
 
     public static final String AI_PORT = ":5000";
     // Register url
@@ -113,4 +115,7 @@ public class Constants {
     public static String CHANNEL_Name = "Smart garden";
 
     public static String CHANNEL_DESC = "Smart garden notification";
+
+    // Username constrict
+    // public static Pattern pattern = Pattern.compile("[A-Za-z0-9_]+");
 }

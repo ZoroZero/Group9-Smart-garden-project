@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Database.Garden_Database_Control;
+import Helper.Helper;
 import Helper.VolleyCallBack;
 
 public class RegisterUserActivity extends AppCompatActivity implements View.OnClickListener, VolleyCallBack {
@@ -46,11 +47,24 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
     public void registerUser(){
         final String username = usernameText.getText().toString().trim();
         final String password = passwordText.getText().toString().trim();
-        if(password.length() < 8){
-            Toast.makeText(getApplicationContext(), "Password must be at least 8 character", Toast.LENGTH_SHORT).show();
+        final String email = emailText.getText().toString().trim();
+        if(username.equals("") || password.length() == 0 || email.equals("")){
+            Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_SHORT).show();
             return;
         }
-        final String email = emailText.getText().toString().trim();
+        if(!Helper.isValidUsername(username)){
+            Toast.makeText(getApplicationContext(), "Invalid username", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(password.length() < 8){
+            Toast.makeText(getApplicationContext(), "Invalid password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!Helper.isValidEmail(email)) {
+            Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Garden_Database_Control.RegisterUser(username, password, email,this, this);
     }
 

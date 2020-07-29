@@ -121,7 +121,7 @@ def get_result(t_data):
     nearest_value = np.mean(signal)
     std = np.std(signal)
     if check_seasonal:
-        return np.min(signal)
+        return np.max(signal)
     else:
         time_diff = abs(t_data.first_key() - t_data.last_key())
         check_time = time_diff.total_seconds()

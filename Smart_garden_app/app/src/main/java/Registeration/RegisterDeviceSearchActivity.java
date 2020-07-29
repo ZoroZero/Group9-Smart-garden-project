@@ -193,7 +193,7 @@ public class RegisterDeviceSearchActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 stopLoading();
-                Toast.makeText(getApplicationContext(), "No device " + topic + " with " + device_type + " found", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No device " + topic + " found", Toast.LENGTH_LONG).show();
                 IOT_Server_Access.Unsubscribe(topic);
             }
         }.start();

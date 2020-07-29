@@ -78,7 +78,7 @@ public class DeviceDetailActivity extends AppCompatActivity implements VolleyCal
             device_readingType1TV.setText("Light intensity");
             readingBar1.setEndValue(Constants.MAX_LIGHT);
             readingBar1.setDividerSize(100);
-            readingBar1.setDividerSize(1);
+            readingBar1.setDividerSize(5);
             ThresholdLabel1.setText("Intensity threshold");
             device_Threshold1TV.setText(getIntent().getStringExtra("device_detail.device_threshold") + " lux");
             ThresholdLabel2.setVisibility(View.GONE);

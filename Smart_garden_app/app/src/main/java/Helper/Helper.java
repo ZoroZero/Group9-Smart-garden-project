@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import Login_RegisterUser.UserLoginManagement;
 
@@ -89,5 +91,35 @@ public class Helper {
             }
         }
         return false;
+    }
+
+    public static boolean isValidUsername(String name)
+    {
+
+        // Regex to check valid username.
+        String regex = "^[aA-zZ]\\w{5,29}$";
+
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the username is empty
+        // return false
+        if (name == null) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given username
+        // and regular expression.
+        Matcher m = p.matcher(name);
+
+        // Return if the username
+        // matched the ReGex
+        return m.matches();
+    }
+
+    public static boolean isValidEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
     }
 }

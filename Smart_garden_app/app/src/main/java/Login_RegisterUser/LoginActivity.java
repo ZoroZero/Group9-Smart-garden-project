@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.smartgarden.R;
 
 import Database.Garden_Database_Control;
+import GardenManagement.PlantManagement.PlantListView;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -43,11 +46,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void login() {
         final String username = usernameText.getText().toString().trim();
         final String password = passwordText.getText().toString().trim();
-        Garden_Database_Control.Login(username, password, this);
-        if (UserLoginManagement.getInstance(this).isLoggedIn()) {
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            finish();
+        if(username.equals("") || password.length() == 0){
+            Toast.makeText(getApplicationContext(), "Empty required field", Toast.LENGTH_SHORT).show();
+            return;
         }
+        Garden_Database_Control.Login(username, password, this);
+        new CountDownTimer(1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                if (UserLoginManagement.getInstance(getApplicationContext()).isLoggedIn()) {
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
+                }
+            }
+        }.start();
+
     }
 
     @Override
