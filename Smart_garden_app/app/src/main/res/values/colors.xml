@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimary">#9AB59A</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="barStrike">#CDE9F6</color>
+    <color name="humidityColor">#AC95FD</color>
+    <color name="temperatureColor">#AE642A</color>
+    <color name="lightColor">#D09145</color>
+    <color name="seek_bar_progress">#68FF4D</color>
+    <color name="seek_bar_secondary_progress">#3399CC</color>
+    <color name="seek_bar_background">#ababab</color>
 </resources>
