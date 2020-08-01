@@ -744,9 +744,9 @@ public class ViewReport extends AppCompatActivity {
             gv.getGridLabelRenderer().setHorizontalLabelsVisible(true);
             if(mode.equals(VALUE_MODE)) {
                 if (num <= 3) {
-                    gv.getGridLabelRenderer().setTextSize(45f);
-                } else if (num == 4) {
                     gv.getGridLabelRenderer().setTextSize(30f);
+                } else if (num == 4) {
+                    gv.getGridLabelRenderer().setTextSize(24f);
                 } else {
                     gv.getGridLabelRenderer().setHorizontalLabelsVisible(false);
                 }

@@ -115,7 +115,7 @@ public class RecordMeasurementService extends Service{
                 }
             }
         };
-        timer.schedule(timerTask, 1000, 12000);
+        timer.schedule(timerTask, 1000, 19000);
     }
 
     public void stoptimertask() {
